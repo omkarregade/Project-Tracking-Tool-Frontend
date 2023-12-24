@@ -7,6 +7,7 @@ function App() {
       <h1>WELCOME TO TRACKER </h1>
       <p>changes by shri</p>
       <p>now changes made by neeraj as well</p>
+      <p>Managed by Ved</p>
     </div>
   );
 }
