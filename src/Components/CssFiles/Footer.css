@@ -1,0 +1,25 @@
+/* Footer.css */
+
+.footer-container {
+    background-color: #0d6efd;
+    /* Set the primary color for the footer background */
+    color: white;
+    /* Set text color to white */
+    text-align: center;
+    padding: 1rem;
+    /* width: 100vw; */
+}
+
+.footer-icon {
+    font-size: 2rem;
+    color: white;
+    /* Set the color of the icons to white */
+    margin: 0 0.5rem;
+}
+
+.footer-copyright {
+    font-size: 1rem;
+    color: white;
+    /* Set the color of the icons to white */
+    margin: 0 0.5rem;
+}
