@@ -1,18 +1,17 @@
-import logo from "./logo.svg";
 import "./App.css";
-import { BrowserRoutre , Routes , Route, BrowserRouter } from 'react-router-dom';
-import Login from "./Components/Pages/Login";
-import SignUp from "./Components/Pages/SignUp";
 
+import CustomNavbar from "./Components/Navbar";
+import HomePage from "./Components/Pages/HomePage/HomePage";
+import { Footer } from "./Components/Footer";
 
 function App() {
   return (
+    <div className="App">
+      <CustomNavbar></CustomNavbar>
+      <HomePage></HomePage>
+      <Footer/>
+    </div>
 
-   
-<>
-
-</>
- 
   );
 }
 
