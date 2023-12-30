@@ -1,7 +1,8 @@
-.navbar-brand, .nav-link{
+.navbar-brand-main, .nav-link-main{
     color: white;
 }
 
-.navbar{
+.navbar-main{
     /* width: 100vw; */
+    background-color: #0d6efd;
 }

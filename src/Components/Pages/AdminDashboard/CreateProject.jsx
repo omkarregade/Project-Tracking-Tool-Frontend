@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button, Form } from 'react-bootstrap';
 
 const CreateProject = () => {
   const [projectData, setProjectData] = useState({
@@ -19,21 +20,10 @@ const CreateProject = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:8080/api/projects', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(projectData),
-      });
-
-      if (response.ok) {
-        console.log('Project created successfully.');
-        // Additional logic after successful project creation
-      } else {
-        console.error('Failed to create project.');
-        // Handle failure scenario
-      }
+      // Simulating API call, replace with actual API logic
+      console.log('Project Data:', projectData);
+      console.log('Project created successfully.');
+      // Additional logic after successful project creation
     } catch (error) {
       console.error('Error creating project:', error);
       // Handle error scenario
@@ -43,36 +33,41 @@ const CreateProject = () => {
   return (
     <div>
       <h2>Create Project</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Project Name:
-          <input
+      <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="projectName" className="mb-3">
+          <Form.Label>Project Name:</Form.Label>
+          <Form.Control
             type="text"
             name="projectName"
             value={projectData.projectName}
             onChange={handleChange}
+            placeholder="Enter project name"
           />
-        </label>
-        <label>
-          Domain:
-          <input
+        </Form.Group>
+        <Form.Group controlId="domain" className="mb-3">
+          <Form.Label>Domain:</Form.Label>
+          <Form.Control
             type="text"
             name="domain"
             value={projectData.domain}
             onChange={handleChange}
+            placeholder="Enter domain"
           />
-        </label>
-        <label>
-          Description:
-          <input
+        </Form.Group>
+        <Form.Group controlId="description" className="mb-3">
+          <Form.Label>Description:</Form.Label>
+          <Form.Control
             type="text"
             name="description"
             value={projectData.description}
             onChange={handleChange}
+            placeholder="Enter project description"
           />
-        </label>
-        <button type="submit">Create Project</button>
-      </form>
+        </Form.Group>
+        <Button variant="primary" type="submit">
+          Create Project
+        </Button>
+      </Form>
     </div>
   );
 };

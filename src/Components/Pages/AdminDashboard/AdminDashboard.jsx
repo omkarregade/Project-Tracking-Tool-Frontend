@@ -3,9 +3,9 @@ import { Container, Row, Col, Nav, Navbar } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../CssFiles/AdminDashboard.css'; // Adjust the path based on the actual folder structure
 import CreateProject from './CreateProject';
-import AssignManager from './AssignManager';
 import ManageProject from './ManageProject';
-
+import AdminProfile from './AdminProfile'; // Import your AdminProfile component here
+import AssignProjectToManager from './AssignProjectToManager';
 
 const AdminDashboard = () => {
     const [selectedOption, setSelectedOption] = useState('');
@@ -21,7 +21,9 @@ const AdminDashboard = () => {
             case 'Project List':
                 return <ManageProject />;
             case 'Assign Manager':
-                return <AssignManager />;
+                return <AssignProjectToManager/>;
+            case 'Admin Profile':
+                return <AdminProfile />;
             default:
                 return <div>Please select an option from the sidebar</div>;
         }
@@ -36,16 +38,28 @@ const AdminDashboard = () => {
                             <Navbar.Toggle aria-controls="sidebar-nav" />
                             <Navbar.Collapse id="sidebar-nav">
                                 <Nav className="flex-column">
-                                    <Nav.Link onClick={() => handleNavigation('Create Project')}
-                                    className={selectedOption === 'Create Project' ? 'active' : ''}>
+                                    <Nav.Link
+                                        onClick={() => handleNavigation('Admin Profile')}
+                                        className={selectedOption === 'Admin Profile' ? 'active' : ''}
+                                    >
+                                        Admin Profile
+                                    </Nav.Link>
+                                    <Nav.Link
+                                        onClick={() => handleNavigation('Create Project')}
+                                        className={selectedOption === 'Create Project' ? 'active' : ''}
+                                    >
                                         Create Project
                                     </Nav.Link>
-                                    <Nav.Link onClick={() => handleNavigation('Project List')}
-                                    className={selectedOption === 'Project List' ? 'active' : ''}>
+                                    <Nav.Link
+                                        onClick={() => handleNavigation('Project List')}
+                                        className={selectedOption === 'Project List' ? 'active' : ''}
+                                    >
                                         Project List
                                     </Nav.Link>
-                                    <Nav.Link onClick={() => handleNavigation('Assign Manager')}
-                                    className={selectedOption === 'Assign Manager' ? 'active' : ''}>
+                                    <Nav.Link
+                                        onClick={() => handleNavigation('Assign Manager')}
+                                        className={selectedOption === 'Assign Manager' ? 'active' : ''}
+                                    >
                                         Assign Manager
                                     </Nav.Link>
                                 </Nav>
