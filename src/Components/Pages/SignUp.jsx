@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 
 const roles = ["Admin", "Manager", "Employee"];
 
-const Signup = () => {
+const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -228,4 +228,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignUp;

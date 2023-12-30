@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import '../../CssFiles/EmployeeProfile.css'; // Adjust the path according to your project structure
+import '../../CssFiles/AdminProfile.css'; // Adjust the path according to your project structure
 
-const EmployeeProfile = () => {
-    const [employeeData, setEmployeeData] = useState({
+const AdminProfile = () => {
+    const [adminData, setAdminData] = useState({
         id: null,
         name: '',
-        position: '',
-        department: '',
+        role: '',
         email: '',
         phone: '',
         address: '',
@@ -15,26 +14,25 @@ const EmployeeProfile = () => {
     });
 
     const [isEditing, setIsEditing] = useState(false);
-    const [editedProfile, setEditedProfile] = useState({ ...employeeData });
+    const [editedProfile, setEditedProfile] = useState({ ...adminData });
 
-    const fetchEmployeeProfile = () => {
+    const fetchAdminProfile = () => {
         // Simulated API call or actual fetch implementation
         const fetchedData = {
             id: 1,
-            name: 'John Wick',
-            position: 'Software Developer',
-            department: 'Engineering',
-            email: 'johnwick@gmail.com',
-            phone: '+91-9921463930',
-            address: '9/11 Trump Tower, Pune, India',
+            name: 'Admin Name',
+            role: 'Administrator',
+            email: 'admin@example.com',
+            phone: '+1-234-567-8901',
+            address: '123 Admin Street, Admin City',
             // Add more fields as needed
         };
-        setEmployeeData(fetchedData);
+        setAdminData(fetchedData);
         setEditedProfile(fetchedData);
     };
 
     useEffect(() => {
-        fetchEmployeeProfile();
+        fetchAdminProfile();
     }, []);
 
     const handleEditProfile = () => {
@@ -44,12 +42,12 @@ const EmployeeProfile = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Simulated logic - update the profile data
-        setEmployeeData(editedProfile);
+        setAdminData(editedProfile);
         setIsEditing(false);
     };
 
     const handleCancelEdit = () => {
-        setEditedProfile(employeeData);
+        setEditedProfile(adminData);
         setIsEditing(false);
     };
 
@@ -62,23 +60,33 @@ const EmployeeProfile = () => {
     };
 
     return (
-        <div className="employee-profile my-5">
-            <div className="employee-profile-header">
-                <h1>{employeeData.name}</h1>
-                <p>{employeeData.position}</p>
+        <div className="admin-profile my-5">
+            {/* Profile Image Section */}
+            <div className="profile-image-section text-center mb-3">
+                {/* Placeholder profile image */}
+                <div className="placeholder-profile-image rounded-circle">
+                    {/* Add text or icon here */}
+                    <span>Profile</span>
+                </div>
             </div>
-            <div className="employee-profile-details">
-                {/* Display employee profile details */}
-                <p>ID: {employeeData.id}</p>
-                <p>Department: {employeeData.department}</p>
-                <p>Email: {employeeData.email}</p>
-                <p>Phone: {employeeData.phone}</p>
-                <p>Address: {employeeData.address}</p>
+
+            <div className="admin-profile-header">
+                <h1>{adminData.name}</h1>
+                <p>{adminData.role}</p>
             </div>
-            <button className="employee-profile-button mt-3" onClick={handleEditProfile}>
+            <div className="admin-profile-details">
+                {/* Display admin profile details */}
+                <p>ID: {adminData.id}</p>
+                <p>Role: {adminData.role}</p>
+                <p>Email: {adminData.email}</p>
+                <p>Phone: {adminData.phone}</p>
+                <p>Address: {adminData.address}</p>
+            </div>
+            <button className="admin-profile-button mt-3" onClick={handleEditProfile}>
                 Edit Profile
             </button>
 
+            {/* Replace the modal with the updated structure */}
             <Modal show={isEditing} onHide={handleCancelEdit} className="edit-profile-modal">
                 <Modal.Header closeButton>
                     <Modal.Title>Edit Profile</Modal.Title>
@@ -94,7 +102,7 @@ const EmployeeProfile = () => {
                                 onChange={handleInputChange}
                             />
                         </Form.Group>
-                        {/* Add more Form.Group for other profile data */}
+                        {/* Add more Form.Group for other fields */}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
@@ -110,4 +118,4 @@ const EmployeeProfile = () => {
     );
 };
 
-export default EmployeeProfile;
+export default AdminProfile;

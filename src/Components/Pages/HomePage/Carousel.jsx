@@ -3,7 +3,7 @@ import Carousel from 'react-bootstrap/Carousel';
 import sliderimage1 from './Images/Carousel-image-Start.png';
 import sliderimage2 from './Images/Carousel-Image-Mid.png';
 import sliderimage3 from './Images/Carousel-Image-End.png';
-import './Carousel.css'; // Import the CSS file
+import '../../CssFiles/Carousel.css'; // Import the CSS file
 
 function HomepageCarousel() {
   return (
