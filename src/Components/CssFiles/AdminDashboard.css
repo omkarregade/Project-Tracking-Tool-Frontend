@@ -1,0 +1,74 @@
+/* ManagerDashboard.css */
+
+/* Set minimum height and width for the entire page */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    /* Minimum height of the viewport */
+    min-width: 320px;
+    /* Minimum width for readability */
+    font-family: Arial, sans-serif;
+    /* Adjust font family as needed */
+}
+
+/* Rest of your existing CSS */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.sidebar {
+    height: 100%;
+    /* Other sidebar styles */
+    padding: 0 !important;
+}
+
+.main-content {
+    height: 100%;
+}
+
+.side-navbar {
+    height: 100vh;
+    padding: 10px !important;
+    background-color: rgb(255, 255, 131);
+}
+
+/* Adjust Nav.Link alignment */
+.side-navbar .flex-column {
+    align-items: flex-start;
+    height: 100%;
+}
+
+/* Adjust Nav.Link styles */
+.side-navbar .flex-column .nav-link {
+    padding: 10px 20px;
+    /* Example padding for Nav.Links */
+    /* Other Nav.Link styles */
+}
+
+.side-navbar .flex-column .nav-link.active {
+    background-color: rgba(255, 238, 0, 0.832);
+    /* Change this color as desired */
+    color: #000000;
+    /* Text color */
+}
+
+/* Media query for collapsing Navbar after 768px */
+@media screen and (max-width: 768px) {
+    .side-navbar {
+        height: fit-content;
+        padding: 1rem;
+        /* Adjust height as needed */
+    }
+
+    /* Adjust the toggler button styles */
+    .side-navbar .navbar-toggler {
+        margin-right: auto;
+        background-color: rgb(187, 187, 20);
+        border: 2px solid rgb(0, 0, 0);
+        /* Additional styles for the toggler button */
+        /* You can further modify styles as needed */
+    }
+}
