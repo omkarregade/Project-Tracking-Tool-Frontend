@@ -25,7 +25,7 @@ export function ContactUs() {
         e.preventDefault();
 
         try {
-          //  const result = await ContactCustomer(contact);
+            //  const result = await ContactCustomer(contact);
             setContact({
                 name: "",
                 email: "",
@@ -44,7 +44,7 @@ export function ContactUs() {
 
     return (
         <>
-          
+
 
             <section className="section-contact">
                 <div className="headingContainer">
@@ -60,7 +60,7 @@ export function ContactUs() {
 
                     <Col className="contactFormContainer">
                         <div className="headingContainer">
-                            
+
                             <h1>Get In Touch</h1>
                             <p>We’d love to hear from you. Take five minutes to fill out our form so that we can get to know you.</p>
                         </div>
@@ -116,11 +116,11 @@ export function ContactUs() {
                         </Form>
                     </Col>
                     <Col lg={4} className="mt-1">
-                         {isSubmitted ? <Alert variant="success">FeedBack Send</Alert> : null}
+                        {isSubmitted ? <Alert variant="success">FeedBack Send</Alert> : null}
                     </Col>
                 </Row>
 
-                
+
 
                 <section className="mb-3">
                     <iframe
