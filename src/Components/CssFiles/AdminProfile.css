@@ -1,0 +1,99 @@
+/* Base styles */
+.admin-profile {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Header styles */
+.admin-profile-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.admin-profile-header h1 {
+    font-size: 24px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.admin-profile-header p {
+    font-size: 16px;
+    color: #666;
+}
+
+/* Profile image styles */
+.admin-profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Details section styles */
+.admin-profile-details {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.admin-profile-details h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.admin-profile-details p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.admin-profile-details .detail-label {
+    font-weight: bold;
+    color: #333;
+}
+
+.admin-profile-details .detail-value {
+    color: #555;
+}
+
+/* Buttons */
+.admin-profile-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #fff;
+    background-color: #3498db;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.admin-profile-button:hover {
+    background-color: #2980b9;
+}
+
+/* EmployeeProfile.css or your CSS file */
+.admin-profile-button {
+    background-color: #4caf50;
+    /* Green background color */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.admin-profile-button:hover {
+    background-color: #45a049;
+    /* Darker green color on hover */
+}
