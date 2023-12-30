@@ -3,7 +3,7 @@ import axios from 'axios';
 import { BASE_URL } from "./APIconstant";
 
 
- export async function register (manager){
+ export async function registerManager (manager){
     try {
       const response = await axios.post(`${BASE_URL}/register`, manager);
       return response.data;
