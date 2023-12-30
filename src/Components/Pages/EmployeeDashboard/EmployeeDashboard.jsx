@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Nav, Navbar } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import EmployeeProfile from "../EmployeeDashboard/EmployeeProfile";
+import EmployeeProfile from "./EmployeeProfile";
 
 
 const EmployeeDashboard = () => {
