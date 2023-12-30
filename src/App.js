@@ -1,14 +1,17 @@
-import logo from "./logo.svg";
 import "./App.css";
+
+import CustomNavbar from "./Components/Navbar";
+import HomePage from "./Components/Pages/HomePage/HomePage";
+import { Footer } from "./Components/Footer";
 
 function App() {
   return (
     <div className="App">
-      <h1>WELCOME TO TRACKER </h1>
-      <p>changes by shri</p>
-      <p>now changes made by neeraj as well</p>
-      <p>Managed by Ved</p>
+      <CustomNavbar></CustomNavbar>
+      <HomePage></HomePage>
+      <Footer/>
     </div>
+
   );
 }
 
