@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 
-import { BASE_URL } from "./APIconstant";
+import { BASE_URL } from "../Service/APIConstant";
 
 
     export async function registerAdmin (admin)  {

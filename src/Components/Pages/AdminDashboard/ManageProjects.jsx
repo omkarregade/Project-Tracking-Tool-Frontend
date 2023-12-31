@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import { updateProject, getAllProjects } from '../../Service/ProjectService'; // Assuming these functions exist
+
 
 const ManageProjects = () => {
     const [projects, setProjects] = useState([]);
@@ -7,20 +9,24 @@ const ManageProjects = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [updatedProjectInfo, setUpdatedProjectInfo] = useState({});
 
-    // Fetch projects data from the API
     useEffect(() => {
-        // Simulated API call or actual fetch implementation
-        const fetchedProjects = [
-            { id: 1, name: 'Project 1', description: 'Description for Project 1' },
-            { id: 2, name: 'Project 2', description: 'Description for Project 2' },
-            { id: 3, name: 'Project 3', description: 'Description for Project 3' },
-            { id: 4, name: 'Project 4', description: 'Description for Project 4' },
-            { id: 5, name: 'Project 5', description: 'Description for Project 5' },
-
-            // ... Add more projects as needed
-        ];
-        setProjects(fetchedProjects);
+        fetchProjects();
     }, []);
+
+    const fetchProjects = async () => {
+        try {
+            const response = await getAllProjects('/api/projects'); // Replace with your API endpoint
+            if (response.ok) {
+                const fetchedProjects = await response.json();
+                setProjects(fetchedProjects);
+            } else {
+                console.error('Failed to fetch projects');
+            }
+        } catch (error) {
+            console.error('Error fetching projects:', error);
+        }
+    };
+
 
     const handleProjectClick = (project) => {
         setSelectedProject(project);
@@ -28,12 +34,16 @@ const ManageProjects = () => {
         setUpdatedProjectInfo({ ...project });
     };
 
-    const handleUpdate = () => {
-        // Simulated API call to update project data
-        console.log('Updated Project Info:', updatedProjectInfo);
-        // Make your API call here with updatedProjectInfo
-        // After successful update, close the modal
-        setIsModalOpen(false);
+    const handleUpdate = async () => {
+        try {
+            // Make the API call to update project data
+            await updateProject(selectedProject.id, updatedProjectInfo); // Assuming updateProject takes project id and updated info
+            console.log('Project updated successfully:', updatedProjectInfo);
+            setIsModalOpen(false); // Close the modal after successful update
+        } catch (error) {
+            console.error('Error updating project:', error);
+            // Handle error scenario
+        }
     };
 
     const handleCloseModal = () => {

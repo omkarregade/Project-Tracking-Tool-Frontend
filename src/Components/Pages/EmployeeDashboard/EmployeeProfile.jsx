@@ -1,36 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import '../../CssFiles/EmployeeProfile.css'; // Adjust the path according to your project structure
+import {getEmployeeById, updateEmployee} from '../../Service/EmployeeService'; // Import the EmployeeService functions
 
 const EmployeeProfile = () => {
     const [employeeData, setEmployeeData] = useState({
-        id: null,
-        name: '',
-        position: '',
-        department: '',
+        id:'',
+        fullName: '',
         email: '',
-        phone: '',
-        address: '',
-        // Add more fields as needed
+        phoneNumber: '',
+        city: ''
     });
 
     const [isEditing, setIsEditing] = useState(false);
     const [editedProfile, setEditedProfile] = useState({ ...employeeData });
 
-    const fetchEmployeeProfile = () => {
-        // Simulated API call or actual fetch implementation
-        const fetchedData = {
-            id: 1,
-            name: 'John Wick',
-            position: 'Software Developer',
-            department: 'Engineering',
-            email: 'johnwick@gmail.com',
-            phone: '+91-9921463930',
-            address: '9/11 Trump Tower, Pune, India',
-            // Add more fields as needed
-        };
-        setEmployeeData(fetchedData);
-        setEditedProfile(fetchedData);
+    const fetchEmployeeProfile = async () => {
+        try {
+            const id = localStorage.getItem('id');
+            const response = await getEmployeeById(id); // Replace with your API call
+            setEmployeeData(response.data);
+            setEditedProfile(response.data);
+        } catch (error) {
+            console.error('Error fetching employee profile:', error);
+        }
     };
 
     useEffect(() => {
@@ -41,11 +34,16 @@ const EmployeeProfile = () => {
         setIsEditing(true);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Simulated logic - update the profile data
-        setEmployeeData(editedProfile);
-        setIsEditing(false);
+        try {
+            const id = localStorage.getItem('id');
+            await updateEmployee(editedProfile);
+            setEmployeeData(editedProfile);
+            setIsEditing(false);
+        } catch (error) {
+            console.error('Error updating employee profile:', error);
+        }
     };
 
     const handleCancelEdit = () => {
@@ -65,12 +63,9 @@ const EmployeeProfile = () => {
         <div className="employee-profile my-5">
             <div className="employee-profile-header">
                 <h1>{employeeData.name}</h1>
-                <p>{employeeData.position}</p>
             </div>
             <div className="employee-profile-details">
-                {/* Display employee profile details */}
                 <p>ID: {employeeData.id}</p>
-                <p>Department: {employeeData.department}</p>
                 <p>Email: {employeeData.email}</p>
                 <p>Phone: {employeeData.phone}</p>
                 <p>Address: {employeeData.address}</p>
@@ -94,7 +89,6 @@ const EmployeeProfile = () => {
                                 onChange={handleInputChange}
                             />
                         </Form.Group>
-                        {/* Add more Form.Group for other profile data */}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>

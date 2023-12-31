@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-import { BASE_URL } from "./APIconstant";
+import { BASE_URL } from "../Service/APIConstant";
 
 
  export async function registerManager (manager){
@@ -38,6 +38,15 @@ import { BASE_URL } from "./APIconstant";
       throw error.response.data;
     }
   }
+
+export async function getAllManagers() {
+  try {
+    const response = await axios.get(`${BASE_URL}/managers`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+}
 
   export async function deleteManager (id) {
     try {

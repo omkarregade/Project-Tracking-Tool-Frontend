@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import '../../CssFiles/ManagerProfile.css'; // Adjust the path according to your project structure
+import {getManagerById, updateManager} from '../../Service/ManagerService';
+
 
 const ManagerProfile = () => {
     const [managerData, setManagerData] = useState({
@@ -16,19 +18,15 @@ const ManagerProfile = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [editedProfile, setEditedProfile] = useState({ ...managerData });
 
-    const fetchManagerProfile = () => {
-        // Simulated API call or actual fetch implementation
-        const fetchedData = {
-            id: 1,
-            name: 'Michael Scott',
-            department: 'Regional Manager',
-            email: 'michael@dundermifflin.com',
-            phone: '+1-123-456-7890',
-            address: '1725 Slough Avenue, Scranton, PA',
-            // Add more fields as needed
-        };
-        setManagerData(fetchedData);
-        setEditedProfile(fetchedData);
+    const fetchManagerProfile = async () => {
+        try {
+            const id = localStorage.getItem('id');
+            const response = await getManagerById(id); // Replace with your API call
+            setManagerData(response.data);
+            setEditedProfile(response.data);
+        } catch (error) {
+            console.error('Error fetching manager profile:', error);
+        }
     };
 
     useEffect(() => {
@@ -39,11 +37,15 @@ const ManagerProfile = () => {
         setIsEditing(true);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Simulated logic - update the profile data
-        setManagerData(editedProfile);
-        setIsEditing(false);
+        try {
+            await updateManager(editedProfile); // Replace with your API call
+            setManagerData(editedProfile);
+            setIsEditing(false);
+        } catch (error) {
+            console.error('Error updating manager profile:', error);
+        }
     };
 
     const handleCancelEdit = () => {

@@ -2,15 +2,16 @@ import React, { useState } from "react";
 import {
   TextField,
   Button,
-  MenuItem,
   FormControl,
-  InputLabel,
-  Select,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
   Typography,
   Link,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import axios from "axios"; // Import axios for API calls
 
 const roles = ["Admin", "Manager", "Employee"];
 
@@ -18,11 +19,56 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = () => {
-    console.log("Username:", username);
-    console.log("Password:", password);
-    console.log("Role:", role);
+  const handleLogin = async () => {
+    try {
+      let apiEndpoint = ""; // Placeholder for your API endpoint
+
+      switch (role) {
+        case "Admin":
+          apiEndpoint = "ADMIN_LOGIN_API_ENDPOINT";
+          break;
+        case "Manager":
+          apiEndpoint = "MANAGER_LOGIN_API_ENDPOINT";
+          break;
+        case "Employee":
+          apiEndpoint = "EMPLOYEE_LOGIN_API_ENDPOINT";
+          break;
+        default:
+          break;
+      }
+
+      const response = await axios.post(apiEndpoint, {
+        username,
+        password,
+        role,
+      });
+
+      console.log("Login Successful:", response.data);
+
+      // Redirect to respective dashboards on successful login
+      switch (role) {
+        case "Admin":
+          navigate("/admin-dashboard");
+          localStorage.setItem("id", parseInt(response.data.adminId));
+          break;
+        case "Manager":
+          navigate("/manager-dashboard");
+          localStorage.setItem("id", parseInt(response.data.managerId));
+          break;
+        case "Employee":
+          navigate("/employee-dashboard");
+          localStorage.setItem("id", parseInt(response.data.employeeId));
+          break;
+        default:
+          break;
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+      // Redirect back to login page on error
+      navigate("/login");
+    }
   };
 
   return (
@@ -77,23 +123,23 @@ const Login = () => {
               }}
             />
 
-            <FormControl variant="outlined" fullWidth margin="normal">
-              <InputLabel>Role</InputLabel>
-              <Select
+            <FormControl component="fieldset" fullWidth margin="normal">
+              <RadioGroup
+                row
+                aria-label="role"
+                name="role"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                label="Role"
-                style={{
-                  backgroundColor: "#ffffff",
-                  borderRadius: "5px",
-                }}
               >
                 {roles.map((role) => (
-                  <MenuItem key={role} value={role}>
-                    {role}
-                  </MenuItem>
+                  <FormControlLabel
+                    key={role}
+                    value={role}
+                    control={<Radio />}
+                    label={role}
+                  />
                 ))}
-              </Select>
+              </RadioGroup>
             </FormControl>
 
             <Button
