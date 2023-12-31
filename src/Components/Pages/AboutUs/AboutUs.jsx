@@ -17,11 +17,21 @@ export const AboutUs = () => {
 
             <Row>
                 <Col lg={12}>
-                    <div class="gif-container">
-                        <img src={timeline} alt="Your GIF" class="fullscreen-gif" />
-                        <h1 class="heading-over-gif">About us </h1>
+                    <div className="gif-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <img
+                            src={timeline}
+                            alt="Your GIF"
+                            className="fullscreen-gif"
+                            style={{ maxWidth: '100%', height: 'auto', maxHeight: '300px' }}
+                        />
                     </div>
                 </Col>
+            </Row>
+            <Row>
+                <h1 className="heading-over-gif"
+                    style={{ textAlign: "center" }}>
+                    About us
+                </h1>
             </Row>
 
 
@@ -82,96 +92,97 @@ export const AboutUs = () => {
                     <h1>Our Leaders</h1>
                 </Col>
             </Row>
-            <Row className="mb-5">
-                <Col>
+            <Row className="mb-5 justify-content-center">
+                <Col lg={4} md={6} className="mb-3">
                     <Card style={{ width: '18rem' }}>
                         <Card.Img variant="top" src={Omkar} className="photo" />
                         <Card.Body>
                             <Card.Title>Omkar Vilas Regade</Card.Title>
                             <Card.Text>
-                                Some quick example text to build on the card title and make up the
-                                bulk of the card's content.
-
+                                Some quick example text to build on the card title and make up the bulk of the card's content.
                             </Card.Text>
                         </Card.Body>
-
                         <Card.Body>
-                            <Card.Link href="https://www.linkedin.com/in/g-neeraj-kumar/"><FontAwesomeIcon icon={faLinkedin} className="iconstyle" /></Card.Link>
+                            <Card.Link href="https://www.linkedin.com/in/g-neeraj-kumar/">
+                                <FontAwesomeIcon icon={faLinkedin} className="iconstyle" />
+                            </Card.Link>
                             <Card.Link href="#">Another Link</Card.Link>
                         </Card.Body>
                     </Card>
                 </Col>
-
-                <Col>
+                {/* Repeat the above structure for other cards */}
+                <Col lg={4} md={6} className="mb-3">
                     <Card style={{ width: '18rem' }}>
                         <Card.Img variant="top" src={Neeraj} className="photo" />
                         <Card.Body>
                             <Card.Title>G Neeraj Kumar</Card.Title>
                             <Card.Text>
-                                Some quick example text to build on the card title and make up the
-                                bulk of the card's content.
+                                Some quick example text to build on the card title and make up the bulk of the card's content.
                             </Card.Text>
                         </Card.Body>
-
                         <Card.Body>
-                            <Card.Link href="https://www.linkedin.com/in/mukul-jain-75538b20b/"><FontAwesomeIcon icon={faLinkedin} className="iconstyle" /></Card.Link>
+                            <Card.Link href="https://www.linkedin.com/in/g-neeraj-kumar/">
+                                <FontAwesomeIcon icon={faLinkedin} className="iconstyle" />
+                            </Card.Link>
                             <Card.Link href="#">Another Link</Card.Link>
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col>
+                <Col lg={4} md={6} className="mb-3">
                     <Card style={{ width: '18rem' }}>
                         <Card.Img variant="top" src={Asawari} className="photo" />
                         <Card.Body>
                             <Card.Title>Asawari Raut</Card.Title>
                             <Card.Text>
-                                Some quick example text to build on the card title and make up the
-                                bulk of the card's content.
-                            </Card.Text>
-                        </Card.Body>
-
-                        <Card.Body>
-                            <Card.Link href="https://www.linkedin.com/in/nitish-patil-6897a6190"><FontAwesomeIcon icon={faLinkedin} className="iconstyle" /></Card.Link>
-                            <Card.Link href="#">Another Link</Card.Link>
-                        </Card.Body>
-                    </Card>
-
-                </Col>
-                <Col>
-                    <Card style={{ width: '18rem' }}>
-                        <Card.Img variant="top" src={Asawari} className="photo" />
-                        <Card.Body>
-                            <Card.Title>Shrikant Dhengle</Card.Title>
-                            <Card.Text>
-                                Some quick example text to build on the card title and make up the
-                                bulk of the card's content.
-                            </Card.Text>
-                        </Card.Body>
-
-                        <Card.Body>
-                            <Card.Link href="https://www.linkedin.com/in/nitish-patil-6897a6190"><FontAwesomeIcon icon={faLinkedin} className="iconstyle" /></Card.Link>
-                            <Card.Link href="#">Another Link</Card.Link>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col>
-                    <Card style={{ width: '18rem' }}>
-                        <Card.Img variant="top" src={Ved} className="photo" />
-                        <Card.Body>
-                            <Card.Title>Ved Sansare</Card.Title>
-                            <Card.Text>
-                                Some quick example text to build on the card title and make up the
-                                bulk of the card's content.
+                                Some quick example text to build on the card title and make up the bulk of the card's content.
                             </Card.Text>
                         </Card.Body>
                         <Card.Body>
-                            <Card.Link href="https://www.linkedin.com/in/nitish-patil-6897a6190"><FontAwesomeIcon icon={faLinkedin} className="iconstyle" /></Card.Link>
+                            <Card.Link href="https://www.linkedin.com/in/g-neeraj-kumar/">
+                                <FontAwesomeIcon icon={faLinkedin} className="iconstyle" />
+                            </Card.Link>
                             <Card.Link href="#">Another Link</Card.Link>
                         </Card.Body>
                     </Card>
                 </Col>
             </Row>
-        </Container>
+            <Row className="mb-5 justify-content-center">
+                <Col lg={6} md={6} className="mb-3">
+                    <Card style={{ width: '18rem' }}>
+                        <Card.Img variant="top" src={Ved} className="photo" />
+                        <Card.Body>
+                            <Card.Title>Ved Sansare</Card.Title>
+                            <Card.Text>
+                                Some quick example text to build on the card title and make up the bulk of the card's content.
+                            </Card.Text>
+                        </Card.Body>
+                        <Card.Body>
+                            <Card.Link href="https://www.linkedin.com/in/g-neeraj-kumar/">
+                                <FontAwesomeIcon icon={faLinkedin} className="iconstyle" />
+                            </Card.Link>
+                            <Card.Link href="#">Another Link</Card.Link>
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col lg={6} md={6} className="mb-3">
+                    <Card style={{ width: '18rem' }}>
+                        {/* Replace with actual image */}
+                        <Card.Img variant="top" src={Asawari} className="photo" />
+                        <Card.Body>
+                            <Card.Title>Shrikant Dhengle</Card.Title>
+                            <Card.Text>
+                                Some quick example text to build on the card title and make up the bulk of the card's content.
+                            </Card.Text>
+                        </Card.Body>
+                        <Card.Body>
+                            <Card.Link href="https://www.linkedin.com/in/g-neeraj-kumar/">
+                                <FontAwesomeIcon icon={faLinkedin} className="iconstyle" />
+                            </Card.Link>
+                            <Card.Link href="#">Another Link</Card.Link>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>        </Container>
 
     );
 };
