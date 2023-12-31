@@ -50,13 +50,14 @@ const SignUp = () => {
         container
         justifyContent="center"
         alignItems="center"
-        style={{ height: "100vh" }}
+        style={{ height: "125vh" }}
       >
         <Grid item xs={12} sm={8} md={6} lg={4}>
           <div
             style={{
-              backgroundColor: "#96EFFF",
+              backgroundColor: "rgb(255, 255, 131)",
               padding: "20px",
+              margin:"20px",
               borderRadius: "10px",
             }}
           >
