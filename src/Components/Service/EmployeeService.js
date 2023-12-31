@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { BASE_URL } from "./APIConstant";
+import { BASE_URL } from "../Service/APIConstant";
 
 export async function registerEmployee(employeeData) {
     try {

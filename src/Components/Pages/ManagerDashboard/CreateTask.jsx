@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Modal, Form, Table } from 'react-bootstrap';
+import {getAllProjects} from '../../Service/ProjectService';
+import {createTask} from '../../Service/TaskService';
+
 
 const CreateTask = () => {
     const [projects, setProjects] = useState([]); // State to hold projects
@@ -8,65 +11,49 @@ const CreateTask = () => {
     const [taskName, setTaskName] = useState(''); // State for Task name
     const [taskDescription, setTaskDescription] = useState(''); // State for Task description
 
-    // Mock projects data
-    const mockProjects = [
-        {
-            id: 1,
-            name: 'Project 1',
-            description: 'Description for Project 1',
-        },
-        {
-            id: 2,
-            name: 'Project 2',
-            description: 'Description for Project 2',
-        },
-        // Add more projects here
-    ];
-
-    // Mock tasks data
-    const mockTasks = [
-        {
-            id: 1,
-            projectId: 1,
-            projectName: 'Project 1',
-            taskName: 'Task 1',
-            taskDescription: 'Task 1 Description',
-            status: 'Pending',
-        },
-        {
-            id: 2,
-            projectId: 2,
-            projectName: 'Project 2',
-            taskName: 'Task 2',
-            taskDescription: 'Task 2 Description',
-            status: 'Completed',
-        },
-        // Add more tasks here
-    ];
-
     useEffect(() => {
-        // Simulate API calls to fetch projects and tasks
-        // Replace with actual API calls
-
-        setProjects(mockProjects);
-        setTasks(mockTasks);
+        fetchProjects(); // Fetch projects on component mount
     }, []);
 
-    // Function to create a task for a specific project
-    const createTaskForProject = (projectId, taskName, taskDescription) => {
-        // Simulate API call to create task
-        // Replace with actual API call
-        const newTask = {
-            id: tasks.length + 1, // Replace this with ID from response
-            projectId,
-            projectName: projects.find((project) => project.id === projectId)?.name || '',
-            taskName,
-            taskDescription,
-            status: 'Pending', // Initial status
-        };
+    const fetchProjects = async () => {
+        try {
+            // Fetch projects from the API
+            const response = await getAllProjects('/api/projects');
+            if (response.ok) {
+                const data = await response.json();
+                setProjects(data);
+            } else {
+                console.error('Failed to fetch projects');
+            }
+        } catch (error) {
+            console.error('Error fetching projects:', error);
+        }
+    };
 
-        setTasks([...tasks, newTask]);
-        setShowModal(false);
+    const createTaskForProject = async (projectId, taskName, taskDescription) => {
+        try {
+            // Create task API call
+            const response = await createTask('/api/tasks', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    taskName,
+                    taskDescription,
+                }),
+            });
+
+            if (response.ok) {
+                const newTask = await response.json();
+                setTasks([...tasks, newTask]);
+                setShowModal(false);
+            } else {
+                console.error('Failed to create task');
+            }
+        } catch (error) {
+            console.error('Error creating task:', error);
+        }
     };
 
     const handleClose = () => setShowModal(false);
@@ -91,7 +78,6 @@ const CreateTask = () => {
 
     return (
         <div>
-            {/* Existing Project Cards */}
             <h2>Projects</h2>
             <div className="d-flex flex-wrap">
                 {projects.map((project) => (

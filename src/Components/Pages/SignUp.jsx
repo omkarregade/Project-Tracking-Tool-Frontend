@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+
+import axios from "axios";
 import {
   TextField,
   Button,
@@ -7,41 +9,60 @@ import {
   Select,
   MenuItem,
   Grid,
-  Link as RouterLink,
   Typography,
   FormControlLabel,
-  FormGroup,
-  Checkbox,
+  Radio,
+  RadioGroup,
 } from "@mui/material";
-import { Link } from "react-router-dom";
-
+import { NavLink, useNavigate } from "react-router-dom";
 
 const roles = ["Admin", "Manager", "Employee"];
 
 const SignUp = () => {
-  const [name, setName] = useState("");
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [designation, setDesignation] = useState("");
-  const [gender, setGender] = useState("");
-  const [contactNo, setContactNo] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [city, setCity] = useState("");
-  const [role, setRole] = useState("");
-  const [redirectToLogin, setRedirectToLogin] = useState(false);
+  const [role, setRole] = useState("Admin");
+  const navigate = useNavigate ();
 
-  const handleSignup = () => {
-    console.log("Name:", name);
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Designation:", designation);
-    console.log("Gender:", gender);
-    console.log("Contact Number:", contactNo);
-    console.log("City:", city);
-    console.log("Role:", role);
-  };
+  const handleSignup = async () => {
+    try {
+      let signupEndpoint = "";
 
-  const handleLoginRedirect = () => {
-    setRedirectToLogin(true);
+      switch (role) {
+        case "Admin":
+          signupEndpoint = "YOUR_ADMIN_SIGNUP_API_ENDPOINT";
+          break;
+        case "Manager":
+          signupEndpoint = "YOUR_MANAGER_SIGNUP_API_ENDPOINT";
+          break;
+        case "Employee":
+          signupEndpoint = "YOUR_EMPLOYEE_SIGNUP_API_ENDPOINT";
+          break;
+        default:
+          break;
+      }
+
+      const userData = {
+        fullName,
+        email,
+        password,
+        phoneNumber,
+        city,
+      };
+
+      // Make an API call to the respective endpoint based on the selected role
+      const response = await axios.post(signupEndpoint, userData);
+
+      console.log("User registered successfully:", response.data);
+      navigate('/Login');
+
+    } catch (error) {
+      console.error("Error registering user:", error.message);
+      navigate('/Signup');
+    }
   };
 
   return (
@@ -57,26 +78,21 @@ const SignUp = () => {
             style={{
               backgroundColor: "rgb(255, 255, 131)",
               padding: "20px",
-              margin:"20px",
+              margin: "20px",
               borderRadius: "10px",
             }}
           >
             <Typography variant="h4" align="center" gutterBottom>
               SignUp
             </Typography>
+
             <TextField
-              label="Name"
+              label="Full Name"
               variant="outlined"
               fullWidth
               margin="normal"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              InputProps={{
-                style: {
-                  backgroundColor: "#ffffff", // Input background color
-                  borderRadius: "5px", // Input border-radius
-                },
-              }}
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
             />
 
             <TextField
@@ -87,12 +103,6 @@ const SignUp = () => {
               margin="normal"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              InputProps={{
-                style: {
-                  backgroundColor: "#ffffff", // Input background color
-                  borderRadius: "5px", // Input border-radius
-                },
-              }}
             />
 
             <TextField
@@ -103,63 +113,16 @@ const SignUp = () => {
               margin="normal"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              InputProps={{
-                style: {
-                  backgroundColor: "#ffffff", // Input background color
-                  borderRadius: "5px", // Input border-radius
-                },
-              }}
             />
 
-            <FormControl variant="outlined" fullWidth margin="normal">
-              <InputLabel>Designation</InputLabel>
-              <Select
-                value={designation}
-                onChange={(e) => setDesignation(e.target.value)}
-                label="Designation"
-                style={{
-                  backgroundColor: "#ffffff",
-                  borderRadius: "5px",
-                }}
-              >
-                {roles.map((role) => (
-                  <MenuItem key={role} value={role}>
-                    {role}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <FormControl variant="outlined" fullWidth margin="normal">
-              <InputLabel>Gender</InputLabel>
-              <Select
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
-                label="Gender"
-                style={{
-                  backgroundColor: "#ffffff",
-                  borderRadius: "5px",
-                }}
-              >
-                <MenuItem value="male">Male</MenuItem>
-                <MenuItem value="female">Female</MenuItem>
-                <MenuItem value="other">Other</MenuItem>
-              </Select>
-            </FormControl>
-
             <TextField
-              label="Contact Number"
+              label="Phone Number"
+              type="tel"
               variant="outlined"
               fullWidth
               margin="normal"
-              value={contactNo}
-              onChange={(e) => setContactNo(e.target.value)}
-              InputProps={{
-                style: {
-                  backgroundColor: "#ffffff", // Input background color
-                  borderRadius: "5px", // Input border-radius
-                },
-              }}
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
             />
 
             <TextField
@@ -169,40 +132,25 @@ const SignUp = () => {
               margin="normal"
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              InputProps={{
-                style: {
-                  backgroundColor: "#ffffff", // Input background color
-                  borderRadius: "5px", // Input border-radius
-                },
-              }}
             />
 
-            <FormControl variant="outlined" fullWidth margin="normal">
-              <InputLabel>Role</InputLabel>
-              <Select
+            <FormControl component="fieldset" margin="normal">
+              <RadioGroup
+                aria-label="role"
+                name="role"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                label="Role"
-                style={{
-                  backgroundColor: "#ffffff",
-                  borderRadius: "5px",
-                }}
               >
                 {roles.map((role) => (
-                  <MenuItem key={role} value={role}>
-                    {role}
-                  </MenuItem>
+                  <FormControlLabel
+                    key={role}
+                    value={role}
+                    control={<Radio />}
+                    label={role}
+                  />
                 ))}
-              </Select>
+              </RadioGroup>
             </FormControl>
-
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox defaultChecked />}
-                label="Label"
-              />{" "}
-              Click me
-            </FormGroup>
 
             <Button
               variant="contained"
@@ -212,16 +160,9 @@ const SignUp = () => {
             >
               Register
             </Button>
-
-            <Link
-              component={RouterLink}
-              to="/login"
-              underline="hover"
-              fullWidth
-              style={{ textDecoration: "none" }}
-            >
-              <Button fullWidth>Already have an account? Login</Button>
-            </Link>
+            <NavLink to="/login" style={{ textDecoration: "none" }}>
+              <Button fullWidth>Login</Button>
+            </NavLink>
           </div>
         </Grid>
       </Grid>

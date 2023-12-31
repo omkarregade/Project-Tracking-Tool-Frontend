@@ -1,51 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, Row, Col, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { getAllManagers } from '../../Service/ManagerService';
+import { getAllProjects } from '../../Service/ProjectService';
+
 
 const AssignProjectToManager = () => {
   const [selectedProject, setSelectedProject] = useState('');
   const [selectedManager, setSelectedManager] = useState('');
-  const [projects, setProjects] = useState([]); // Placeholder for projects
-  const [managers, setManagers] = useState([]); // Placeholder for managers
+  const [projects, setProjects] = useState([]);
+  const [managers, setManagers] = useState([]);
 
   useEffect(() => {
-    fetchProjects();
-    fetchManagers();
+    fetchProjects(); // Fetch projects when the component mounts
+    fetchManagers(); // Fetch managers when the component mounts
   }, []);
 
   const fetchProjects = async () => {
     try {
-      const fetchedProjects = [
-        { id: 1, name: 'Project A' },
-        { id: 2, name: 'Project B' },
-        // ... Add more project data if needed
-      ];
+      const fetchedProjects = await getAllProjects(); // Call your fetchProjectsAPI function
       setProjects(fetchedProjects);
     } catch (error) {
       console.error('Error fetching projects:', error);
+      // Handle errors (e.g., display an error message)
     }
   };
 
   const fetchManagers = async () => {
     try {
-      const fetchedManagers = [
-        { id: 1, name: 'Manager 1' },
-        { id: 2, name: 'Manager 2' },
-        // ... Add more manager data if needed
-      ];
+      const fetchedManagers = await getAllManagers(); // Call your fetchManagersAPI function
       setManagers(fetchedManagers);
     } catch (error) {
       console.error('Error fetching managers:', error);
+      // Handle errors (e.g., display an error message)
     }
   };
 
   const handleAssignManager = () => {
     if (selectedProject && selectedManager) {
+      // Logic to assign manager to the project
       alert(`Manager ${selectedManager} assigned to Project ${selectedProject}`);
     } else {
       alert('Please select both a project and a manager before assigning.');
     }
   };
+
 
   return (
     <Container>

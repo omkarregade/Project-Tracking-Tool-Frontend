@@ -1,49 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import '../../CssFiles/AdminProfile.css'; // Adjust the path according to your project structure
+import { updateAdmin } from '../../Service/AdminService';
+
 
 const AdminProfile = () => {
-    const [adminData, setAdminData] = useState({
-        id: null,
-        name: '',
-        role: '',
-        email: '',
-        phone: '',
-        address: '',
-        // Add more fields as needed
-    });
-
+    const [adminData, setAdminData] = useState({});
     const [isEditing, setIsEditing] = useState(false);
-    const [editedProfile, setEditedProfile] = useState({ ...adminData });
-
-    const fetchAdminProfile = () => {
-        // Simulated API call or actual fetch implementation
-        const fetchedData = {
-            id: 1,
-            name: 'Admin Name',
-            role: 'Administrator',
-            email: 'admin@example.com',
-            phone: '+1-234-567-8901',
-            address: '123 Admin Street, Admin City',
-            // Add more fields as needed
-        };
-        setAdminData(fetchedData);
-        setEditedProfile(fetchedData);
-    };
+    const [editedProfile, setEditedProfile] = useState({});
 
     useEffect(() => {
         fetchAdminProfile();
     }, []);
 
+    const fetchAdminProfile = async () => {
+        try {
+            const id = localStorage.getItem('id');
+            const data = await fetchAdminProfile(id);
+            setAdminData(data);
+            setEditedProfile(data);
+        } catch (error) {
+            console.error(error.message);
+        }
+    };
+
     const handleEditProfile = () => {
         setIsEditing(true);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Simulated logic - update the profile data
-        setAdminData(editedProfile);
-        setIsEditing(false);
+        try {
+            await updateAdmin(editedProfile);
+            setAdminData(editedProfile);
+            setIsEditing(false);
+        } catch (error) {
+            console.error(error.message);
+        }
     };
 
     const handleCancelEdit = () => {
@@ -72,15 +65,12 @@ const AdminProfile = () => {
 
             <div className="admin-profile-header">
                 <h1>{adminData.name}</h1>
-                <p>{adminData.role}</p>
             </div>
             <div className="admin-profile-details">
-                {/* Display admin profile details */}
                 <p>ID: {adminData.id}</p>
-                <p>Role: {adminData.role}</p>
                 <p>Email: {adminData.email}</p>
-                <p>Phone: {adminData.phone}</p>
-                <p>Address: {adminData.address}</p>
+                <p>Phone: {adminData.phoneNumber}</p>
+                <p>Address: {adminData.city}</p>
             </div>
             <button className="admin-profile-button mt-3" onClick={handleEditProfile}>
                 Edit Profile

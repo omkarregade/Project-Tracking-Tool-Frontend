@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
+import { addProject } from '../../Service/ProjectService'; // Import your API functions
 
 const CreateProject = () => {
   const [projectData, setProjectData] = useState({
     projectName: '',
     domain: '',
     description: '',
+    createDate: '',
   });
 
   const handleChange = (e) => {
@@ -20,9 +22,9 @@ const CreateProject = () => {
     e.preventDefault();
 
     try {
-      // Simulating API call, replace with actual API logic
-      console.log('Project Data:', projectData);
-      console.log('Project created successfully.');
+      // Call the API function to create a project
+      const response = await addProject(projectData);
+      console.log('Project created successfully:', response);
       // Additional logic after successful project creation
     } catch (error) {
       console.error('Error creating project:', error);
@@ -62,6 +64,15 @@ const CreateProject = () => {
             value={projectData.description}
             onChange={handleChange}
             placeholder="Enter project description"
+          />
+        </Form.Group>
+        <Form.Group controlId="createDate" className="mb-3">
+          <Form.Label>Create Date:</Form.Label>
+          <Form.Control
+            type="date"
+            name="createDate"
+            value={projectData.createDate}
+            onChange={handleChange}
           />
         </Form.Group>
         <Button variant="primary" type="submit">
