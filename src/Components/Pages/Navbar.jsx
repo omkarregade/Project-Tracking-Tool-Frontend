@@ -29,7 +29,7 @@ function CustomNavbar() {
               <Nav.Link className="nav-link-main">About Us</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/contact-us">
-              <Nav.Link className="nav-link-main">Contact Us</Nav.Link>
+              <Nav.Link className="nav-link-main">Contact-Us</Nav.Link>
             </LinkContainer>
           </Nav>
         </Navbar.Collapse>
