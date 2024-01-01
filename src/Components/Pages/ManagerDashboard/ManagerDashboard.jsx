@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Nav, Navbar } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../CssFiles/ManagerDashboard.css'; // Adjust the path based on the actual folder structure
-import DemoKanbanBoard from './KanbanBoard';
+import { Kanban } from '../../KanbanBoard/Kanban';
 import CreateTask from './CreateTask';
 import ManagerProfile from './ManagerProfile';
 import AssignProjectToEmployee from './AssignProjectToEmployee';
@@ -16,12 +16,12 @@ const ManagerDashboard = () => {
 
     const renderContent = () => {
         switch (selectedOption) {
-            case 'Manager Profile': // New case for 'Edit Profile'
+            case 'Manager Profile':
                 return <ManagerProfile />;
             case 'Assign Projects':
                 return <AssignProjectToEmployee/>;
             case 'Kanban Board':
-                return <DemoKanbanBoard />;
+                return <Kanban />;
             case 'Create Task':
                 return <CreateTask />;
             default:

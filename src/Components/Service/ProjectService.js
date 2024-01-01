@@ -50,7 +50,7 @@ export async function updateProject(projectId, updatedProject) {
 
 export async function getProjectsByEmployeeId(employeeId) {
     try {
-        const response = await axios.get(`${BASE_URL}/employee/${employeeId}`);
+        const response = await axios.get(`${BASE_URL}/employees/${employeeId}`);
         return response.data;
     } catch (error) {
         throw error.response.data;

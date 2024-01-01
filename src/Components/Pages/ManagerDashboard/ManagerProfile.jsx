@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import '../../CssFiles/ManagerProfile.css'; // Adjust the path according to your project structure
 import {getManagerById, updateManager} from '../../Service/ManagerService';
+import { getId } from "../../Service/Util";
 
 
 const ManagerProfile = () => {
     const [managerData, setManagerData] = useState({
-        id: null,
-        name: '',
-        department: '',
+        managerId: null,
+        fullName: '',
         email: '',
-        phone: '',
-        address: '',
+        phoneNumber: '',
+        city: '',
         // Add more fields as needed
     });
 
@@ -20,7 +20,7 @@ const ManagerProfile = () => {
 
     const fetchManagerProfile = async () => {
         try {
-            const id = localStorage.getItem('id');
+            const id = getId('id');
             const response = await getManagerById(id); // Replace with your API call
             setManagerData(response.data);
             setEditedProfile(response.data);
@@ -73,16 +73,14 @@ const ManagerProfile = () => {
             </div>
 
             <div className="manager-profile-header">
-                <h1>{managerData.name}</h1>
-                <p>{managerData.department}</p>
+                <h1>{managerData.fullName}</h1>
             </div>
             <div className="manager-profile-details">
                 {/* Display manager profile details */}
-                <p>ID: {managerData.id}</p>
-                <p>Department: {managerData.department}</p>
+                <p>ID: {managerData.managerId}</p>
                 <p>Email: {managerData.email}</p>
-                <p>Phone: {managerData.phone}</p>
-                <p>Address: {managerData.address}</p>
+                <p>Phone: {managerData.phoneNumber}</p>
+                <p>Address: {managerData.city}</p>
             </div>
             <button className="manager-profile-button mt-3" onClick={handleEditProfile}>
                 Edit Profile

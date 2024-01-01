@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import '../../CssFiles/AdminProfile.css'; // Adjust the path according to your project structure
 import { updateAdmin } from '../../Service/AdminService';
+import { getId } from "../../Service/Util";
+
 
 
 const AdminProfile = () => {
@@ -15,7 +17,7 @@ const AdminProfile = () => {
 
     const fetchAdminProfile = async () => {
         try {
-            const id = localStorage.getItem('id');
+            const id = getId('id');
             const data = await fetchAdminProfile(id);
             setAdminData(data);
             setEditedProfile(data);
@@ -70,7 +72,7 @@ const AdminProfile = () => {
                 <p>ID: {adminData.id}</p>
                 <p>Email: {adminData.email}</p>
                 <p>Phone: {adminData.phoneNumber}</p>
-                <p>Address: {adminData.city}</p>
+                <p>City: {adminData.city}</p>
             </div>
             <button className="admin-profile-button mt-3" onClick={handleEditProfile}>
                 Edit Profile
@@ -92,7 +94,6 @@ const AdminProfile = () => {
                                 onChange={handleInputChange}
                             />
                         </Form.Group>
-                        {/* Add more Form.Group for other fields */}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>

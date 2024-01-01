@@ -15,7 +15,7 @@ const ManageProjects = () => {
 
     const fetchProjects = async () => {
         try {
-            const response = await getAllProjects('/api/projects'); // Replace with your API endpoint
+            const response = await getAllProjects(); // Replace with your API endpoint
             if (response.ok) {
                 const fetchedProjects = await response.json();
                 setProjects(fetchedProjects);
@@ -36,13 +36,11 @@ const ManageProjects = () => {
 
     const handleUpdate = async () => {
         try {
-            // Make the API call to update project data
-            await updateProject(selectedProject.id, updatedProjectInfo); // Assuming updateProject takes project id and updated info
+            await updateProject(selectedProject.id, updatedProjectInfo);
             console.log('Project updated successfully:', updatedProjectInfo);
-            setIsModalOpen(false); // Close the modal after successful update
+            setIsModalOpen(false);
         } catch (error) {
             console.error('Error updating project:', error);
-            // Handle error scenario
         }
     };
 
@@ -60,6 +58,7 @@ const ManageProjects = () => {
 
     return (
         <div className="manage-projects">
+        <h2>All Projects</h2>
             <Row xs={1} md={4} className="g-4">
                 {projects.map((project, index) => (
                     <Col key={index}>
