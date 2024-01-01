@@ -31,10 +31,10 @@ const Login = () => {
           apiEndpoint = `${BASE_URL}/admins/admin?email=${email}&password=${password}`;
           break;
         case "Manager":
-          apiEndpoint = "/manager";
+          apiEndpoint = `${BASE_URL}/managers/manager?email=${email}&password=${password}`;
           break;
         case "Employee":
-          apiEndpoint = "/employee";
+          apiEndpoint = `${BASE_URL}/managers/manager?email=${email}&password=${password}`;
           break;
         default:
           break;
@@ -44,7 +44,6 @@ const response = await axios.get(apiEndpoint);
 
       console.log("Login Successful:", response.data);
 
-      // Redirect to respective dashboards on successful login
       switch (role) {
         case "Admin":
           navigate("/admin-dashboard");

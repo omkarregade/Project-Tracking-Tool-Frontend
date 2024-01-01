@@ -3,7 +3,6 @@ import { Container, Row, Col, Nav, Navbar } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../CssFiles/AdminDashboard.css'; // Adjust the path based on the actual folder structure
 import CreateProject from './CreateProject';
-import ManageProject from './ManageProjects';
 import AdminProfile from './AdminProfile'; // Import your AdminProfile component here
 import AssignProjectToManager from './AssignProjectToManager';
 import ManageProjects from './ManageProjects';
