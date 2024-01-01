@@ -48,7 +48,12 @@ export async function deleteEmployee(id) {
 
 export async function updateEmployeeDesignation(employeeId, newDesignation) {
     try {
-        const response = await axios.put(`${BASE_URL}/employee/${employeeId}/designation`, newDesignation);
+        const response = await axios.put(`${BASE_URL}/employee/designation/${employeeId}`, newDesignation,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
         return response.data;
     } catch (error) {
         throw error;
@@ -57,7 +62,7 @@ export async function updateEmployeeDesignation(employeeId, newDesignation) {
 
 export async function mapEmployeeToProject(employeeId, projectId) {
     try {
-        const response = await axios.post(`${BASE_URL}/assignment-mappings//mapping/${employeeId}/to/${projectId}`);
+        const response = await axios.post(`${BASE_URL}/assignment-mappings/mapping/${employeeId}/to/${projectId}`);
         return response.data;
     } catch (error) {
         throw error;

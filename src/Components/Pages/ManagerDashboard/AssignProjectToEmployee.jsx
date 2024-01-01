@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, Row, Col, Table } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { getAllEmployees, mapEmployeeToProject, updateEmployeeDesignation } from '../../Service/EmployeeService'; // Import the EmployeeService functions
-import {getAllProjects} from '../../Service/ProjectService';
+import { getAllEmployees, mapEmployeeToProject, updateEmployeeDesignation } from '../../Service/EmployeeService';
+import { getAllProjects } from '../../Service/ProjectService';
+
 const AssignProjectToEmployee = () => {
     const [employees, setEmployees] = useState([]);
     const [projects, setProjects] = useState([]);
-    const [selectedEmployee, setSelectedEmployee] = useState('');
-    const [selectedProject, setSelectedProject] = useState('');
+    const [selectedEmployeeId, setSelectedEmployeeId] = useState('');
+    const [selectedProjectId, setSelectedProjectId] = useState('');
     const [selectedDesignation, setSelectedDesignation] = useState('');
 
     useEffect(() => {
@@ -17,13 +17,8 @@ const AssignProjectToEmployee = () => {
 
     const fetchEmployees = async () => {
         try {
-            const response = await getAllEmployees(); // API call to fetch employees
-            if (response.ok) {
-                const fetchedEmployees = await response.json();
-                setEmployees(fetchedEmployees);
-            } else {
-                console.error('Failed to fetch employees');
-            }
+            const fetchedEmployees = await getAllEmployees();
+            setEmployees(fetchedEmployees);
         } catch (error) {
             console.error('Error fetching employees:', error);
         }
@@ -31,28 +26,37 @@ const AssignProjectToEmployee = () => {
 
     const fetchProjects = async () => {
         try {
-            const response = await getAllProjects(); // API call to fetch projects
-            if (response.ok) {
-                const fetchedProjects = await response.json();
-                setProjects(fetchedProjects);
-            } else {
-                console.error('Failed to fetch projects');
-            }
+            const fetchedProjects = await getAllProjects();
+            setProjects(fetchedProjects);
         } catch (error) {
             console.error('Error fetching projects:', error);
         }
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await mapEmployeeToProject(selectedEmployee.employeeId, selectedProject.ProjectId); // API call to assign project to employee
-            await updateEmployeeDesignation(selectedEmployee, selectedDesignation);
-            alert('Project assigned successfully:', selectedProject);
-        } catch (error) {
-            alert('Error assigning project:', error);
-        }
-    };
+
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+        console.log("Selected Employee ID:", selectedEmployeeId);
+        console.log("Selected Project ID:", selectedProjectId);
+        console.log("Selected DESIGNATION:", selectedDesignation);
+
+        const designationData = {
+            title: selectedDesignation // This should match one of your DesignationTitle enum values
+            // Other designation properties...
+        };
+
+
+        // const selectedEmp = employees.find(employee => employee.employeeId === selectedEmployeeId);
+        // const selectedProj = projects.find(project => project.projectId === selectedProjectId);
+
+            await mapEmployeeToProject(selectedEmployeeId, selectedProjectId);
+            console.log('Project assigned successfully');
+        
+    } catch (error) {
+        console.log('Error assigning project:', error);
+    }
+};
 
     const hardcodedDesignations = [
         'SOFTWARE_ENGINEER',
@@ -72,35 +76,18 @@ const AssignProjectToEmployee = () => {
                 <Col md={6}>
                     <div className="inner-box">
                         <h2>Assign Project to Employee</h2>
-
                         <Form onSubmit={handleSubmit}>
                             <Form.Group controlId="employeeSelect" className="mb-3">
                                 <Form.Label>Select Employee:</Form.Label>
                                 <Form.Control
                                     as="select"
-                                    value={selectedEmployee}
-                                    onChange={(e) => setSelectedEmployee(e.target.value)}
+                                    value={selectedEmployeeId}
+                                    onChange={(e)=> setSelectedEmployeeId(e.target.value)}
                                 >
                                     <option value="">Select Employee</option>
                                     {employees.map((employee) => (
                                         <option key={employee.employeeId} value={employee.employeeId}>
-                                            {employee.firstName}
-                                        </option>
-                                    ))}
-                                </Form.Control>
-                            </Form.Group>
-
-                            <Form.Group controlId="designationSelect" className="mb-3">
-                                <Form.Label>Select Designation:</Form.Label>
-                                <Form.Control
-                                    as="select"
-                                    value={selectedDesignation}
-                                    onChange={(e) => setSelectedDesignation(e.target.value)}
-                                >
-                                    <option value="">Assign designation for the employee</option>
-                                    {hardcodedDesignations.map((designation) => (
-                                        <option key={designation} value={designation}>
-                                            {designation}
+                                            {employee.fullName}
                                         </option>
                                     ))}
                                 </Form.Control>
@@ -110,8 +97,8 @@ const AssignProjectToEmployee = () => {
                                 <Form.Label>Select Project:</Form.Label>
                                 <Form.Control
                                     as="select"
-                                    value={selectedProject}
-                                    onChange={(e) => setSelectedProject(e.target.value)}
+                                    value={selectedProjectId}
+                                    onChange={(e)=> setSelectedProjectId(e.target.value)}
                                 >
                                     <option value="">Select from ongoing projects</option>
                                     {projects.map((project) => (
@@ -122,17 +109,15 @@ const AssignProjectToEmployee = () => {
                                 </Form.Control>
                             </Form.Group>
 
-                            <div className="d-grid">
-                                <Button variant="primary" type="submit">
-                                    Assign
-                                </Button>
-                            </div>
+                            <Button variant="primary" type="submit">
+                                Assign
+                            </Button>
                         </Form>
                     </div>
                 </Col>
             </Row>
 
-            {/* Project List Section */}
+            {/* Display the list of projects */}
             <Row className="justify-content-md-center mt-5">
                 <Col md={8}>
                     <div className="inner-box">
