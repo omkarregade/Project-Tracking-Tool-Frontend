@@ -12,33 +12,30 @@ const AssignProjectToManager = () => {
   const [managers, setManagers] = useState([]);
 
   useEffect(() => {
-    fetchProjects(); // Fetch projects when the component mounts
-    fetchManagers(); // Fetch managers when the component mounts
+    fetchProjects();
+    fetchManagers();
   }, []);
 
   const fetchProjects = async () => {
     try {
-      const fetchedProjects = await getAllProjects(); // Call your fetchProjectsAPI function
+      const fetchedProjects = await getAllProjects();
       setProjects(fetchedProjects);
     } catch (error) {
       console.error('Error fetching projects:', error);
-      // Handle errors (e.g., display an error message)
     }
   };
 
   const fetchManagers = async () => {
     try {
-      const fetchedManagers = await getAllManagers(); // Call your fetchManagersAPI function
+      const fetchedManagers = await getAllManagers();
       setManagers(fetchedManagers);
     } catch (error) {
       console.error('Error fetching managers:', error);
-      // Handle errors (e.g., display an error message)
     }
   };
 
   const handleAssignManager = () => {
     if (selectedProject && selectedManager) {
-      // Logic to assign manager to the project
       alert(`Manager ${selectedManager} assigned to Project ${selectedProject}`);
     } else {
       alert('Please select both a project and a manager before assigning.');

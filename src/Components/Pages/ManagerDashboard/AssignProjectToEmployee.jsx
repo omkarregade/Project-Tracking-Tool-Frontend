@@ -1,36 +1,71 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, Row, Col, Table } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import { getAllEmployees, mapEmployeeToProject, updateEmployeeDesignation } from '../../Service/EmployeeService'; // Import the EmployeeService functions
+import {getAllProjects} from '../../Service/ProjectService';
 const AssignProjectToEmployee = () => {
     const [employees, setEmployees] = useState([]);
+    const [projects, setProjects] = useState([]);
     const [selectedEmployee, setSelectedEmployee] = useState('');
-    const [designations, setDesignations] = useState(['Junior Developer', 'Senior Developer', 'UI/UX Designer']);
+    const [selectedProject, setSelectedProject] = useState('');
     const [selectedDesignation, setSelectedDesignation] = useState('');
-    const [projects, setProjects] = useState([
-        { id: 1, name: 'Project A', description: 'Description for Project A' },
-        { id: 2, name: 'Project B', description: 'Description for Project B' },
-        // Add more project data as needed
-    ]);
-    const [selectedProject, setSelectedProject] = useState(''); // Define selectedProject state
 
-    // Simulated API call to fetch employees
     useEffect(() => {
-        const fetchedEmployees = [
-            { id: 1, name: 'Employee 1' },
-            { id: 2, name: 'Employee 2' },
-            { id: 3, name: 'Employee 3' },
-        ];
-        setEmployees(fetchedEmployees);
+        fetchEmployees();
+        fetchProjects();
     }, []);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Selected Employee:', selectedEmployee);
-        console.log('Selected Designation:', selectedDesignation);
-        console.log('Selected Project:', selectedProject);
-        // Here you can handle the submission logic
+    const fetchEmployees = async () => {
+        try {
+            const response = await getAllEmployees(); // API call to fetch employees
+            if (response.ok) {
+                const fetchedEmployees = await response.json();
+                setEmployees(fetchedEmployees);
+            } else {
+                console.error('Failed to fetch employees');
+            }
+        } catch (error) {
+            console.error('Error fetching employees:', error);
+        }
     };
+
+    const fetchProjects = async () => {
+        try {
+            const response = await getAllProjects(); // API call to fetch projects
+            if (response.ok) {
+                const fetchedProjects = await response.json();
+                setProjects(fetchedProjects);
+            } else {
+                console.error('Failed to fetch projects');
+            }
+        } catch (error) {
+            console.error('Error fetching projects:', error);
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await mapEmployeeToProject(selectedEmployee.employeeId, selectedProject.ProjectId); // API call to assign project to employee
+            await updateEmployeeDesignation(selectedEmployee, selectedDesignation);
+            alert('Project assigned successfully:', selectedProject);
+        } catch (error) {
+            alert('Error assigning project:', error);
+        }
+    };
+
+    const hardcodedDesignations = [
+        'SOFTWARE_ENGINEER',
+        'UI_UX_DESIGNER',
+        'QA_TESTER',
+        'DEVOPS_ENGINEER',
+        'SYSTEM_ADMINISTRATOR',
+        'CONTENT_WRITER',
+        'SEO_SPECIALIST',
+        'BUSINESS_ANALYST',
+        'DATA_ANALYST',
+    ];
+
     return (
         <Container>
             <Row className="justify-content-md-center mt-5">
@@ -41,11 +76,15 @@ const AssignProjectToEmployee = () => {
                         <Form onSubmit={handleSubmit}>
                             <Form.Group controlId="employeeSelect" className="mb-3">
                                 <Form.Label>Select Employee:</Form.Label>
-                                <Form.Control as="select" value={selectedEmployee} onChange={(e) => setSelectedEmployee(e.target.value)}>
+                                <Form.Control
+                                    as="select"
+                                    value={selectedEmployee}
+                                    onChange={(e) => setSelectedEmployee(e.target.value)}
+                                >
                                     <option value="">Select Employee</option>
                                     {employees.map((employee) => (
-                                        <option key={employee.id} value={employee.id}>
-                                            {employee.name}
+                                        <option key={employee.employeeId} value={employee.employeeId}>
+                                            {employee.firstName}
                                         </option>
                                     ))}
                                 </Form.Control>
@@ -53,9 +92,13 @@ const AssignProjectToEmployee = () => {
 
                             <Form.Group controlId="designationSelect" className="mb-3">
                                 <Form.Label>Select Designation:</Form.Label>
-                                <Form.Control as="select" value={selectedDesignation} onChange={(e) => setSelectedDesignation(e.target.value)}>
+                                <Form.Control
+                                    as="select"
+                                    value={selectedDesignation}
+                                    onChange={(e) => setSelectedDesignation(e.target.value)}
+                                >
                                     <option value="">Assign designation for the employee</option>
-                                    {designations.map((designation) => (
+                                    {hardcodedDesignations.map((designation) => (
                                         <option key={designation} value={designation}>
                                             {designation}
                                         </option>
@@ -65,11 +108,15 @@ const AssignProjectToEmployee = () => {
 
                             <Form.Group controlId="projectSelect" className="mb-3">
                                 <Form.Label>Select Project:</Form.Label>
-                                <Form.Control as="select" value={selectedProject} onChange={(e) => setSelectedProject(e.target.value)}>
+                                <Form.Control
+                                    as="select"
+                                    value={selectedProject}
+                                    onChange={(e) => setSelectedProject(e.target.value)}
+                                >
                                     <option value="">Select from ongoing projects</option>
                                     {projects.map((project) => (
-                                        <option key={project.id} value={project.id}>
-                                            {project.name}
+                                        <option key={project.projectId} value={project.projectId}>
+                                            {project.projectTitle}
                                         </option>
                                     ))}
                                 </Form.Control>
@@ -99,9 +146,9 @@ const AssignProjectToEmployee = () => {
                             </thead>
                             <tbody>
                                 {projects.map((project) => (
-                                    <tr key={project.id}>
-                                        <td>{project.name}</td>
-                                        <td>{project.description}</td>
+                                    <tr key={project.projectId}>
+                                        <td>{project.projectTitle}</td>
+                                        <td>{project.projectDescription}</td>
                                     </tr>
                                 ))}
                             </tbody>

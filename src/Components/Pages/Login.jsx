@@ -66,7 +66,6 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Error:", error.message);
-      // Redirect back to login page on error
       navigate("/login");
     }
   };

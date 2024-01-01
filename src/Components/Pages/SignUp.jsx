@@ -27,7 +27,24 @@ const SignUp = () => {
   const [role, setRole] = useState("Admin");
   const navigate = useNavigate ();
 
+const isValidEmail = (email) => {
+    // Email validation regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const isValidPhoneNumber = (email) => {
+    // Email validation regex
+    const phoneNumberRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return phoneNumberRegex.test(phoneNumber);
+  };
+
+  
+
+
   const handleSignup = async () => {
+  if (fullName && isValidEmail(email) && password  &&  isValidPhoneNumber(phoneNumber) && city ) {
+
     try {
       let signupEndpoint = "";
 
@@ -62,6 +79,10 @@ const SignUp = () => {
     } catch (error) {
       console.error("Error registering user:", error.message);
       navigate('/Signup');
+    }
+
+     } else {
+      console.log("Form data is invalid. Please check the fields.");
     }
   };
 

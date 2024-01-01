@@ -18,7 +18,7 @@ const CreateTask = () => {
     const fetchProjects = async () => {
         try {
             // Fetch projects from the API
-            const response = await getAllProjects('/api/projects');
+            const response = await getAllProjects();
             if (response.ok) {
                 const data = await response.json();
                 setProjects(data);
@@ -30,52 +30,47 @@ const CreateTask = () => {
         }
     };
 
-    const createTaskForProject = async (projectId, taskName, taskDescription) => {
-        try {
-            // Create task API call
-            const response = await createTask('/api/tasks', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    taskName,
-                    taskDescription,
-                }),
-            });
+const createTaskForProject = async (taskData) => {
+    try {
+        const response = await createTask(taskData);
 
-            if (response.ok) {
-                const newTask = await response.json();
-                setTasks([...tasks, newTask]);
-                setShowModal(false);
-            } else {
-                console.error('Failed to create task');
-            }
-        } catch (error) {
-            console.error('Error creating task:', error);
+        if (response.ok) {
+            const newTask = await response.json();
+            setTasks([...tasks, newTask]);
+            setShowModal(false);
+        } else {
+            console.error('Failed to create task');
         }
-    };
+    } catch (error) {
+        console.error('Error creating task:', error);
+    }
+};
 
     const handleClose = () => setShowModal(false);
     const handleShow = () => setShowModal(true);
 
-    const handleCreateTask = (e) => {
-        e.preventDefault();
-        if (taskName && taskDescription) {
-            const selectedProjectId = projects.length > 0 ? projects[0].id : null;
+const handleCreateTask = (e) => {
+    e.preventDefault();
+    if (taskName && taskDescription) {
+        const selectedProjectId = projects.length > 0 ? projects[0].id : null;
 
-            if (selectedProjectId) {
-                createTaskForProject(selectedProjectId, taskName, taskDescription);
-                setTaskName('');
-                setTaskDescription('');
-            } else {
-                alert('Please select a project before creating a task.');
-            }
+        if (selectedProjectId) {
+            const taskData = {
+                projectId: selectedProjectId,
+                taskName,
+                taskDescription,
+            };
+
+            createTaskForProject(taskData);
+            setTaskName('');
+            setTaskDescription('');
         } else {
-            alert('Please provide both task name and task description.');
+            alert('Please select a project before creating a task.');
         }
-    };
-
+    } else {
+        alert('Please provide both task name and task description.');
+    }
+};
     return (
         <div>
             <h2>Projects</h2>

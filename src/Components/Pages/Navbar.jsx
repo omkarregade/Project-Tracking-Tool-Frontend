@@ -2,9 +2,20 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from "react-router-bootstrap";
+import { isAuthenticated, logout } from "../Service/Util";
+import { useNavigate } from 'react-router-dom';
 import './../CssFiles/Navbar.css'
 
+
 function CustomNavbar() {
+  const navigate = useNavigate();
+
+
+  const handleLogout = () => {
+        logout();        
+        
+        navigate('/login');
+    };
   return (
     <Navbar expand="lg" className="navbar sticky-top navbar-expand-sm navbar-main">
       <Container fluid>
@@ -23,7 +34,15 @@ function CustomNavbar() {
               <Nav.Link className="nav-link-main">Register</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/login">
-              <Nav.Link className="nav-link-main">Login</Nav.Link>
+              <Nav>
+                            {isAuthenticated() ? (
+                                <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                            ) : (
+                                <LinkContainer to="/log-in">
+                                    <Nav.Link>Login</Nav.Link>
+                                </LinkContainer>
+                            )}
+                        </Nav>
             </LinkContainer>
             <LinkContainer to="/about-us">
               <Nav.Link className="nav-link-main">About Us</Nav.Link>

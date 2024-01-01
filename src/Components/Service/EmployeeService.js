@@ -4,7 +4,7 @@ import { BASE_URL } from "../Service/APIConstant";
 
 export async function registerEmployee(employeeData) {
     try {
-        const response = await axios.post(`${BASE_URL}/employees`, employeeData);
+        const response = await axios.post(`${BASE_URL}/employee`, employeeData);
         return response.data;
     } catch (error) {
         throw error;
@@ -13,7 +13,7 @@ export async function registerEmployee(employeeData) {
 
 export async function getAllEmployees() {
     try {
-        const response = await axios.get(`${BASE_URL}/employees`);
+        const response = await axios.get(`${BASE_URL}/employee`);
         return response.data;
     } catch (error) {
         throw error;
@@ -22,7 +22,7 @@ export async function getAllEmployees() {
 
 export async function getEmployeeById(id) {
     try {
-        const response = await axios.get(`${BASE_URL}/employees/${id}`);
+        const response = await axios.get(`${BASE_URL}/employee/getBy/${id}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -31,7 +31,7 @@ export async function getEmployeeById(id) {
 
 export async function updateEmployee(id, employeeData) {
     try {
-        const response = await axios.put(`${BASE_URL}/employees/${id}`, employeeData);
+        const response = await axios.put(`${BASE_URL}/employee/${id}`, employeeData);
         return response.data;
     } catch (error) {
         throw error;
@@ -40,7 +40,7 @@ export async function updateEmployee(id, employeeData) {
 
 export async function deleteEmployee(id) {
     try {
-        await axios.delete(`${BASE_URL}/employees/${id}`);
+        await axios.delete(`${BASE_URL}/employee/${id}`);
     } catch (error) {
         throw error;
     }
@@ -48,10 +48,18 @@ export async function deleteEmployee(id) {
 
 export async function updateEmployeeDesignation(employeeId, newDesignation) {
     try {
-        const response = await axios.put(`${BASE_URL}/employees/${employeeId}/designation`, newDesignation);
+        const response = await axios.put(`${BASE_URL}/employee/${employeeId}/designation`, newDesignation);
         return response.data;
     } catch (error) {
         throw error;
     }
 }
 
+export async function mapEmployeeToProject(employeeId, projectId) {
+    try {
+        const response = await axios.post(`${BASE_URL}/assignment-mappings//mapping/${employeeId}/to/${projectId}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}

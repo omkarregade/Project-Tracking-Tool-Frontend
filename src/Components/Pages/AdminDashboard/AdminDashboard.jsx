@@ -6,6 +6,7 @@ import CreateProject from './CreateProject';
 import ManageProject from './ManageProjects';
 import AdminProfile from './AdminProfile'; // Import your AdminProfile component here
 import AssignProjectToManager from './AssignProjectToManager';
+import ManageProjects from './ManageProjects';
 
 const AdminDashboard = () => {
     const [selectedOption, setSelectedOption] = useState('');
@@ -19,7 +20,7 @@ const AdminDashboard = () => {
             case 'Create Project':
                 return <CreateProject />;
             case 'Project List':
-                return <ManageProject />;
+                return <ManageProjects />;
             case 'Assign Manager':
                 return <AssignProjectToManager/>;
             case 'Admin Profile':
@@ -60,7 +61,7 @@ const AdminDashboard = () => {
                                         onClick={() => handleNavigation('Assign Manager')}
                                         className={selectedOption === 'Assign Manager' ? 'active' : ''}
                                     >
-                                        Assign Manager
+                                        Assign Project to Manager
                                     </Nav.Link>
                                 </Nav>
                             </Navbar.Collapse>

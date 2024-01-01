@@ -70,7 +70,7 @@ const AdminProfile = () => {
                 <p>ID: {adminData.id}</p>
                 <p>Email: {adminData.email}</p>
                 <p>Phone: {adminData.phoneNumber}</p>
-                <p>Address: {adminData.city}</p>
+                <p>City: {adminData.city}</p>
             </div>
             <button className="admin-profile-button mt-3" onClick={handleEditProfile}>
                 Edit Profile
@@ -92,7 +92,6 @@ const AdminProfile = () => {
                                 onChange={handleInputChange}
                             />
                         </Form.Group>
-                        {/* Add more Form.Group for other fields */}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>

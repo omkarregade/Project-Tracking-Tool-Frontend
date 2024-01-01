@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Nav, Navbar } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../CssFiles/EmployeeDashboard.css'; // Adjust the path based on the actual folder structure
+import '../../CssFiles/EmployeeDashboard.css';
 import EmployeeProfile from './EmployeeProfile';
-import DemoKanbanBoard from './KanbanBoard';
 import { Kanban } from '../../KanbanBoard/Kanban';
 
 const EmployeeDashboard = () => {
@@ -17,7 +16,7 @@ const EmployeeDashboard = () => {
         switch (selectedOption) {
             case 'Employee Profile':
                 return <EmployeeProfile />;
-            case 'Kanban Board':
+            case 'Kanban':
                 return <Kanban />;
             default:
                 return <div>Please select an option from the sidebar</div>;

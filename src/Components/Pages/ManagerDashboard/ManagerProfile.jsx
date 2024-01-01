@@ -6,12 +6,11 @@ import {getManagerById, updateManager} from '../../Service/ManagerService';
 
 const ManagerProfile = () => {
     const [managerData, setManagerData] = useState({
-        id: null,
-        name: '',
-        department: '',
+        managerId: null,
+        fullName: '',
         email: '',
-        phone: '',
-        address: '',
+        phoneNumber: '',
+        city: '',
         // Add more fields as needed
     });
 
@@ -73,16 +72,14 @@ const ManagerProfile = () => {
             </div>
 
             <div className="manager-profile-header">
-                <h1>{managerData.name}</h1>
-                <p>{managerData.department}</p>
+                <h1>{managerData.fullName}</h1>
             </div>
             <div className="manager-profile-details">
                 {/* Display manager profile details */}
-                <p>ID: {managerData.id}</p>
-                <p>Department: {managerData.department}</p>
+                <p>ID: {managerData.managerId}</p>
                 <p>Email: {managerData.email}</p>
-                <p>Phone: {managerData.phone}</p>
-                <p>Address: {managerData.address}</p>
+                <p>Phone: {managerData.phoneNumber}</p>
+                <p>Address: {managerData.city}</p>
             </div>
             <button className="manager-profile-button mt-3" onClick={handleEditProfile}>
                 Edit Profile

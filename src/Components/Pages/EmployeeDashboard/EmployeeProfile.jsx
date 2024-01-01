@@ -5,7 +5,7 @@ import {getEmployeeById, updateEmployee} from '../../Service/EmployeeService'; /
 
 const EmployeeProfile = () => {
     const [employeeData, setEmployeeData] = useState({
-        id:'',
+        employeeId:'',
         fullName: '',
         email: '',
         phoneNumber: '',
@@ -18,7 +18,7 @@ const EmployeeProfile = () => {
     const fetchEmployeeProfile = async () => {
         try {
             const id = localStorage.getItem('id');
-            const response = await getEmployeeById(id); // Replace with your API call
+            const response = await getEmployeeById(id);
             setEmployeeData(response.data);
             setEditedProfile(response.data);
         } catch (error) {
@@ -62,13 +62,13 @@ const EmployeeProfile = () => {
     return (
         <div className="employee-profile my-5">
             <div className="employee-profile-header">
-                <h1>{employeeData.name}</h1>
+                <h1>{employeeData.fullName}</h1>
             </div>
             <div className="employee-profile-details">
-                <p>ID: {employeeData.id}</p>
+                <p>ID: {employeeData.employeeId}</p>
                 <p>Email: {employeeData.email}</p>
-                <p>Phone: {employeeData.phone}</p>
-                <p>Address: {employeeData.address}</p>
+                <p>Phone: {employeeData.phoneNumber}</p>
+                <p>Address: {employeeData.city}</p>
             </div>
             <button className="employee-profile-button mt-3" onClick={handleEditProfile}>
                 Edit Profile

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { addProject } from '../../Service/ProjectService'; // Import your API functions
-
+import { addProject } from '../../Service/ProjectService';
 const CreateProject = () => {
   const [projectData, setProjectData] = useState({
     projectName: '',
@@ -22,13 +21,10 @@ const CreateProject = () => {
     e.preventDefault();
 
     try {
-      // Call the API function to create a project
       const response = await addProject(projectData);
       console.log('Project created successfully:', response);
-      // Additional logic after successful project creation
     } catch (error) {
       console.error('Error creating project:', error);
-      // Handle error scenario
     }
   };
 
