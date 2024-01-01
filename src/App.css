@@ -1,0 +1,18 @@
+.move_button {
+    cursor: pointer;
+    border-radius: 5px;
+    outline: none;
+    background-color: #1b8bcc;
+    color: #fff;
+    border: none;
+    transition: 100ms ease;
+    padding: 10px;
+}
+
+.move_button button:hover {
+    background-color: #046daa;
+}
+
+.move_button button:active {
+    transform: translateY(2px);
+}
