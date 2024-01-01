@@ -1,0 +1,47 @@
+
+.custom-scroll::-webkit-scrollbar {
+    width: 10px;
+    
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+    border-radius: 50px;
+    border: 1px solid #ccc;
+    background-color: #8b6c6c;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+    border: 1px solid gray;
+    background-color: #352f2f;
+    
+}
+
+
+.kanban{
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.kanban_navbar{
+    width: 100%;
+    padding: 20px 30px;
+    border-bottom: 5px solid #ccc;
+}
+
+.kanban_outer{
+    flex: 1;
+    width: 100%;
+    overflow-x: auto;
+   
+}
+
+.kanban_boards{
+    padding: 20px;
+    padding-bottom: 0;
+    height: 100%;
+    min-width: fit-content;
+    display: flex;
+    gap: 30px;
+}

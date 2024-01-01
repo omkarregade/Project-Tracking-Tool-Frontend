@@ -11,6 +11,7 @@ import { ContactUs } from "./Components/Pages/ContactUs/ContactUs";
 import AboutUs from "./Components/Pages/AboutUs/AboutUs";
 import SignUp from "./Components/Pages/SignUp";
 import Login from "./Components/Pages/Login";
+import { Kanban } from "./Components/KanbanBoard/Kanban";
 
 function App() {
   return (
@@ -18,20 +19,31 @@ function App() {
       <BrowserRouter>
         <CustomNavbar></CustomNavbar>
         <Routes>
-          <Route path="/" element={<HomePage/>} />
-          <Route path="/about-us" element={<AboutUs/>} />
-          <Route path="/contact-us" element={<ContactUs/>} />
-          {/* <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+
+
+
+           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/manager-dashboard" element={<ManagerDashboard />} />
-          <Route path="/employee-dashboard" element={<EmployeeDashboard />} /> */}
-          <Route path="/register" element={<SignUp/>} />
-          <Route path="/login" element={<Login/>} />
+          <Route path="/employee-dashboard" element={<EmployeeDashboard />} /> 
+
+
+
+          <Route path="/register" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
         <Footer />
       </BrowserRouter>
+      ;
     </div>
-
   );
 }
 
 export default App;
+
+
+
+
+
