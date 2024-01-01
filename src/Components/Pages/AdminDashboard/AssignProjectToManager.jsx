@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, Row, Col, Form } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { getAllManagers } from '../../Service/ManagerService';
-import { getAllProjects } from '../../Service/ProjectService';
-
+import { updateProject, getAllProjects } from '../../Service/ProjectService';
 
 const AssignProjectToManager = () => {
   const [selectedProject, setSelectedProject] = useState('');
@@ -34,22 +32,28 @@ const AssignProjectToManager = () => {
     }
   };
 
-  const handleAssignManager = () => {
-    if (selectedProject && selectedManager) {
-      alert(`Manager ${selectedManager} assigned to Project ${selectedProject}`);
-    } else {
-      alert('Please select both a project and a manager before assigning.');
+  const handleAssignManager = async (e) => {
+  e.preventDefault();
+  if (selectedProject && selectedManager) {
+    try {
+      const projectToUpdate = projects.find(project => project.projectId === selectedProject);
+      const updatedProject = { ...projectToUpdate, manager: { managerId: selectedManager } };
+      await updateProject(selectedProject, updatedProject);
+      console.log(`Manager assigned to Project successfully`);
+      fetchProjects(); // Optionally, you can refetch projects after updating to reflect changes
+    } catch (error) {
+      console.error('Error assigning manager:', error);
     }
-  };
-
-
+  } else {
+    alert('Please select both a project and a manager before assigning.');
+  }
+};
   return (
     <Container>
       <Row className="justify-content-md-center mt-5">
         <Col md={6}>
           <div className="inner-box assign-manager-form">
             <h2>Assign Manager</h2>
-
             <Form onSubmit={handleAssignManager}>
               <Form.Group controlId="projectSelect" className="mb-3">
                 <Form.Label>Select Project:</Form.Label>
@@ -59,13 +63,12 @@ const AssignProjectToManager = () => {
                 >
                   <option value="">Select Project</option>
                   {projects.map((project) => (
-                    <option key={project.id} value={project.id}>
-                      {project.name}
+                    <option key={project.projectId} value={project.projectId}>
+                      {project.projectTitle}
                     </option>
                   ))}
                 </Form.Select>
               </Form.Group>
-
               <Form.Group controlId="managerSelect" className="mb-3">
                 <Form.Label>Select Manager:</Form.Label>
                 <Form.Select
@@ -74,13 +77,12 @@ const AssignProjectToManager = () => {
                 >
                   <option value="">Select Manager</option>
                   {managers.map((manager) => (
-                    <option key={manager.id} value={manager.id}>
-                      {manager.name}
+                    <option key={manager.managerId} value={manager.managerId}>
+                      {manager.fullName}
                     </option>
                   ))}
                 </Form.Select>
               </Form.Group>
-
               <div className="d-grid">
                 <Button variant="primary" type="submit">
                   Assign Manager

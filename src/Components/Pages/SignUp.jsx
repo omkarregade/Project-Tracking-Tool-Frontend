@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {BASE_URL} from '../Service/APIConstant';
 
 import axios from "axios";
 import {
@@ -24,25 +25,28 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [city, setCity] = useState("");
-  const [role, setRole] = useState("Admin");
+  const [role, setRole] = useState("");
   const navigate = useNavigate ();
 
 const isValidEmail = (email) => {
-    // Email validation regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  const isValidPhoneNumber = (email) => {
-    // Email validation regex
-    const phoneNumberRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const isValidPhoneNumber = (phoneNumber) => {
+    // Phone number validation regex for Indian phone numbers
+    const phoneNumberRegex = /^[6-9]\d{9}$/;
     return phoneNumberRegex.test(phoneNumber);
   };
 
   
 
 
+
   const handleSignup = async () => {
+
+    console.log(role);
+
   if (fullName && isValidEmail(email) && password  &&  isValidPhoneNumber(phoneNumber) && city ) {
 
     try {
@@ -50,13 +54,13 @@ const isValidEmail = (email) => {
 
       switch (role) {
         case "Admin":
-          signupEndpoint = "YOUR_ADMIN_SIGNUP_API_ENDPOINT";
+          signupEndpoint = `${BASE_URL}/admins/register`;
           break;
         case "Manager":
-          signupEndpoint = "YOUR_MANAGER_SIGNUP_API_ENDPOINT";
+          signupEndpoint = `${BASE_URL}/managers/register`;
           break;
         case "Employee":
-          signupEndpoint = "YOUR_EMPLOYEE_SIGNUP_API_ENDPOINT";
+          signupEndpoint = `${BASE_URL}/employee`;
           break;
         default:
           break;
@@ -71,14 +75,16 @@ const isValidEmail = (email) => {
       };
 
       // Make an API call to the respective endpoint based on the selected role
+      console.log(signupEndpoint);
+      console.log(userData);
       const response = await axios.post(signupEndpoint, userData);
 
       console.log("User registered successfully:", response.data);
-      navigate('/Login');
+      navigate('/login');
 
     } catch (error) {
       console.error("Error registering user:", error.message);
-      navigate('/Signup');
+      navigate('/register');
     }
 
      } else {

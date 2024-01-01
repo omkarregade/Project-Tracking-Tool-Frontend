@@ -33,17 +33,15 @@ function CustomNavbar() {
             <LinkContainer to="/register">
               <Nav.Link className="nav-link-main">Register</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/login">
               <Nav>
                             {isAuthenticated() ? (
                                 <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
                             ) : (
-                                <LinkContainer to="/log-in">
+                                <LinkContainer to="/login">
                                     <Nav.Link>Login</Nav.Link>
                                 </LinkContainer>
                             )}
                         </Nav>
-            </LinkContainer>
             <LinkContainer to="/about-us">
               <Nav.Link className="nav-link-main">About Us</Nav.Link>
             </LinkContainer>

@@ -15,13 +15,9 @@ const ManageProjects = () => {
 
     const fetchProjects = async () => {
         try {
-            const response = await getAllProjects(); // Replace with your API endpoint
-            if (response.ok) {
-                const fetchedProjects = await response.json();
+            const fetchedProjects = await getAllProjects();
+            
                 setProjects(fetchedProjects);
-            } else {
-                console.error('Failed to fetch projects');
-            }
         } catch (error) {
             console.error('Error fetching projects:', error);
         }
@@ -36,9 +32,10 @@ const ManageProjects = () => {
 
     const handleUpdate = async () => {
         try {
-            await updateProject(selectedProject.id, updatedProjectInfo);
+            await updateProject(parseInt(selectedProject.projectId), updatedProjectInfo);
             console.log('Project updated successfully:', updatedProjectInfo);
             setIsModalOpen(false);
+            fetchProjects();
         } catch (error) {
             console.error('Error updating project:', error);
         }
@@ -67,8 +64,8 @@ const ManageProjects = () => {
                             onClick={() => handleProjectClick(project)}
                         >
                             <Card.Body>
-                                <Card.Title>{project.name}</Card.Title>
-                                <Card.Text>{project.description}</Card.Text>
+                                <Card.Title>{project.projectTitle}</Card.Title>
+                                <Card.Text>{project.projectDescription}</Card.Text>
                             </Card.Body>
                         </Card>
                     </Col>
@@ -85,8 +82,8 @@ const ManageProjects = () => {
                             <Form.Label>Name</Form.Label>
                             <Form.Control
                                 type="text"
-                                name="name"
-                                value={updatedProjectInfo.name || ''}
+                                name="projectTitle"
+                                value={updatedProjectInfo.projectTitle || ''}
                                 onChange={handleInputChange}
                             />
                         </Form.Group>
@@ -94,8 +91,8 @@ const ManageProjects = () => {
                             <Form.Label>Description</Form.Label>
                             <Form.Control
                                 as="textarea"
-                                name="description"
-                                value={updatedProjectInfo.description || ''}
+                                name="projectDescription"
+                                value={updatedProjectInfo.projectDescription || ''}
                                 onChange={handleInputChange}
                             />
                         </Form.Group>

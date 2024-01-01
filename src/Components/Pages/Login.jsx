@@ -12,11 +12,12 @@ import {
 import Grid from "@mui/material/Grid";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import axios from "axios"; // Import axios for API calls
+import { BASE_URL } from "../Service/APIConstant";
 
 const roles = ["Admin", "Manager", "Employee"];
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
   const navigate = useNavigate();
@@ -27,23 +28,19 @@ const Login = () => {
 
       switch (role) {
         case "Admin":
-          apiEndpoint = "ADMIN_LOGIN_API_ENDPOINT";
+          apiEndpoint = `${BASE_URL}/admins/admin?email=${email}&password=${password}`;
           break;
         case "Manager":
-          apiEndpoint = "MANAGER_LOGIN_API_ENDPOINT";
+          apiEndpoint = "/manager";
           break;
         case "Employee":
-          apiEndpoint = "EMPLOYEE_LOGIN_API_ENDPOINT";
+          apiEndpoint = "/employee";
           break;
         default:
           break;
       }
 
-      const response = await axios.post(apiEndpoint, {
-        username,
-        password,
-        role,
-      });
+const response = await axios.get(apiEndpoint);
 
       console.log("Login Successful:", response.data);
 
@@ -92,12 +89,12 @@ const Login = () => {
               Login
             </Typography>
             <TextField
-              label="Username"
+              label="Email"
               variant="outlined"
               fullWidth
               margin="normal"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               InputProps={{
                 style: {
                   backgroundColor: "#ffffff", // Input background color
