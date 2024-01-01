@@ -12,7 +12,7 @@ export function DoneBoard(props) {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get("http://localhost:8090/api/tasks");
+        const response = await axios.get("http://localhost:8090/api/tasks/status/DONE");
         setTasks(response.data);
       } catch (error) {
         setError("Error fetching data.");
@@ -37,7 +37,7 @@ export function DoneBoard(props) {
         <p className="board_top_title">
           {" "}
           <span>{props.bid}</span>
-          Backlog<span> {}</span>
+          Done<span> {}</span>
         </p>
         {/* three dots ...  for more info */}
         <MoreHorizontal />

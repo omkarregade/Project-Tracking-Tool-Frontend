@@ -36,6 +36,7 @@ import { BASE_URL } from "../Service/APIConstant";
     
   
       export async function updateAdmin (adminId, updatedAdmin)  {
+        console.log(updatedAdmin);
       try {
         const response = await axios.put(`${BASE_URL}/admins/${adminId}`, updatedAdmin);
         return response.data;

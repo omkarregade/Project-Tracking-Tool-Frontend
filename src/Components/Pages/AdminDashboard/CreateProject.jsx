@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Alert, Col, Row } from 'react-bootstrap';
 import { addProject } from '../../Service/ProjectService';
+
+
 const CreateProject = () => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [projectData, setProjectData] = useState({
-    projectName: '',
-    domain: '',
-    description: '',
+    projectTitle: '',
+    projectDescription: '',
     createDate: '',
   });
 
@@ -21,8 +23,13 @@ const CreateProject = () => {
     e.preventDefault();
 
     try {
+      console.log(projectData);
       const response = await addProject(projectData);
-      console.log('Project created successfully:', response);
+            setIsSubmitted(true);
+            setTimeout(() => {
+                setIsSubmitted(false);
+            }, 2000);
+
     } catch (error) {
       console.error('Error creating project:', error);
     }
@@ -36,28 +43,18 @@ const CreateProject = () => {
           <Form.Label>Project Name:</Form.Label>
           <Form.Control
             type="text"
-            name="projectName"
-            value={projectData.projectName}
+            name="projectTitle"
+            value={projectData.projectTitle}
             onChange={handleChange}
             placeholder="Enter project name"
           />
         </Form.Group>
-        <Form.Group controlId="domain" className="mb-3">
-          <Form.Label>Domain:</Form.Label>
-          <Form.Control
-            type="text"
-            name="domain"
-            value={projectData.domain}
-            onChange={handleChange}
-            placeholder="Enter domain"
-          />
-        </Form.Group>
-        <Form.Group controlId="description" className="mb-3">
+        <Form.Group controlId="projectDescription" className="mb-3">
           <Form.Label>Description:</Form.Label>
           <Form.Control
             type="text"
-            name="description"
-            value={projectData.description}
+            name="projectDescription"
+            value={projectData.projectDescription}
             onChange={handleChange}
             placeholder="Enter project description"
           />
@@ -75,6 +72,12 @@ const CreateProject = () => {
           Create Project
         </Button>
       </Form>
+      <Row>
+        <Col lg={4} className="mt-1">
+          {isSubmitted ? <Alert variant="success">Project Created</Alert> : null}
+        </Col>
+      </Row>
+
     </div>
   );
 };

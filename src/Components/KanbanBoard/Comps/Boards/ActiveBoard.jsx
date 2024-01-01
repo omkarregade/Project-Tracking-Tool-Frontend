@@ -19,7 +19,7 @@ export function ActiveBoard(props) {
     useEffect(() => {
       const fetchTasks = async () => {
         try {
-          const response = await axios.get("http://localhost:8090/api/tasks");
+          const response = await axios.get("http://localhost:8090/api/tasks/status/ACTIVE");
           setTasks(response.data);
         } catch (error) {
           setError("Error fetching data.");
@@ -47,7 +47,7 @@ export function ActiveBoard(props) {
     const updateTaskStatus = async (taskId, newStatus) => {
       try {
         const status = "REVIEWING";
-        await axios.put(`http://localhost:8090/api/tasks/${status}`);
+        await axios.put(`http://localhost:8090/api/tasks/${taskId}/${status}`);
       } catch (error) {
         console.error("Error updating task status:", error);
       }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import '../../CssFiles/AdminProfile.css'; // Adjust the path according to your project structure
-import { updateAdmin } from '../../Service/AdminService';
+import { updateAdmin, getAdminById } from '../../Service/AdminService';
 import { getId } from "../../Service/Util";
 
 
@@ -18,7 +18,7 @@ const AdminProfile = () => {
     const fetchAdminProfile = async () => {
         try {
             const id = getId('id');
-            const data = await fetchAdminProfile(id);
+            const data = await getAdminById(id);
             setAdminData(data);
             setEditedProfile(data);
         } catch (error) {
@@ -32,8 +32,9 @@ const AdminProfile = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const id = getId('id');
         try {
-            await updateAdmin(editedProfile);
+            await updateAdmin(id, editedProfile);
             setAdminData(editedProfile);
             setIsEditing(false);
         } catch (error) {
@@ -46,13 +47,12 @@ const AdminProfile = () => {
         setIsEditing(false);
     };
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setEditedProfile((prevProfile) => ({
-            ...prevProfile,
-            [name]: value,
-        }));
-    };
+const handleInputChange = (e, field) => {
+    setEditedProfile((prevProfile) => ({
+        ...prevProfile,
+        [field]: e.target.value,
+    }));
+};
 
     return (
         <div className="admin-profile my-5">
@@ -66,10 +66,10 @@ const AdminProfile = () => {
             </div>
 
             <div className="admin-profile-header">
-                <h1>{adminData.name}</h1>
+                <h1>{adminData.fullName}</h1>
             </div>
             <div className="admin-profile-details">
-                <p>ID: {adminData.id}</p>
+                <p>ID: {adminData.adminId}</p>
                 <p>Email: {adminData.email}</p>
                 <p>Phone: {adminData.phoneNumber}</p>
                 <p>City: {adminData.city}</p>
@@ -90,8 +90,29 @@ const AdminProfile = () => {
                             <Form.Control
                                 type="text"
                                 name="name"
-                                value={editedProfile.name}
-                                onChange={handleInputChange}
+                                value={editedProfile.fullName}
+                                onChange={(e) => handleInputChange(e, 'fullName')}
+                            />
+                            <Form.Label>Email:</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="name"
+                                value={editedProfile.email}
+                                onChange={(e) => handleInputChange(e, 'email')}
+                            />
+                            <Form.Label>Phone:</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="name"
+                                value={editedProfile.phoneNumber}
+                                onChange={(e) => handleInputChange(e, 'phoneNumber')}
+                            />
+                            <Form.Label>City:</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="name"
+                                value={editedProfile.city}
+                                onChange={(e) => handleInputChange(e, 'city')}
                             />
                         </Form.Group>
                     </Form>

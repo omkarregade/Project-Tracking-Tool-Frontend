@@ -1,7 +1,7 @@
 import Omkar from "../AboutUs/images/Omkar.jpg"
 import Neeraj from "../AboutUs/images/Neeraj.jpg"
 import Asawari from "../AboutUs/images/Asawari.jpg"
-// import Shrikant from "../AboutUs/images/Asawari.jpeg.jpg"
+import Shrikant from "../AboutUs/images/Shrikant.jpg"
 import Ved from "../AboutUs/images/Ved.jpg"
 import timeline from "../AboutUs/images/Timline.jpg"
 
@@ -166,7 +166,7 @@ export const AboutUs = () => {
                 <Col lg={6} md={6} className="mb-3 mx-auto">
                     <Card className="mx-auto" style={{ width: '18rem' }}>
                         {/* Replace with actual image */}
-                        <Card.Img variant="top" src={Asawari} className="photo" />
+                        <Card.Img variant="top" src={Shrikant} className="photo" />
                         <Card.Body>
                             <Card.Title>Shrikant Dhengle</Card.Title>
                             <Card.Text>

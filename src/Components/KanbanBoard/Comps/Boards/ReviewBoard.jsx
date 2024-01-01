@@ -21,7 +21,7 @@ const [selectedTasks, setSelectedTasks] = useState([]);
       const fetchTasks = async () => {
         try {
           const response = await axios.get(
-            "http://localhost:8090/api/tasks"
+            "http://localhost:8090/api/tasks/status/REVIEWING"
           );
           setTasks(response.data);
         } catch (error) {
@@ -49,7 +49,7 @@ const [selectedTasks, setSelectedTasks] = useState([]);
     const updateTaskStatus = async (taskId, newStatus) => {
       try {
         const status = "DONE";
-        await axios.put(`http://localhost:8090/api/tasks/${status}`, {
+        await axios.put(`http://localhost:8090/api/tasks/${taskId}/${status}`, {
           status: newStatus,
         });
         // Handle success, update state, etc.

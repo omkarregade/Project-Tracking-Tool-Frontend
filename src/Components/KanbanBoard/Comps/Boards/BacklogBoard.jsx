@@ -17,7 +17,7 @@ export function BacklogBoard(props) {
         // Update the state, API calls, or any other necessary operations
         const updateTaskStatus = async (taskId, newStatus) => {
           try {
-            await axios.put(`http://localhost:8090/api/tasks/${taskId}`, {
+            await axios.put(`http://localhost:8090/api/tasks/${taskId}/ACTIVE`, {
               status: newStatus,
             });
             // Handle success, update state, etc.
