@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import '../../CssFiles/ManagerProfile.css'; // Adjust the path according to your project structure
 import {getManagerById, updateManager} from '../../Service/ManagerService';
+import { getId } from "../../Service/Util";
 
 
 const ManagerProfile = () => {
@@ -19,7 +20,7 @@ const ManagerProfile = () => {
 
     const fetchManagerProfile = async () => {
         try {
-            const id = localStorage.getItem('id');
+            const id = getId('id');
             const response = await getManagerById(id); // Replace with your API call
             setManagerData(response.data);
             setEditedProfile(response.data);

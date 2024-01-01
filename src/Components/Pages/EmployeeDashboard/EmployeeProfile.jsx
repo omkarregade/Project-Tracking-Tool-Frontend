@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import '../../CssFiles/EmployeeProfile.css'; // Adjust the path according to your project structure
 import {getEmployeeById, updateEmployee} from '../../Service/EmployeeService'; // Import the EmployeeService functions
+import { getId } from "../../Service/Util";
+
 
 const EmployeeProfile = () => {
     const [employeeData, setEmployeeData] = useState({
@@ -17,7 +19,7 @@ const EmployeeProfile = () => {
 
     const fetchEmployeeProfile = async () => {
         try {
-            const id = localStorage.getItem('id');
+            const id = getId('id');
             const response = await getEmployeeById(id);
             setEmployeeData(response.data);
             setEditedProfile(response.data);

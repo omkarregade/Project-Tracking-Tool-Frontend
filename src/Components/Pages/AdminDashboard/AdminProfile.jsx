@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import '../../CssFiles/AdminProfile.css'; // Adjust the path according to your project structure
 import { updateAdmin } from '../../Service/AdminService';
+import { getId } from "../../Service/Util";
+
 
 
 const AdminProfile = () => {
@@ -15,7 +17,7 @@ const AdminProfile = () => {
 
     const fetchAdminProfile = async () => {
         try {
-            const id = localStorage.getItem('id');
+            const id = getId('id');
             const data = await fetchAdminProfile(id);
             setAdminData(data);
             setEditedProfile(data);
