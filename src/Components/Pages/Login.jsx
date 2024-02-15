@@ -34,7 +34,7 @@ const Login = () => {
           apiEndpoint = `${BASE_URL}/managers/manager?email=${email}&password=${password}`;
           break;
         case "Employee":
-          apiEndpoint = `${BASE_URL}/managers/manager?email=${email}&password=${password}`;
+          apiEndpoint = `${BASE_URL}/employees/employee?email=${email}&password=${password}`;
           break;
         default:
           break;

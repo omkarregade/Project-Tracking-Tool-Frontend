@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {BASE_URL} from '../Service/APIConstant';
+import { BASE_URL } from "../Service/APIConstant";
 
 import axios from "axios";
 import {
@@ -26,9 +26,9 @@ const SignUp = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [city, setCity] = useState("");
   const [role, setRole] = useState("");
-  const navigate = useNavigate ();
+  const navigate = useNavigate();
 
-const isValidEmail = (email) => {
+  const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
@@ -39,55 +39,53 @@ const isValidEmail = (email) => {
     return phoneNumberRegex.test(phoneNumber);
   };
 
-  
-
-
-
   const handleSignup = async () => {
-
     console.log(role);
 
-  if (fullName && isValidEmail(email) && password  &&  isValidPhoneNumber(phoneNumber) && city ) {
+    if (
+      fullName &&
+      isValidEmail(email) &&
+      password &&
+      isValidPhoneNumber(phoneNumber) &&
+      city
+    ) {
+      try {
+        let signupEndpoint = "";
 
-    try {
-      let signupEndpoint = "";
+        switch (role) {
+          case "Admin":
+            signupEndpoint = `${BASE_URL}/admins/register`;
+            break;
+          case "Manager":
+            signupEndpoint = `${BASE_URL}/managers/register`;
+            break;
+          case "Employee":
+            signupEndpoint = `${BASE_URL}/employees`;
+            break;
+          default:
+            break;
+        }
 
-      switch (role) {
-        case "Admin":
-          signupEndpoint = `${BASE_URL}/admins/register`;
-          break;
-        case "Manager":
-          signupEndpoint = `${BASE_URL}/managers/register`;
-          break;
-        case "Employee":
-          signupEndpoint = `${BASE_URL}/employee`;
-          break;
-        default:
-          break;
+        const userData = {
+          fullName,
+          email,
+          password,
+          phoneNumber,
+          city,
+        };
+
+        // Make an API call to the respective endpoint based on the selected role
+        console.log(signupEndpoint);
+        console.log(userData);
+        const response = await axios.post(signupEndpoint, userData);
+
+        console.log("User registered successfully:", response.data);
+        navigate("/login");
+      } catch (error) {
+        console.error("Error registering user:", error.message);
+        navigate("/register");
       }
-
-      const userData = {
-        fullName,
-        email,
-        password,
-        phoneNumber,
-        city,
-      };
-
-      // Make an API call to the respective endpoint based on the selected role
-      console.log(signupEndpoint);
-      console.log(userData);
-      const response = await axios.post(signupEndpoint, userData);
-
-      console.log("User registered successfully:", response.data);
-      navigate('/login');
-
-    } catch (error) {
-      console.error("Error registering user:", error.message);
-      navigate('/register');
-    }
-
-     } else {
+    } else {
       console.log("Form data is invalid. Please check the fields.");
     }
   };

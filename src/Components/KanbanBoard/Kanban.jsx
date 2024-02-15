@@ -14,13 +14,42 @@ export function Kanban() {
      const [loading, setLoading] = useState(true);
      const [error, setError] = useState(null);
     
-
+  const taskData = [
+    {
+      taskId: 1,
+      title: "Sample Task",
+      description: "This is a sample task",
+      domain: "Frontend",
+      status: "Backlog",
+      startTaskDate: "2024-01-01",
+      deadlineTaskDate: "2024-01-15",
+    
+        projectId: 1,
+        employeeId: 1,
+  
+    },
+    {
+      taskId: 2,
+      title: "Sample Task",
+      description: "This is a sample task",
+      domain: "Backend",
+      status: "Backlog",
+      startTaskDate: "2024-01-01",
+      deadlineTaskDate: "2024-01-15",
+     
+        projectId: 1,
+        employeeId: 3,
+    
+    }
+  ];
 
 
     useEffect(() => {
       const fetchTasks = async () => {
         try {
-          const response = await axios.get("http://localhost:8090/api/tasks");
+          //"https://6593f4061493b01160698e98.mockapi.io/api/tasks/tasks"
+          const URI = "http://localhost:8090/api/tasks";
+          const response = await axios.get(URI);
           setTasks(response.data);
         } catch (error) {
           setError("Error fetching data.");
@@ -50,11 +79,12 @@ export function Kanban() {
         <div className="kanban_boards">
           <BacklogBoard
             bid="1"
-            tasks={tasks} 
+            tasks={tasks}
+            // tasks={taskData}
           />
-          <ActiveBoard bid="2"/>
-           <ReviewBoard bid="3"/>
-          <DoneBoard bid="4"/>  
+          <ActiveBoard bid="2" />
+          <ReviewBoard bid="3" />
+          <DoneBoard bid="4" />
         </div>
       </div>
     </div>

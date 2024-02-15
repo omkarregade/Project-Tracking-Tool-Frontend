@@ -7,43 +7,42 @@ import axios from "axios";
 export function BacklogBoard(props) {
   const [selectedTasks, setSelectedTasks] = useState([]);
 
-
-   const clearSelectedTasks = () => {
+  const clearSelectedTasks = () => {
     setSelectedTasks([]);
   };
-      const moveSelectedTasksToActiveBoard = () => {
-
-        // Logic to move selected tasks to Active board
-        // Update the state, API calls, or any other necessary operations
-        const updateTaskStatus = async (taskId, newStatus) => {
-          try {
-            await axios.put(`http://localhost:8090/api/tasks/${taskId}/ACTIVE`, {
-              status: newStatus,
-            });
-            // Handle success, update state, etc.
-          } catch (error) {
-            console.error("Error updating task status:", error);
-          }
-        };
-
-        // Loop through selected tasks and update their status to move to Active board
-        selectedTasks.forEach((taskId) => {
-          updateTaskStatus(taskId, "Active");
+  const moveSelectedTasksToActiveBoard = () => {
+    // Logic to move selected tasks to Active board
+    // Update the state, API calls, or any other necessary operations
+    const updateTaskStatus = async (taskId, newStatus) => {
+      try {
+        await axios.put(`http://localhost:8090/api/tasks/${taskId}/ACTIVE`, {
+          status: newStatus,
         });
+        // Handle success, update state, etc.
+      } catch (error) {
+        console.error("Error updating task status:", error);
+      }
+    };
 
-        // Clear the selected tasks
-        clearSelectedTasks();
-      };
+    // Loop through selected tasks and update their status to move to Active board
+    selectedTasks.forEach((taskId) => {
+      updateTaskStatus(taskId, "Active");
+    });
 
+    // Clear the selected tasks
+    clearSelectedTasks();
+  };
 
-             const handleTaskSelect = (taskId) => {
-               const isSelected = selectedTasks.includes(taskId);
-               if (isSelected) {
-                 setSelectedTasks(selectedTasks.filter((id) => id !== taskId));
-               } else {
-                 setSelectedTasks([...selectedTasks, taskId]);
-               }
-             };
+  const handleTaskSelect = (taskId) => {
+    const isSelected = selectedTasks.includes(taskId);
+    if (isSelected) {
+      setSelectedTasks(selectedTasks.filter((id) => id !== taskId));
+    } else {
+      setSelectedTasks([...selectedTasks, taskId]);
+
+      console.log(taskId);
+    }
+  };
   return (
     <div className="board">
       <div className="board_top">
@@ -70,7 +69,10 @@ export function BacklogBoard(props) {
         ))}
       </div>
       <div>
-        <button className="move_button" onClick={moveSelectedTasksToActiveBoard}>
+        <button
+          className="move_button"
+          onClick={moveSelectedTasksToActiveBoard}
+        >
           Move Selected to Active
         </button>
       </div>

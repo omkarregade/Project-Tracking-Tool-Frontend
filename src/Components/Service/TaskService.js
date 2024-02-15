@@ -1,23 +1,34 @@
-import axios from 'axios';
+import axios from "axios";
 
-const BASE_URL = 'http://your-base-url'; // Replace with your base URL
+import { BASE_URL } from "../Service/APIConstant";
 
 export async function createTask(task) {
-    try {
-        const response = await axios.post(`${BASE_URL}/api/tasks`, task);
-        return response.data;
-    } catch (error) {
-        throw error.response.data;
-    }
+  try {
+    console.log(task);
+    const response = await axios.post(`${BASE_URL}/api/tasks`, task);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
 }
 
 export async function getTaskById(id) {
-    try {
-        const response = await axios.get(`${BASE_URL}/api/tasks/${id}`);
-        return response.data;
-    } catch (error) {
-        throw error.response.data;
-    }
+  try {
+    const response = await axios.get(`${BASE_URL}/api/tasks/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+}
+
+export async function getAllTasks() {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/tasks`);
+   
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
 }
 
 // export async function updateTask(id, updatedTask) {
@@ -30,12 +41,12 @@ export async function getTaskById(id) {
 // }
 
 export async function deleteTask(id) {
-    try {
-        const response = await axios.delete(`${BASE_URL}/api/tasks/${id}`);
-        return response.data;
-    } catch (error) {
-        throw error.response.data;
-    }
+  try {
+    const response = await axios.delete(`${BASE_URL}/api/tasks/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
 }
 
 // export async function getTasksByProjectId(projectId) {
