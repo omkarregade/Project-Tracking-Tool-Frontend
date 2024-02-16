@@ -39,6 +39,7 @@ const isDoneBoard = props.bid === 4 ;
               onChange={() => props.handleTaskSelect(props.id)}
               value={props.isSelected ? "select" : ""}
             >
+
               <FormControlLabel
                 value="select"
                 control={<Radio />}
@@ -47,9 +48,11 @@ const isDoneBoard = props.bid === 4 ;
             </RadioGroup>
           </p>
         )}
+
       </div>
     </div>
   );
-
-
 }
+
+
+

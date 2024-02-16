@@ -10,25 +10,34 @@ export function DoneBoard(props) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await axios.get("http://localhost:8090/api/tasks/status/DONE");
-        setTasks(response.data);
-      } catch (error) {
-        setError("Error fetching data.");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchTasks();
   }, []);
+  const fetchTasks = async () => {
+    try {
+      const status = "DONE";
+      const employeeId = localStorage.getItem("id");
 
+      const URI = `http://localhost:8090/api/tasks/status/${status}/${employeeId}`;
+      const response = await axios.get(URI);
+
+      if (response.data) {
+        setTasks(response.data);
+      } else {
+        setError("No Tasks In Done Board Yet!!");
+      }
+    } catch (error) {
+      console.log(error);
+      setError("error while fetching tasks");
+    } finally {
+      setLoading(false);
+    }
+  };
   if (loading) {
     return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div>Message : {error}</div>;
   }
 
   return (

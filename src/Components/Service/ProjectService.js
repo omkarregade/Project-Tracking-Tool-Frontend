@@ -21,13 +21,15 @@ export async function getProjectById(projectId) {
 }
 
 export async function getAllProjects(managerId) {
-    try {
-        const response = await axios.get(`${BASE_URL}/getProject/${managerId}`);
-        return response.data;
-    } catch (error) {
-        throw error.response.data;
-    }
+  try {
+    const response = await axios.get(`${BASE_URL}/getProject/${managerId}`);
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
 }
+
 
 export async function deleteProject(projectId) {
   try {
@@ -39,13 +41,14 @@ export async function deleteProject(projectId) {
 }
 
 export async function updateProject(projectId, managerId) {
-    try {
-        const response = await axios.post(`${BASE_URL}/${projectId}/assign-manager/${managerId}`);
-        return response.data;
-    } catch (error) {
-        throw error.response.data;
-    }
-
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/${projectId}/assign-manager/${managerId}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
 }
 
 export async function getProjectsByEmployeeId(employeeId) {
@@ -60,9 +63,23 @@ export async function getProjectsByEmployeeId(employeeId) {
 export async function getProjectsByManagerId(managerId) {
   try {
     const response = await axios.get(`${BASE_URL}/getproject/${managerId}`);
+    console.log( response.data);
     return response.data;
   } catch (error) {
     throw error.response.data;
   }
 }
+
+export async function assignProject(projectId, managerId) {
+  try {
+    console.log(projectId, managerId);
+    const response = await axios.post(
+      `${BASE_URL}/${projectId}/assign-manager/${managerId}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+}
+
 
