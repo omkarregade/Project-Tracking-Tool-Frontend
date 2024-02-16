@@ -38,6 +38,7 @@ const passwordParam = encodeURIComponent(password);
           break;
         case "Employee":
           apiEndpoint = `${BASE_URL}/employees/employee?email=${emailParam}&password=${passwordParam}`;
+
           break;
         default:
           break;
@@ -59,6 +60,7 @@ const response = await axios.get(apiEndpoint);
         case "Employee":
           navigate("/employee-dashboard");
           localStorage.setItem("id", parseInt(response.data.employeeId));
+          localStorage.setItem("employee", parseInt(response.data));
           break;
         default:
           break;

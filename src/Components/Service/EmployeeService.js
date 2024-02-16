@@ -1,27 +1,28 @@
-import axios from 'axios';
+import axios from "axios";
 
 import { BASE_URL } from "../Service/APIConstant";
 
 export async function registerEmployee(employeeData) {
-    try {
-        const response = await axios.post(`${BASE_URL}/employee`, employeeData);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+  try {
+    const response = await axios.post(`${BASE_URL}/employee`, employeeData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 }
 
 export async function getAllEmployees() {
-    try {
-        const response = await axios.get(`${BASE_URL}/employee`);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+  try {
+    const response = await axios.get(`${BASE_URL}/employees`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 }
 
 export async function getEmployeeById(id) {
-    try {
+
+  try {
         const response = await axios.get(`${BASE_URL}/employees/getBy/${id}`);
         return response;
     } catch (error) {
@@ -58,13 +59,17 @@ export async function updateEmployeeDesignation(employeeId, newDesignation) {
     } catch (error) {
         throw error;
     }
+
 }
 
 export async function mapEmployeeToProject(employeeId, projectId) {
-    try {
-        const response = await axios.post(`${BASE_URL}/assignment-mappings/mapping/${employeeId}/to/${projectId}`);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/assignment-mappings/mapping/${employeeId}/to/${projectId}`
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 }
