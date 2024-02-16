@@ -8,54 +8,8 @@ import { ReviewBoard } from "./Comps/Boards/ReviewBoard";
 import { ActiveBoard } from "./Comps/Boards/ActiveBoard";
 
 export function Kanban() {
-  const [tasks, setTasks] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  const taskData = [
-    {
-      taskId: 1,
-      title: "Sample Task",
-      description: "This is a sample task",
-      domain: "Frontend",
-      status: "Backlog",
-      startTaskDate: "2024-01-01",
-      deadlineTaskDate: "2024-01-15",
-
-      projectId: 1,
-      employeeId: 1,
-    },
-    {
-      taskId: 2,
-      title: "Sample Task",
-      description: "This is a sample task",
-      domain: "Backend",
-      status: "Backlog",
-      startTaskDate: "2024-01-01",
-      deadlineTaskDate: "2024-01-15",
-
-      projectId: 1,
-      employeeId: 3,
-    },
-  ];
-
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const empID = localStorage.getItem("id");
-        //"https://6593f4061493b01160698e98.mockapi.io/api/tasks/tasks"
-        const URI = `http://localhost:8090/api/tasks/employee?empId=${empID}`;
-        const response = await axios.get(URI);
-        setTasks(response.data);
-        console.log(response.data);
-      } catch (error) {
-        setError("Error fetching data.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTasks();
-  }, []);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -72,11 +26,7 @@ export function Kanban() {
       </div>
       <div className="kanban_outer">
         <div className="kanban_boards">
-          <BacklogBoard
-            bid="1"
-            tasks={tasks}
-            // tasks={taskData}
-          />
+          <BacklogBoard bid="1" />
           <ActiveBoard bid="2" />
           <ReviewBoard bid="3" />
           <DoneBoard bid="4" />

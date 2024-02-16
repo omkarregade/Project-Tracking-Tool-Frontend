@@ -15,20 +15,21 @@ export function ActiveBoard(props) {
   };
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8090/api/tasks/status/ACTIVE"
-        );
-        setTasks(response.data);
-      } catch (error) {
-        setError("Error fetching data. from active boasrd");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchTasks();
-  }, []);
+  }, [selectedTasks]);
+  const fetchTasks = async () => {
+    try {
+      const status = "ACTIVE";
+      const employeeId = localStorage.getItem("id");
+      const URI = `http://localhost:8090/api/tasks/status/${status}/${employeeId}`;
+      const response = await axios.get(URI);
+      setTasks(response.data);
+    } catch (error) {
+      setError("Error fetching data. from active task board");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -41,8 +42,11 @@ export function ActiveBoard(props) {
   const moveSelectedTasksToReviewBoard = () => {
     const updateTaskStatus = async (taskId, newStatus) => {
       try {
+        const empId = localStorage.getItem("id");
         const status = "REVIEWING";
-        await axios.put(`http://localhost:8090/api/tasks/${taskId}/${status}`);
+        await axios.patch(
+          `http://localhost:8090/api/tasks/${taskId}/${status}/${empId}`
+        );
       } catch (error) {
         console.error("Error updating task status:", error);
       }
@@ -55,6 +59,8 @@ export function ActiveBoard(props) {
 
     // Clear the selected tasks
     clearSelectedTasks();
+    fetchTasks();
+    console.log("here I am ");
   };
 
   const handleTaskSelect = (taskId) => {
@@ -62,6 +68,7 @@ export function ActiveBoard(props) {
     if (isSelected) {
       setSelectedTasks(selectedTasks.filter((id) => id !== taskId));
     } else {
+      console.log("select task from active :", taskId);
       setSelectedTasks([...selectedTasks, taskId]);
     }
   };
@@ -71,7 +78,7 @@ export function ActiveBoard(props) {
         <p className="board_top_title">
           {" "}
           <span>{props.bid}</span>
-          Active<span> </span>
+          Active<span> {tasks.length}</span>
         </p>
         {/* three dots ...  for more info */}
         <MoreHorizontal />

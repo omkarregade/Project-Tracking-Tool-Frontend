@@ -5,41 +5,40 @@ import "./Brd.css";
 import { MoreHorizontal } from "react-feather";
 import axios from "axios";
 export function ReviewBoard(props) {
-
-const [tasks, setTasks] = useState([]);
-const [loading, setLoading] = useState(true);
-const [error, setError] = useState(null);
-const [selectedTasks, setSelectedTasks] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedTasks, setSelectedTasks] = useState([]);
 
   const clearSelectedTasks = () => {
     setSelectedTasks([]);
   };
 
+  useEffect(() => {
+    fetchTasks();
+  }, [selectedTasks]);
 
-  
-    useEffect(() => {
-      const fetchTasks = async () => {
-        try {
-          const response = await axios.get(
-            "http://localhost:8090/api/tasks/status/REVIEWING"
-          );
-          setTasks(response.data);
-        } catch (error) {
-          setError("Error fetching data.");
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchTasks();
-    }, []);
+  const fetchTasks = async () => {
+    try {
+      const status = "REVIEWING";
+      const employeeId = localStorage.getItem("id");
 
-    if (loading) {
-      return <div>Loading...</div>;
+      const URI = `http://localhost:8090/api/tasks/status/${status}/${employeeId}`;
+      const response = await axios.get(URI);
+      setTasks(response.data);
+    } catch (error) {
+      setError("Error fetching data.");
+    } finally {
+      setLoading(false);
     }
+  };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-    if (error) {
-      return <div>Error: {error}</div>;
-    }
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   const moveSelectedTasksToDoneBoard = () => {
     // Logic to move selected tasks to Active board
@@ -48,10 +47,14 @@ const [selectedTasks, setSelectedTasks] = useState([]);
     // For example, if you have an API endpoint to update the status:
     const updateTaskStatus = async (taskId, newStatus) => {
       try {
+        const empId = localStorage.getItem("id");
         const status = "DONE";
-        await axios.put(`http://localhost:8090/api/tasks/${taskId}/${status}`, {
-          status: newStatus,
-        });
+        await axios.patch(
+          `http://localhost:8090/api/tasks/${taskId}/${status}/${empId}`,
+          {
+            status: newStatus,
+          }
+        );
         // Handle success, update state, etc.
       } catch (error) {
         console.error("Error updating task status:", error);
@@ -67,16 +70,14 @@ const [selectedTasks, setSelectedTasks] = useState([]);
     clearSelectedTasks();
   };
 
-
-      const handleTaskSelect = (taskId) => {
-        const isSelected = selectedTasks.includes(taskId);
-        if (isSelected) {
-          setSelectedTasks(selectedTasks.filter((id) => id !== taskId));
-        } else {
-          setSelectedTasks([...selectedTasks, taskId]);
-        }
-      };
-
+  const handleTaskSelect = (taskId) => {
+    const isSelected = selectedTasks.includes(taskId);
+    if (isSelected) {
+      setSelectedTasks(selectedTasks.filter((id) => id !== taskId));
+    } else {
+      setSelectedTasks([...selectedTasks, taskId]);
+    }
+  };
 
   return (
     <div className="board">
