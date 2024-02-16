@@ -31,7 +31,7 @@ const SignUp = () => {
   const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
-  };
+  }; // <-- Closing brace for isValidEmail
 
   const isValidPhoneNumber = (phoneNumber) => {
     // Phone number validation regex for Indian phone numbers
@@ -42,23 +42,29 @@ const SignUp = () => {
   const handleSignup = async () => {
     console.log(role);
 
-  if (fullName && isValidEmail(email) && password  &&  isValidPhoneNumber(phoneNumber) && city ) {
+    if (
+      fullName &&
+      isValidEmail(email) &&
+      password &&
+      isValidPhoneNumber(phoneNumber) &&
+      city
+    ) {
+      try {
+        let signupEndpoint = "";
 
-    try {
-      let signupEndpoint = "";
-
-      switch (role) {
-        case "Admin":
-          signupEndpoint = `${BASE_URL}/admins/register`;
-          break;
-        case "Manager":
-          signupEndpoint = `${BASE_URL}/managers/register`;
-          break;
-        case "Employee":
-          signupEndpoint = `${BASE_URL}/employees`;
-          break;
-        default:
-          break;
+        switch (role) {
+          case "Admin":
+            signupEndpoint = `${BASE_URL}/admins/register`;
+            break;
+          case "Manager":
+            signupEndpoint = `${BASE_URL}/managers/register`;
+            break;
+          case "Employee":
+            signupEndpoint = `${BASE_URL}/employees`;
+            break;
+          default:
+            break;
+        }
 
         const userData = {
           fullName,
@@ -79,7 +85,7 @@ const SignUp = () => {
     } else {
       console.log("Form data is invalid. Please check the fields.");
     }
-  };
+  }; 
 
   return (
     <div className="comp">

@@ -25,14 +25,6 @@ const EmployeeProfile = () => {
       console.log("my empoloyee data:" + response.data);
       setEmployeeData(response.data);
       setEditedProfile(response.data);
-
-    const fetchEmployeeProfile = async () => {
-        try {
-            const id = getId('id');
-            const response = await getEmployeeById(id);
-            console.log(response.data);
-            setEmployeeData(response.data);
-            setEditedProfile(response.data);
     } catch (error) {
       console.error("Error fetching employee profile:", error);
     }

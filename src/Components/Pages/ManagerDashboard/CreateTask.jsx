@@ -5,21 +5,18 @@ import { createTask } from '../../Service/TaskService';
 import { getId } from '../../Service/Util';
 
 const CreateTask = () => {
-    const [projects, setProjects] = useState([]); // State to hold projects
-    const [tasks, setTasks] = useState([]); // State to hold tasks
-    const [showModal, setShowModal] = useState(false); // State for modal visibility
-    const [taskName, setTaskName] = useState(''); // State for Task name
-    const [taskDescription, setTaskDescription] = useState(''); // State for Task description
-    const [taskDomain, setTaskDomain] = useState(''); // State for Task domain
-    const [taskDeadline, setTaskDeadline] = useState(''); // State for Task domain
+    const [projects, setProjects] = useState([]);
+    const [tasks, setTasks] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [taskName, setTaskName] = useState('');
+    const [taskDescription, setTaskDescription] = useState('');
+    const [taskDomain, setTaskDomain] = useState('');
+    const [taskDeadline, setTaskDeadline] = useState('');
     const [selectedProjectId, setSelectedProjectId] = useState('');
 
     useEffect(() => {
         fetchProjects();
-    }, []);
-
-    useEffect(()=>{
-        fetchAllTasks();
+        fetchAllTasks(); // Call fetchAllTasks
     }, []);
 
     const fetchProjects = async () => {
@@ -33,13 +30,13 @@ const CreateTask = () => {
     };
 
     const fetchAllTasks = async () => {
-    const response = await getAllTasks();
-    if (response) {
-      setTasks(response);
-    } else {
-      console.error("Failed to fetch tasks");
-    }
-  };
+        const response = await fetchAllTasks();
+        if (response) {
+            setTasks(response);
+        } else {
+            console.error("Failed to fetch tasks");
+        }
+    };
 
     const handleShow = (projectId) => {
         setShowModal(true);
@@ -47,7 +44,7 @@ const CreateTask = () => {
         setTaskDescription('');
         setTaskDomain('');
         setTaskDeadline('');
-        setSelectedProjectId(projectId); // Set the selected project ID
+        setSelectedProjectId(projectId);
     };
 
     const handleClose = () => setShowModal(false);
@@ -70,6 +67,7 @@ const CreateTask = () => {
             console.error('Error creating task:', error);
         }
     };
+
 
     return (
         <div>
