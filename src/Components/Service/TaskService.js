@@ -1,10 +1,11 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://your-base-url'; // Replace with your base URL
+import { BASE_URL } from "../Service/APIConstant";
 
-export async function createTask(task) {
+
+export async function createTask(projectId, task) {
     try {
-        const response = await axios.post(`${BASE_URL}/api/tasks`, task);
+        const response = await axios.post(`${BASE_URL}/api/tasks/${projectId}`, task);
         return response.data;
     } catch (error) {
         throw error.response.data;

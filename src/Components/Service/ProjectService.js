@@ -21,9 +21,9 @@ export async function getProjectById(projectId) {
     }
 }
 
-export async function getAllProjects() {
+export async function getAllProjects(managerId) {
     try {
-        const response = await axios.get(`${BASE_URL}/projects`);
+        const response = await axios.get(`${BASE_URL}/getProject/${managerId}`);
         return response.data;
     } catch (error) {
         throw error.response.data;
@@ -39,9 +39,9 @@ export async function deleteProject(projectId) {
     }
 }
 
-export async function updateProject(projectId, updatedProject) {
+export async function updateProject(projectId, managerId) {
     try {
-        const response = await axios.put(`${BASE_URL}/project/${projectId}`, updatedProject);
+        const response = await axios.post(`${BASE_URL}/${projectId}/assign-manager/${managerId}`);
         return response.data;
     } catch (error) {
         throw error.response.data;

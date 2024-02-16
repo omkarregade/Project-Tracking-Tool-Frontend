@@ -18,6 +18,7 @@ const AssignProjectToManager = () => {
     try {
       const fetchedProjects = await getAllProjects();
       setProjects(fetchedProjects);
+      console.log(fetchedProjects);
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
@@ -35,10 +36,9 @@ const AssignProjectToManager = () => {
   const handleAssignManager = async (e) => {
   e.preventDefault();
   if (selectedProject && selectedManager) {
+    console.log(selectedProject);
     try {
-      const projectToUpdate = projects.find(project => project.projectId === selectedProject);
-      const updatedProject = { ...projectToUpdate, manager: { managerId: selectedManager } };
-      await updateProject(selectedProject, updatedProject);
+      await updateProject(selectedProject, selectedManager);
       console.log(`Manager assigned to Project successfully`);
       fetchProjects(); // Optionally, you can refetch projects after updating to reflect changes
     } catch (error) {
@@ -50,8 +50,8 @@ const AssignProjectToManager = () => {
 };
   return (
     <Container>
-      <Row className="justify-content-md-center mt-5">
-        <Col md={6}>
+      <Row className="justify-content-md-center mt-3">
+        <Col md={10}>
           <div className="inner-box assign-manager-form">
             <h2>Assign Manager</h2>
             <Form onSubmit={handleAssignManager}>
@@ -63,7 +63,7 @@ const AssignProjectToManager = () => {
                 >
                   <option value="">Select Project</option>
                   {projects.map((project) => (
-                    <option key={project.projectId} value={project.projectId}>
+                    <option key={project.id} value={project.id}>
                       {project.projectTitle}
                     </option>
                   ))}

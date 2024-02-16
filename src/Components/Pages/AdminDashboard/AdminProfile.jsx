@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Container, Col, Row, Modal, Button, Form } from 'react-bootstrap';
 import '../../CssFiles/AdminProfile.css'; // Adjust the path according to your project structure
 import { updateAdmin, getAdminById } from '../../Service/AdminService';
 import { getId } from "../../Service/Util";
@@ -55,6 +55,9 @@ const handleInputChange = (e, field) => {
 };
 
     return (
+        <Container>
+      <Row className="justify-content-md-center mt-3">
+        <Col md={10}>
         <div className="admin-profile my-5">
             {/* Profile Image Section */}
             <div className="profile-image-section text-center mb-3">
@@ -127,6 +130,9 @@ const handleInputChange = (e, field) => {
                 </Modal.Footer>
             </Modal>
         </div>
+                </Col>
+      </Row>
+    </Container>
     );
 };
 

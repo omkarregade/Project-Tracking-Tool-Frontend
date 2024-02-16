@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Modal, Form, Table } from 'react-bootstrap';
-import {getAllProjects} from '../../Service/ProjectService';
-import {createTask} from '../../Service/TaskService';
-
+import { getAllProjects } from '../../Service/ProjectService';
+import { createTask } from '../../Service/TaskService';
+import { getId } from '../../Service/Util';
 
 const CreateTask = () => {
     const [projects, setProjects] = useState([]); // State to hold projects
@@ -10,67 +10,67 @@ const CreateTask = () => {
     const [showModal, setShowModal] = useState(false); // State for modal visibility
     const [taskName, setTaskName] = useState(''); // State for Task name
     const [taskDescription, setTaskDescription] = useState(''); // State for Task description
+    const [taskDomain, setTaskDomain] = useState(''); // State for Task domain
+    const [taskDeadline, setTaskDeadline] = useState(''); // State for Task domain
+    const [selectedProjectId, setSelectedProjectId] = useState('');
 
     useEffect(() => {
-        fetchProjects(); // Fetch projects on component mount
+        fetchProjects();
+    }, []);
+
+    useEffect(()=>{
+        fetchAllTasks();
     }, []);
 
     const fetchProjects = async () => {
         try {
-            // Fetch projects from the API
-            const response = await getAllProjects();
-            if (response.ok) {
-                const data = await response.json();
-                setProjects(data);
-            } else {
-                console.error('Failed to fetch projects');
-            }
+            const id = getId('id');
+            const fetchedProjects = await getAllProjects(id);
+            setProjects(fetchedProjects);
         } catch (error) {
             console.error('Error fetching projects:', error);
         }
     };
 
-const createTaskForProject = async (taskData) => {
-    try {
-        const response = await createTask(taskData);
-
-        if (response.ok) {
-            const newTask = await response.json();
-            setTasks([...tasks, newTask]);
-            setShowModal(false);
-        } else {
-            console.error('Failed to create task');
-        }
-    } catch (error) {
-        console.error('Error creating task:', error);
+    const fetchAllTasks = async () => {
+    const response = await getAllTasks();
+    if (response) {
+      setTasks(response);
+    } else {
+      console.error("Failed to fetch tasks");
     }
-};
+  };
+
+    const handleShow = (projectId) => {
+        setShowModal(true);
+        setTaskName('');
+        setTaskDescription('');
+        setTaskDomain('');
+        setTaskDeadline('');
+        setSelectedProjectId(projectId); // Set the selected project ID
+    };
 
     const handleClose = () => setShowModal(false);
-    const handleShow = () => setShowModal(true);
 
-const handleCreateTask = (e) => {
-    e.preventDefault();
-    if (taskName && taskDescription) {
-        const selectedProjectId = projects.length > 0 ? projects[0].id : null;
+    const handleCreateTask = async (e) => {
+        e.preventDefault();
+        const taskData = {
+            taskName,
+            taskDescription,
+            taskDomain,
+            taskDeadline,
+        };
 
-        if (selectedProjectId) {
-            const taskData = {
-                projectId: selectedProjectId,
-                taskName,
-                taskDescription,
-            };
-
-            createTaskForProject(taskData);
-            setTaskName('');
-            setTaskDescription('');
-        } else {
-            alert('Please select a project before creating a task.');
+        try {
+            const projectId = selectedProjectId;
+            const newTask = await createTask(projectId, taskData);
+            setTasks([...tasks, newTask]);
+            setShowModal(false);
+        } catch (error) {
+            console.error('Error creating task:', error);
         }
-    } else {
-        alert('Please provide both task name and task description.');
-    }
-};
+    };
+
     return (
         <div>
             <h2>Projects</h2>
@@ -78,15 +78,14 @@ const handleCreateTask = (e) => {
                 {projects.map((project) => (
                     <Card key={project.id} style={{ width: '18rem', margin: '10px' }}>
                         <Card.Body>
-                            <Card.Title>{project.name}</Card.Title>
-                            <Card.Text>{project.description}</Card.Text>
-                            <Button onClick={handleShow}>Add Task</Button>
+                            <Card.Title>{project.projectTitle}</Card.Title>
+                            <Card.Text>{project.projectDescription}</Card.Text>
+                            <Button onClick={() => handleShow(project.projectId)}>Add Task</Button>
                         </Card.Body>
                     </Card>
                 ))}
             </div>
 
-            {/* Modal for Creating Task */}
             <Modal show={showModal} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Create Task</Modal.Title>
@@ -107,24 +106,43 @@ const handleCreateTask = (e) => {
                             <Form.Control
                                 as="textarea"
                                 rows={3}
-                                placeholder="Enter task description"
+                                placeholder="Enter description"
                                 value={taskDescription}
                                 onChange={(e) => setTaskDescription(e.target.value)}
                             />
                         </Form.Group>
+                        <Form.Group controlId="taskDomain" className="mb-3">
+                            <Form.Label>Task Domain</Form.Label>
+                            <Form.Control
+                                type="text"
+                                rows={3}
+                                placeholder="Enter domain"
+                                value={taskDomain}
+                                onChange={(e) => setTaskDomain(e.target.value)}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="taskDeadline" className="mb-3">
+                            <Form.Label>Task Deadline</Form.Label>
+                            <Form.Control
+                                type="date"
+                                rows={3}
+                                placeholder="Enter deadline date"
+                                value={taskDeadline}
+                                onChange={(e) => setTaskDeadline(e.target.value)}
+                            />
+                        </Form.Group>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                                Cancel
+                            </Button>
+                            <Button variant="primary" type="Submit">
+                                Create Task
+                            </Button>
+                        </Modal.Footer>
                     </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Cancel
-                    </Button>
-                    <Button variant="primary" type="submit" onClick={handleCreateTask}>
-                        Create Task
-                    </Button>
-                </Modal.Footer>
             </Modal>
 
-            {/* Task List Section */}
             <h2>Task List</h2>
             <Table striped bordered hover>
                 <thead>

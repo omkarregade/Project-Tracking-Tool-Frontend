@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import {Container, Card, Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import { updateProject, getAllProjects } from '../../Service/ProjectService'; // Assuming these functions exist
 
 
@@ -54,6 +54,9 @@ const ManageProjects = () => {
     };
 
     return (
+         <Container>
+      <Row className="justify-content-md-center mt-3">
+        <Col md={10}>
         <div className="manage-projects">
         <h2>All Projects</h2>
             <Row xs={1} md={4} className="g-4">
@@ -108,6 +111,9 @@ const ManageProjects = () => {
                 </Modal.Footer>
             </Modal>
         </div>
+                    </Col>
+      </Row>
+    </Container>
     );
 };
 

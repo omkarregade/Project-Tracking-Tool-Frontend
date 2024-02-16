@@ -60,7 +60,7 @@ const isValidEmail = (email) => {
           signupEndpoint = `${BASE_URL}/managers/register`;
           break;
         case "Employee":
-          signupEndpoint = `${BASE_URL}/employee`;
+          signupEndpoint = `${BASE_URL}/employees`;
           break;
         default:
           break;

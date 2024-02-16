@@ -21,6 +21,7 @@ const EmployeeProfile = () => {
         try {
             const id = getId('id');
             const response = await getEmployeeById(id);
+            console.log(response.data);
             setEmployeeData(response.data);
             setEditedProfile(response.data);
         } catch (error) {
@@ -40,7 +41,7 @@ const EmployeeProfile = () => {
         e.preventDefault();
         try {
             const id = localStorage.getItem('id');
-            await updateEmployee(editedProfile);
+            await updateEmployee(id, editedProfile);
             setEmployeeData(editedProfile);
             setIsEditing(false);
         } catch (error) {
@@ -53,11 +54,10 @@ const EmployeeProfile = () => {
         setIsEditing(false);
     };
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
+    const handleInputChange = (e, field) => {
         setEditedProfile((prevProfile) => ({
             ...prevProfile,
-            [name]: value,
+            [field]: e.target.value,
         }));
     };
 
@@ -87,8 +87,29 @@ const EmployeeProfile = () => {
                             <Form.Control
                                 type="text"
                                 name="name"
-                                value={editedProfile.name}
-                                onChange={handleInputChange}
+                                value={editedProfile.fullName}
+                                onChange={(e)=>handleInputChange(e, 'fullName')}
+                            />
+                            <Form.Label>Email:</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="name"
+                                value={editedProfile.email}
+                                onChange={(e) => handleInputChange(e, 'email')}
+                            />
+                            <Form.Label>Phone:</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="name"
+                                value={editedProfile.phoneNumber}
+                                onChange={(e) => handleInputChange(e, 'phoneNumber')}
+                            />
+                            <Form.Label>City:</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="name"
+                                value={editedProfile.city}
+                                onChange={(e) => handleInputChange(e, 'city')}
                             />
                         </Form.Group>
                     </Form>
