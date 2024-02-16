@@ -5,45 +5,40 @@ import "./Brd.css";
 import { MoreHorizontal } from "react-feather";
 import axios from "axios";
 export function ActiveBoard(props) {
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedTasks, setSelectedTasks] = useState([]);
 
-    const [tasks, setTasks] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [selectedTasks, setSelectedTasks] = useState([]);
-    
+  const clearSelectedTasks = () => {
+    setSelectedTasks([]);
+  };
 
-    const clearSelectedTasks = () => {
-      setSelectedTasks([]);
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8090/api/tasks/status/ACTIVE"
+        );
+        setTasks(response.data);
+      } catch (error) {
+        setError("Error fetching data. from active boasrd");
+      } finally {
+        setLoading(false);
+      }
     };
+    fetchTasks();
+  }, []);
 
-    useEffect(() => {
-      const fetchTasks = async () => {
-        try {
-          const response = await axios.get("http://localhost:8090/api/tasks/status/ACTIVE");
-          setTasks(response.data);
-        } catch (error) {
-          setError("Error fetching data.");
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchTasks();
-    }, []);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-    if (loading) {
-      return <div>Loading...</div>;
-    }
-
-    if (error) {
-      return <div>Error: {error}</div>;
-    }
-
-    
-
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   const moveSelectedTasksToReviewBoard = () => {
-
-
     const updateTaskStatus = async (taskId, newStatus) => {
       try {
         const status = "REVIEWING";
@@ -62,15 +57,14 @@ export function ActiveBoard(props) {
     clearSelectedTasks();
   };
 
-  
-             const handleTaskSelect = (taskId) => {
-               const isSelected = selectedTasks.includes(taskId);
-               if (isSelected) {
-                 setSelectedTasks(selectedTasks.filter((id) => id !== taskId));
-               } else {
-                 setSelectedTasks([...selectedTasks, taskId]);
-               }
-             };
+  const handleTaskSelect = (taskId) => {
+    const isSelected = selectedTasks.includes(taskId);
+    if (isSelected) {
+      setSelectedTasks(selectedTasks.filter((id) => id !== taskId));
+    } else {
+      setSelectedTasks([...selectedTasks, taskId]);
+    }
+  };
   return (
     <div className="board">
       <div className="board_top">

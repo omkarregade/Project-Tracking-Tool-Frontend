@@ -8,12 +8,10 @@ import { ReviewBoard } from "./Comps/Boards/ReviewBoard";
 import { ActiveBoard } from "./Comps/Boards/ActiveBoard";
 
 export function Kanban() {
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-
-   const [tasks, setTasks] = useState([]);
-     const [loading, setLoading] = useState(true);
-     const [error, setError] = useState(null);
-    
   const taskData = [
     {
       taskId: 1,
@@ -23,10 +21,9 @@ export function Kanban() {
       status: "Backlog",
       startTaskDate: "2024-01-01",
       deadlineTaskDate: "2024-01-15",
-    
-        projectId: 1,
-        employeeId: 1,
-  
+
+      projectId: 1,
+      employeeId: 1,
     },
     {
       taskId: 2,
@@ -36,39 +33,37 @@ export function Kanban() {
       status: "Backlog",
       startTaskDate: "2024-01-01",
       deadlineTaskDate: "2024-01-15",
-     
-        projectId: 1,
-        employeeId: 3,
-    
-    }
+
+      projectId: 1,
+      employeeId: 3,
+    },
   ];
 
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const empID = localStorage.getItem("id");
+        //"https://6593f4061493b01160698e98.mockapi.io/api/tasks/tasks"
+        const URI = `http://localhost:8090/api/tasks/employee?empId=${empID}`;
+        const response = await axios.get(URI);
+        setTasks(response.data);
+        console.log(response.data);
+      } catch (error) {
+        setError("Error fetching data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTasks();
+  }, []);
 
-    useEffect(() => {
-      const fetchTasks = async () => {
-        try {
-          //"https://6593f4061493b01160698e98.mockapi.io/api/tasks/tasks"
-          const URI = "http://localhost:8090/api/tasks";
-          const response = await axios.get(URI);
-          setTasks(response.data);
-        } catch (error) {
-          setError("Error fetching data.");
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchTasks();
-    }, []); 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-     if (loading) {
-       return <div>Loading...</div>;
-     }
-
-     if (error) {
-       return <div>Error: {error}</div>;
-     }
-
-
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="kanban">

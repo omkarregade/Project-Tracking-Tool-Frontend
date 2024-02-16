@@ -70,3 +70,13 @@ export async function getProjectsByEmployeeId(employeeId) {
     throw error.response.data;
   }
 }
+
+export async function getProjectsByManagerId(managerId) {
+  try {
+    const response = await axios.get(`${BASE_URL}/getproject/${managerId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+}
+

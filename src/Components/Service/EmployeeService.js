@@ -73,6 +73,7 @@ export async function mapEmployeeToProject(employeeId, projectId) {
     const response = await axios.post(
       `${BASE_URL}/assignment-mappings/mapping/${employeeId}/to/${projectId}`
     );
+    console.log(response.data);
     return response.data;
   } catch (error) {
     throw error;

@@ -7,6 +7,10 @@ import axios from "axios";
 export function BacklogBoard(props) {
   const [selectedTasks, setSelectedTasks] = useState([]);
 
+
+  // {
+  //         status: newStatus,
+  //       }
   const clearSelectedTasks = () => {
     setSelectedTasks([]);
   };
@@ -15,14 +19,16 @@ export function BacklogBoard(props) {
     // Update the state, API calls, or any other necessary operations
     const updateTaskStatus = async (taskId, newStatus) => {
       try {
-        await axios.put(`http://localhost:8090/api/tasks/${taskId}/ACTIVE`, {
-          status: newStatus,
-        });
+
+        console.log("task id : "  , taskId);
+        await axios.put(`http://localhost:8090/api/tasks/${taskId}/ACTIVE`);
         // Handle success, update state, etc.
       } catch (error) {
         console.error("Error updating task status:", error);
       }
     };
+
+    console.log(selectedTasks);
 
     // Loop through selected tasks and update their status to move to Active board
     selectedTasks.forEach((taskId) => {
