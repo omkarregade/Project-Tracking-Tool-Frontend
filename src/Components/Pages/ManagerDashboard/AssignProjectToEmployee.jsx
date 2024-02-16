@@ -5,7 +5,7 @@ import {
   mapEmployeeToProject,
   updateEmployeeDesignation,
 } from "../../Service/EmployeeService";
-import { getAllProjects } from "../../Service/ProjectService";
+import { getProjectsByManagerId } from "../../Service/ProjectService";
 
 const AssignProjectToEmployee = () => {
   const [employees, setEmployees] = useState([]);
@@ -30,7 +30,8 @@ const AssignProjectToEmployee = () => {
 
   const fetchProjects = async () => {
     try {
-      const fetchedProjects = await getAllProjects();
+      const id = localStorage.getItem("id");
+      const fetchedProjects = await getProjectsByManagerId(id);
       setProjects(fetchedProjects);
       console.log(fetchedProjects);
     } catch (error) {
@@ -104,11 +105,11 @@ const AssignProjectToEmployee = () => {
                   as="select"
                   value={selectedProjectId}
                   onChange={(e) => setSelectedProjectId(e.target.value)}
-                //   disabled={loadingProjects}
+                  //   disabled={loadingProjects}
                 >
                   <option value="">Select from ongoing projects</option>
                   {projects.map((project) => (
-                    <option key={project.id} value={project.id}>
+                    <option key={project.projectId} value={project.projectId}>
                       {project.projectTitle}
                     </option>
                   ))}

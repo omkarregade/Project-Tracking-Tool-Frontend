@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Modal, Form, Table } from "react-bootstrap";
-import { getAllProjects } from "../../Service/ProjectService";
+import {
+  getAllProjects,
+  getProjectsByManagerId,
+} from "../../Service/ProjectService";
 import { createTask, getAllTasks } from "../../Service/TaskService";
 
 const CreateTask = () => {
@@ -20,7 +23,6 @@ const CreateTask = () => {
 
   const fetchAllTasks = async () => {
     const response = await getAllTasks();
- 
     if (response) {
       setTasks(response);
     } else {
@@ -30,10 +32,10 @@ const CreateTask = () => {
   const fetchProjects = async () => {
     try {
       // Fetch projects from the API
-      const response = await getAllProjects();
-     
-      if (response) {
+      const id = localStorage.getItem("id");
+      const response = await getProjectsByManagerId(id);
 
+      if (response) {
         setProjects(response);
       } else {
         console.error("Failed to fetch projects");

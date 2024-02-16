@@ -22,6 +22,7 @@ const EmployeeProfile = () => {
     try {
       const id = getId("id");
       const response = await getEmployeeById(id);
+      console.log("my empoloyee data:" + response.data);
       setEmployeeData(response.data);
       setEditedProfile(response.data);
 

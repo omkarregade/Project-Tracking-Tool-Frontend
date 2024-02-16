@@ -20,8 +20,8 @@ const ManagerDashboard = () => {
                 return <ManagerProfile />;
             case 'Assign Projects':
                 return <AssignProjectToEmployee/>;
-            case 'Kanban Board':
-                return <Kanban />;
+            // case 'Kanban Board':
+            //     return <Kanban />;
             case 'Create Task':
                 return <CreateTask />;
             default:
@@ -46,10 +46,10 @@ const ManagerDashboard = () => {
                                         className={selectedOption === 'Assign Projects' ? 'active' : ''}>
                                         Assign Projects
                                     </Nav.Link>
-                                    <Nav.Link onClick={() => handleNavigation('Kanban Board')}
+                                    {/* <Nav.Link onClick={() => handleNavigation('Kanban Board')}
                                         className={selectedOption === 'Kanban Board' ? 'active' : ''}>
                                         Kanban Board for Projects
-                                    </Nav.Link>
+                                    </Nav.Link> */}
                                     <Nav.Link onClick={() => handleNavigation('Create Task')}
                                         className={selectedOption === 'Create Task' ? 'active' : ''}>
                                         Create Task

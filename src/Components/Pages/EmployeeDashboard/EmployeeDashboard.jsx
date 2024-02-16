@@ -16,7 +16,7 @@ const EmployeeDashboard = () => {
     switch (selectedOption) {
       case "Employee Profile":
         return <EmployeeProfile />;
-      case "Kanban":
+      case "Kanban Board":
         return <Kanban />;
       default:
         return <div>Please select an option from the sidebar</div>;
