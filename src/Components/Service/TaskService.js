@@ -2,14 +2,14 @@ import axios from "axios";
 
 import { BASE_URL } from "../Service/APIConstant";
 
-export async function createTask(task) {
-  try {
-    console.log(task);
-    const response = await axios.post(`${BASE_URL}/api/tasks`, task);
-    return response.data;
-  } catch (error) {
-    throw error.response.data;
-  }
+
+export async function createTask(projectId, task) {
+    try {
+        const response = await axios.post(`${BASE_URL}/api/tasks/${projectId}`, task);
+        return response.data;
+    } catch (error) {
+        throw error.response.data;
+    }
 }
 
 export async function getTaskById(id) {

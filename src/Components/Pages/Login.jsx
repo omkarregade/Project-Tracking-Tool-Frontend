@@ -26,15 +26,19 @@ const Login = () => {
     try {
       let apiEndpoint = ""; // Placeholder for your API endpoint
 
+      const emailParam = encodeURIComponent(email);
+const passwordParam = encodeURIComponent(password);
+
       switch (role) {
         case "Admin":
-          apiEndpoint = `${BASE_URL}/admins/admin?email=${email}&password=${password}`;
+          apiEndpoint = `${BASE_URL}/admins/admin?email=${emailParam}&password=${passwordParam}`;
           break;
         case "Manager":
-          apiEndpoint = `${BASE_URL}/managers/manager?email=${email}&password=${password}`;
+          apiEndpoint = `${BASE_URL}/managers/manager?email=${emailParam}&password=${passwordParam}`;
           break;
         case "Employee":
-          apiEndpoint = `${BASE_URL}/employees/employee?email=${email}&password=${password}`;
+          apiEndpoint = `${BASE_URL}/employees/employee?email=${emailParam}&password=${passwordParam}`;
+
           break;
         default:
           break;

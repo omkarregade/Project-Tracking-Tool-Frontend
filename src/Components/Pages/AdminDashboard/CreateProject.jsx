@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Form, Alert, Col, Row } from 'react-bootstrap';
+import {Container, Button, Form, Alert, Col, Row } from 'react-bootstrap';
 import { addProject } from '../../Service/ProjectService';
 
 
@@ -8,7 +8,6 @@ const CreateProject = () => {
   const [projectData, setProjectData] = useState({
     projectTitle: '',
     projectDescription: '',
-    createDate: '',
   });
 
   const handleChange = (e) => {
@@ -36,6 +35,9 @@ const CreateProject = () => {
   };
 
   return (
+    <Container>
+      <Row className="justify-content-md-center mt-3">
+        <Col md={10}>
     <div>
       <h2>Create Project</h2>
       <Form onSubmit={handleSubmit}>
@@ -59,15 +61,6 @@ const CreateProject = () => {
             placeholder="Enter project description"
           />
         </Form.Group>
-        <Form.Group controlId="createDate" className="mb-3">
-          <Form.Label>Create Date:</Form.Label>
-          <Form.Control
-            type="date"
-            name="createDate"
-            value={projectData.createDate}
-            onChange={handleChange}
-          />
-        </Form.Group>
         <Button variant="primary" type="submit">
           Create Project
         </Button>
@@ -79,6 +72,9 @@ const CreateProject = () => {
       </Row>
 
     </div>
+            </Col>
+      </Row>
+    </Container>
   );
 };
 

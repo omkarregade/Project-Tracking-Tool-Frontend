@@ -21,51 +21,45 @@ export async function getAllEmployees() {
 }
 
 export async function getEmployeeById(id) {
-  try {
-    const response = await axios.get(`${BASE_URL}/employees/getBy/${id}`);
 
-    console.log(response.data);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  try {
+        const response = await axios.get(`${BASE_URL}/employees/getBy/${id}`);
+        return response;
+    } catch (error) {
+        throw error;
+    }
 }
 
 export async function updateEmployee(id, employeeData) {
-  try {
-    const response = await axios.put(
-      `${BASE_URL}/employee/${id}`,
-      employeeData
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+    try {
+        const response = await axios.patch(`${BASE_URL}/employees/${id}`, employeeData);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
 }
 
 export async function deleteEmployee(id) {
-  try {
-    await axios.delete(`${BASE_URL}/employee/${id}`);
-  } catch (error) {
-    throw error;
-  }
+    try {
+        await axios.delete(`${BASE_URL}/employees/${id}`);
+    } catch (error) {
+        throw error;
+    }
 }
 
 export async function updateEmployeeDesignation(employeeId, newDesignation) {
-  try {
-    const response = await axios.put(
-      `${BASE_URL}/employee/designation/${employeeId}`,
-      newDesignation,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+    try {
+        const response = await axios.put(`${BASE_URL}/employees/designation/${employeeId}`, newDesignation,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+
 }
 
 export async function mapEmployeeToProject(employeeId, projectId) {

@@ -26,7 +26,13 @@ const EmployeeProfile = () => {
       setEmployeeData(response.data);
       setEditedProfile(response.data);
 
-      console.log(response);
+    const fetchEmployeeProfile = async () => {
+        try {
+            const id = getId('id');
+            const response = await getEmployeeById(id);
+            console.log(response.data);
+            setEmployeeData(response.data);
+            setEditedProfile(response.data);
     } catch (error) {
       console.error("Error fetching employee profile:", error);
     }
@@ -40,30 +46,30 @@ const EmployeeProfile = () => {
     setIsEditing(true);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const id = localStorage.getItem("id");
-      await updateEmployee(editedProfile);
-      setEmployeeData(editedProfile);
-      setIsEditing(false);
-    } catch (error) {
-      console.error("Error updating employee profile:", error);
-    }
-  };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const id = localStorage.getItem('id');
+            await updateEmployee(id, editedProfile);
+            setEmployeeData(editedProfile);
+            setIsEditing(false);
+        } catch (error) {
+            console.error('Error updating employee profile:', error);
+        }
+    };
 
   const handleCancelEdit = () => {
     setEditedProfile(employeeData);
     setIsEditing(false);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditedProfile((prevProfile) => ({
-      ...prevProfile,
-      [name]: value,
-    }));
-  };
+    const handleInputChange = (e, field) => {
+        setEditedProfile((prevProfile) => ({
+            ...prevProfile,
+            [field]: e.target.value,
+        }));
+    };
+
 
   return (
     <div className="employee-profile my-5">
@@ -83,38 +89,55 @@ const EmployeeProfile = () => {
         Edit Profile
       </button>
 
-      <Modal
-        show={isEditing}
-        onHide={handleCancelEdit}
-        className="edit-profile-modal"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Profile</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="p-4">
-          <Form onSubmit={handleSubmit} className="edit-profile-form">
-            <Form.Group className="mb-3">
-              <Form.Label>Name:</Form.Label>
-              <Form.Control
-                type="text"
-                name="name"
-                value={editedProfile.name}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCancelEdit}>
-            Cancel
-          </Button>
-          <Button variant="primary" type="submit" onClick={handleSubmit}>
-            Save
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
-  );
+            <Modal show={isEditing} onHide={handleCancelEdit} className="edit-profile-modal">
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Profile</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="p-4">
+                    <Form onSubmit={handleSubmit} className="edit-profile-form">
+                        <Form.Group className="mb-3">
+                            <Form.Label>Name:</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="name"
+                                value={editedProfile.fullName}
+                                onChange={(e)=>handleInputChange(e, 'fullName')}
+                            />
+                            <Form.Label>Email:</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="name"
+                                value={editedProfile.email}
+                                onChange={(e) => handleInputChange(e, 'email')}
+                            />
+                            <Form.Label>Phone:</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="name"
+                                value={editedProfile.phoneNumber}
+                                onChange={(e) => handleInputChange(e, 'phoneNumber')}
+                            />
+                            <Form.Label>City:</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="name"
+                                value={editedProfile.city}
+                                onChange={(e) => handleInputChange(e, 'city')}
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCancelEdit}>
+                        Cancel
+                    </Button>
+                    <Button variant="primary" type="submit" onClick={handleSubmit}>
+                        Save
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </div>
+    );
 };
 
 export default EmployeeProfile;

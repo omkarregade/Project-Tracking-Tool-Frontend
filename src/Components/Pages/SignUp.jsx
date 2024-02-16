@@ -42,29 +42,23 @@ const SignUp = () => {
   const handleSignup = async () => {
     console.log(role);
 
-    if (
-      fullName &&
-      isValidEmail(email) &&
-      password &&
-      isValidPhoneNumber(phoneNumber) &&
-      city
-    ) {
-      try {
-        let signupEndpoint = "";
+  if (fullName && isValidEmail(email) && password  &&  isValidPhoneNumber(phoneNumber) && city ) {
 
-        switch (role) {
-          case "Admin":
-            signupEndpoint = `${BASE_URL}/admins/register`;
-            break;
-          case "Manager":
-            signupEndpoint = `${BASE_URL}/managers/register`;
-            break;
-          case "Employee":
-            signupEndpoint = `${BASE_URL}/employees`;
-            break;
-          default:
-            break;
-        }
+    try {
+      let signupEndpoint = "";
+
+      switch (role) {
+        case "Admin":
+          signupEndpoint = `${BASE_URL}/admins/register`;
+          break;
+        case "Manager":
+          signupEndpoint = `${BASE_URL}/managers/register`;
+          break;
+        case "Employee":
+          signupEndpoint = `${BASE_URL}/employees`;
+          break;
+        default:
+          break;
 
         const userData = {
           fullName,
@@ -74,9 +68,6 @@ const SignUp = () => {
           city,
         };
 
-        // Make an API call to the respective endpoint based on the selected role
-        console.log(signupEndpoint);
-        console.log(userData);
         const response = await axios.post(signupEndpoint, userData);
 
         console.log("User registered successfully:", response.data);

@@ -24,7 +24,6 @@ const AssignProjectToManager = () => {
       const fetchedProjects = await getAllProjects();
       setProjects(fetchedProjects);
 
-      //console.log(fetchedProjects);
     } catch (error) {
       console.error("Error fetching projects:", error);
     }
@@ -45,7 +44,6 @@ const AssignProjectToManager = () => {
     e.preventDefault();
     if (selectedProject && selectedManager) {
       try {
-        console.log(selectedProject, selectedManager);
 
         const status = await assignProject(selectedProject, selectedManager);
 
@@ -61,8 +59,8 @@ const AssignProjectToManager = () => {
   };
   return (
     <Container>
-      <Row className="justify-content-md-center mt-5">
-        <Col md={6}>
+      <Row className="justify-content-md-center mt-3">
+        <Col md={10}>
           <div className="inner-box assign-manager-form">
             <h2>Assign Manager</h2>
             <Form onSubmit={handleAssignManager}>
