@@ -1,42 +1,41 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
-import "../../CssFiles/EmployeeProfile.css"; // Adjust the path according to your project structure
-import { getEmployeeById, updateEmployee } from "../../Service/EmployeeService"; // Import the EmployeeService functions
+import React, { useState, useEffect } from 'react';
+import { Modal, Button, Form } from 'react-bootstrap';
+import '../../CssFiles/EmployeeProfile.css'; // Adjust the path according to your project structure
+import {getEmployeeById, updateEmployee} from '../../Service/EmployeeService'; // Import the EmployeeService functions
 import { getId } from "../../Service/Util";
 
+
 const EmployeeProfile = () => {
-  const [employeeData, setEmployeeData] = useState();
+    const [employeeData, setEmployeeData] = useState({
+        employeeId:'',
+        fullName: '',
+        email: '',
+        phoneNumber: '',
+        city: ''
+    });
 
-  // {
-  //     employeeId:'',
-  //     fullName: '',
-  //     email: '',
-  //     phoneNumber: '',
-  //     city: ''
-  // }
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedProfile, setEditedProfile] = useState({ ...employeeData });
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedProfile, setEditedProfile] = useState({ ...employeeData });
+    const fetchEmployeeProfile = async () => {
+        try {
+            const id = getId('id');
+            const response = await getEmployeeById(id);
+            console.log(response.data);
+            setEmployeeData(response.data);
+            setEditedProfile(response.data);
+        } catch (error) {
+            console.error('Error fetching employee profile:', error);
+        }
+    };
 
-  const fetchEmployeeProfile = async () => {
-    try {
-      const id = getId("id");
-      const response = await getEmployeeById(id);
-      console.log("my empoloyee data:" + response.data);
-      setEmployeeData(response.data);
-      setEditedProfile(response.data);
-    } catch (error) {
-      console.error("Error fetching employee profile:", error);
-    }
-  };
+    useEffect(() => {
+        fetchEmployeeProfile();
+    }, []);
 
-  useEffect(() => {
-    fetchEmployeeProfile();
-  }, []);
-
-  const handleEditProfile = () => {
-    setIsEditing(true);
-  };
+    const handleEditProfile = () => {
+        setIsEditing(true);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -50,10 +49,10 @@ const EmployeeProfile = () => {
         }
     };
 
-  const handleCancelEdit = () => {
-    setEditedProfile(employeeData);
-    setIsEditing(false);
-  };
+    const handleCancelEdit = () => {
+        setEditedProfile(employeeData);
+        setIsEditing(false);
+    };
 
     const handleInputChange = (e, field) => {
         setEditedProfile((prevProfile) => ({
@@ -62,24 +61,20 @@ const EmployeeProfile = () => {
         }));
     };
 
-
-  return (
-    <div className="employee-profile my-5">
-      <div className="employee-profile-header">
-        <h1>{employeeData.fullName}</h1>
-      </div>
-      <div className="employee-profile-details">
-        <p>ID: {employeeData.employeeId}</p>
-        <p>Email: {employeeData.email}</p>
-        <p>Phone: {employeeData.phoneNumber}</p>
-        <p>Address: {employeeData.city}</p>
-      </div>
-      <button
-        className="employee-profile-button mt-3"
-        onClick={handleEditProfile}
-      >
-        Edit Profile
-      </button>
+    return (
+        <div className="employee-profile my-5">
+            <div className="employee-profile-header">
+                <h1>{employeeData.fullName}</h1>
+            </div>
+            <div className="employee-profile-details">
+                <p>ID: {employeeData.employeeId}</p>
+                <p>Email: {employeeData.email}</p>
+                <p>Phone: {employeeData.phoneNumber}</p>
+                <p>Address: {employeeData.city}</p>
+            </div>
+            <button className="employee-profile-button mt-3" onClick={handleEditProfile}>
+                Edit Profile
+            </button>
 
             <Modal show={isEditing} onHide={handleCancelEdit} className="edit-profile-modal">
                 <Modal.Header closeButton>
