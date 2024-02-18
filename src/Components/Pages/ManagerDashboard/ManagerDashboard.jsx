@@ -13,12 +13,12 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import PersonIcon from '@mui/icons-material/Person';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import CreateIcon from '@mui/icons-material/Create';
 
 const ManagerDashboard = () => {
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState('Manager Profile'); // Set default option to 'Manager Profile'
   const [drawerState, setDrawerState] = useState({
     left: false,
   });
@@ -56,7 +56,7 @@ const ManagerDashboard = () => {
 
   // Mapping icons to each option
   const iconMap = {
-    'Manager Profile': <PersonIcon fontSize="small" style={{ marginRight: '8px' }} />,
+    'Manager Profile': <AccountCircleIcon fontSize="small" style={{ marginRight: '8px' }} />,
     'Assign Projects': <AssignmentIcon fontSize="small" style={{ marginRight: '8px' }} />,
     'Create Task': <CreateIcon fontSize="small" style={{ marginRight: '8px' }} />,
   };
@@ -96,7 +96,7 @@ const ManagerDashboard = () => {
             {list}
           </Drawer>
         </Row>
-        <Row md={11} className="main-content p-4">
+        <Row md={10} className="main-content p-4">
           {renderContent()}
         </Row>
       </div>

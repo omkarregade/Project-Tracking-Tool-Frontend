@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../CssFiles/AdminDashboard.css'; // Adjust the path based on the actual folder structure
@@ -13,13 +13,13 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import PersonIcon from '@mui/icons-material/Person';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import ListIcon from '@mui/icons-material/List';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 
 const AdminDashboard = () => {
-    const [selectedOption, setSelectedOption] = useState('');
+    const [selectedOption, setSelectedOption] = useState('Admin Profile');
     const [drawerState, setDrawerState] = useState({
         left: false,
     });
@@ -45,15 +45,14 @@ const AdminDashboard = () => {
             case 'Assign Manager':
                 return <AssignProjectToManager />;
             case 'Admin Profile':
-                return <AdminProfile />;
             default:
-                return <div>Please select an option from the drawer</div>;
+                return <AdminProfile />;
         }
     };
 
     // Mapping icons to each option
     const iconMap = {
-        'Admin Profile': <PersonIcon fontSize="small" style={{ marginRight: '8px' }} />,
+        'Admin Profile': <AccountCircleIcon fontSize="small" style={{ marginRight: '8px' }} />,
         'Create Project': <AddBoxIcon fontSize="small" style={{ marginRight: '8px' }} />,
         'Project List': <ListIcon fontSize="small" style={{ marginRight: '8px' }} />,
         'Assign Manager': <AssignmentIndIcon fontSize="small" style={{ marginRight: '8px' }} />,
@@ -76,15 +75,21 @@ const AdminDashboard = () => {
 
     return (
         <Container fluid className="content-container dashboard-container">
-            <Row className="flex-xl-nowrap">
-                <Button onClick={toggleDrawer('left', true)}>Open Dashboard</Button>
-                <Drawer anchor="left" open={drawerState.left} onClose={toggleDrawer('left', false)}>
-                    {list}
-                </Drawer>
-                <Col md={11} xl={11} className="main-content p-4">
+            <div className="flex-xl-nowrap">
+                <Row className="mySidebar">
+                    <Button onClick={toggleDrawer('left', true)}>Open Dashboard</Button>
+                    <Drawer
+                        anchor="left"
+                        open={drawerState.left}
+                        onClose={toggleDrawer('left', false)}
+                    >
+                        {list}
+                    </Drawer>
+                </Row>
+                <Row md={10} className="main-content p-4">
                     {renderContent()}
-                </Col>
-            </Row>
+                </Row>
+            </div>
         </Container>
     );
 };
