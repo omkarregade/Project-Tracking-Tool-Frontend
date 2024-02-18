@@ -49,14 +49,15 @@ export async function deleteTask(id) {
   }
 }
 
-// export async function getTasksByProjectId(projectId) {
-//     try {
-//         const response = await axios.get(`${BASE_URL}/task/projects/${projectId}/tasks`);
-//         return response.data;
-//     } catch (error) {
-//         throw error.response.data;
-//     }
-// }
+export async function getTasksByProjectId(projectId) {
+    try {
+        const response = await axios.get(`${BASE_URL}/api/tasks/project/${projectId}`);
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        throw error.response.data;
+    }
+}
 
 // export async function getTasksByEmployeeId(employeeId) {
 //     try {

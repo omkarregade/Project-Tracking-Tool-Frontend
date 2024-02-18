@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
-import { Editable } from "../../Editabled/Editable";
 import { Card } from "../Card/Card";
-import "./Brd.css";
 import { MoreHorizontal } from "react-feather";
 import axios from "axios";
+import SockJS from "sockjs-client";
+import Stomp from "stompjs";
+
 export function ReviewBoard(props) {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedTasks, setSelectedTasks] = useState([]);
+  const [stompClient, setStompClient] = useState(null);
+  const [webSocketConnected, setWebSocketConnected] = useState(false);
+  const [lastUpdate, setLastUpdate] = useState(Date.now()); // Added for triggering a re-fetch
 
   const clearSelectedTasks = () => {
     setSelectedTasks([]);
@@ -16,7 +20,15 @@ export function ReviewBoard(props) {
 
   useEffect(() => {
     fetchTasks();
-  }, [selectedTasks]);
+    setupWebSocket();
+
+    return () => {
+      // Cleanup WebSocket connection on component unmount
+      if (stompClient) {
+        stompClient.disconnect();
+      }
+    };
+  }, [webSocketConnected, lastUpdate]);
 
   const fetchTasks = async () => {
     try {
@@ -32,16 +44,51 @@ export function ReviewBoard(props) {
       setLoading(false);
     }
   };
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  const setupWebSocket = () => {
+    const socket = new SockJS("http://localhost:8090/ws");
+    const stomp = Stomp.over(socket);
+
+    stomp.reconnect_delay = 5000; // Reconnect after 5 seconds
+
+    stomp.connect({}, (frame) => {
+      console.log("Connected to WebSocket");
+      setWebSocketConnected(true);
+      setStompClient(stomp);
+
+      const subscription = stomp.subscribe("/topic/taskStatusUpdates", (message) => {
+        try {
+          const receivedTask = JSON.parse(message.body);
+          console.log("Received task update:", receivedTask);
+
+          // Update state
+          setTasks((prevTasks) => {
+            const index = prevTasks.findIndex((task) => task.taskId === receivedTask.taskId);
+            if (index !== -1) {
+              const newTasks = [...prevTasks];
+              newTasks[index] = receivedTask;
+              return newTasks;
+            }
+            return [...prevTasks, receivedTask];
+          });
+
+          // Trigger re-fetch when tasks are updated
+          setLastUpdate(Date.now());
+        } catch (parseError) {
+          console.error("Error parsing message body:", parseError);
+        }
+      });
+    });
+
+    stomp.ws.onclose = () => {
+      console.log("WebSocket connection closed. Reconnecting...");
+      // Optionally handle additional reconnection logic here
+      setupWebSocket();
+    };
+  };
 
   const moveSelectedTasksToDoneBoard = () => {
-    // Logic to move selected tasks to Active board
+    // Logic to move selected tasks to Done board
     // Update the state, API calls, or any other necessary operations
 
     // For example, if you have an API endpoint to update the status:
@@ -61,9 +108,9 @@ export function ReviewBoard(props) {
       }
     };
 
-    // Loop through selected tasks and update their status to move to Active board
+    // Loop through selected tasks and update their status to move to Done board
     selectedTasks.forEach((taskId) => {
-      updateTaskStatus(taskId, "Active");
+      updateTaskStatus(taskId, "Done");
     });
 
     // Clear the selected tasks
@@ -85,14 +132,14 @@ export function ReviewBoard(props) {
         <p className="board_top_title">
           {" "}
           <span>{props.bid}</span>
-          Review<span> </span>
+          Review<span> {tasks.length}</span>
         </p>
         {/* three dots ...  for more info */}
         <MoreHorizontal />
       </div>
       <div className="board_cards custom-scroll">
         {tasks.map((task) => (
-          <div>
+          <div key={task.taskId}>
             <Card
               bid={props.bid}
               id={task.taskId}
@@ -100,7 +147,7 @@ export function ReviewBoard(props) {
               card={task}
               handleTaskSelect={handleTaskSelect}
               isSelected={selectedTasks?.includes(task.taskId) ?? false}
-            ></Card>
+            />
           </div>
         ))}
       </div>

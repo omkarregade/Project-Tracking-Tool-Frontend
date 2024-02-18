@@ -1,52 +1,53 @@
+/* ManagerProfile.css or your existing CSS file */
 /* Base styles */
 .manager-profile {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     background-color: #f9f9f9;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     max-width: 600px;
-    margin: 0 auto;
-}
-
-/* Header styles */
-.manager-profile-header {
+    margin: 20px auto;
     text-align: center;
-    margin-bottom: 20px;
-}
-
-.manager-profile-header h1 {
-    font-size: 24px;
-    margin-bottom: 5px;
-    color: #333;
-}
-
-.manager-profile-header p {
-    font-size: 16px;
-    color: #666;
 }
 
 /* Profile image styles */
-.manager-profile-image {
+.profile-image-section {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.placeholder-profile-image {
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 15px;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    background-color: #3498db;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
 }
 
-/* Details section styles */
+/* Header styles */
+.manager-profile-header h1 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* Adjusted width for manager-profile-details */
 .manager-profile-details {
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
-}
-
-.manager-profile-details h2 {
-    font-size: 20px;
-    margin-bottom: 15px;
-    color: #333;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    margin: 0 auto;
+    /* Center the element horizontally */
+    max-width: 400px;
+    /* Set your desired maximum width */
 }
 
 .manager-profile-details p {
@@ -56,44 +57,64 @@
     margin-bottom: 10px;
 }
 
-.manager-profile-details .detail-label {
-    font-weight: bold;
-    color: #333;
+/* Edit Profile Modal styles */
+.edit-profile-modal {
+    text-align: left;
 }
 
-.manager-profile-details .detail-value {
-    color: #555;
+.edit-profile-form {
+    margin-top: 20px;
 }
 
 /* Buttons */
-.manager-profile-button {
+.manager-profile-button,
+.edit-profile-modal .btn-primary,
+.edit-profile-modal .btn-secondary {
     padding: 8px 16px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    color: #fff;
-    background-color: #3498db;
     font-size: 16px;
     transition: background-color 0.3s ease;
 }
 
-.manager-profile-button:hover {
+.manager-profile-button {
+    color: #fff;
+    background-color: #3498db;
+}
+
+.edit-profile-modal .btn-primary,
+.edit-profile-modal .btn-secondary {
+    color: #fff;
+    background-color: #3498db;
+}
+
+.edit-profile-modal .btn-secondary {
+    color: #333;
+    background-color: #ddd;
+}
+
+.manager-profile-button:hover,
+.edit-profile-modal .btn-primary:hover,
+.edit-profile-modal .btn-secondary:hover {
     background-color: #2980b9;
 }
 
-/* EmployeeProfile.css or your CSS file */
-.manager-profile-button {
-    background-color: #4caf50;
-    /* Green background color */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
+/* Hover effect for modal buttons */
+.edit-profile-modal .btn-primary:hover,
+.edit-profile-modal .btn-secondary:hover {
+    background-color: #45a049;
 }
 
-.manager-profile-button:hover {
-    background-color: #45a049;
-    /* Darker green color on hover */
+/* Styling for input fields */
+.edit-profile-modal input {
+    margin-bottom: 10px;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+    .manager-profile-details {
+        max-width: 100%;
+        /* Allow the container to take full width on smaller screens */
+    }
 }

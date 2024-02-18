@@ -22,7 +22,7 @@ export async function getProjectById(projectId) {
 
 export async function getAllProjects(managerId) {
   try {
-    const response = await axios.get(`${BASE_URL}/getProject/${managerId}`);
+    const response = await axios.get(`${BASE_URL}/projects`);
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -62,7 +62,7 @@ export async function getProjectsByEmployeeId(employeeId) {
 
 export async function getProjectsByManagerId(managerId) {
   try {
-    const response = await axios.get(`${BASE_URL}/getproject/${managerId}`);
+    const response = await axios.get(`${BASE_URL}/getProject/${managerId}`);
     console.log( response.data);
     return response.data;
   } catch (error) {

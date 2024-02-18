@@ -1,54 +1,102 @@
 import { useEffect, useState } from "react";
-import { Editable } from "../../Editabled/Editable";
 import { Card } from "../Card/Card";
-import "./Brd.css";
 import { MoreHorizontal } from "react-feather";
 import axios from "axios";
+import SockJS from "sockjs-client";
+import Stomp from "stompjs";
+
 export function BacklogBoard(props) {
   const [selectedTasks, setSelectedTasks] = useState([]);
   const [tasks, setTasks] = useState([]);
+  const [stompClient, setStompClient] = useState(null);
+  const [webSocketConnected, setWebSocketConnected] = useState(false);
+  const [lastUpdate, setLastUpdate] = useState(Date.now()); // Added for triggering a re-fetch
 
   useEffect(() => {
     fetchTasks();
-  }, [selectedTasks]);
+    setupWebSocket();
+
+    return () => {
+      // Cleanup WebSocket connection on component unmount
+      if (stompClient) {
+        stompClient.disconnect();
+      }
+    };
+  }, [webSocketConnected, lastUpdate]);
+
   const fetchTasks = async () => {
     try {
       const status = "BACKLOG";
       const employeeId = localStorage.getItem("id");
-      //"https://6593f4061493b01160698e98.mockapi.io/api/tasks/tasks"
       const URI = `http://localhost:8090/api/tasks/status/${status}/${employeeId}`;
       const response = await axios.get(URI);
       setTasks(response.data);
-      console.log(response.data);
     } catch (error) {
-      console.log("from catch block", error);
-      // setError("Error fetching data.");
-    } finally {
-      //setLoading(false);
+      console.error("Error fetching tasks:", error);
     }
   };
+
+  const setupWebSocket = () => {
+    const socket = new SockJS("http://localhost:8090/ws");
+    const stomp = Stomp.over(socket);
+
+    stomp.reconnect_delay = 5000; // Reconnect after 5 seconds
+
+    stomp.connect({}, (frame) => {
+      console.log("Connected to WebSocket");
+      setWebSocketConnected(true);
+      setStompClient(stomp);
+
+      const subscription = stomp.subscribe("/topic/taskStatusUpdates", (message) => {
+        try {
+          const receivedTask = JSON.parse(message.body);
+          console.log("Received task update:", receivedTask);
+
+          // Update state
+          setTasks((prevTasks) => {
+            const index = prevTasks.findIndex((task) => task.taskId === receivedTask.taskId);
+            if (index !== -1) {
+              const newTasks = [...prevTasks];
+              newTasks[index] = receivedTask;
+              return newTasks;
+            }
+            return [...prevTasks, receivedTask];
+          });
+
+          // Trigger re-fetch when tasks are updated
+          setLastUpdate(Date.now());
+        } catch (parseError) {
+          console.error("Error parsing message body:", parseError);
+        }
+      });
+    });
+
+    stomp.ws.onclose = () => {
+      console.log("WebSocket connection closed. Reconnecting...");
+      // Optionally handle additional reconnection logic here
+      setupWebSocket();
+    };
+  };
+
   const clearSelectedTasks = () => {
     setSelectedTasks([]);
   };
+
   const moveSelectedTasksToActiveBoard = () => {
-    const updateTaskStatus = async (taskId, newStatus) => {
+    const updateTaskStatus = async (taskId) => {
       try {
         const empId = localStorage.getItem("id");
-        console.log("task id : ", taskId);
         await axios.patch(
           `http://localhost:8090/api/tasks/${taskId}/ACTIVE/${empId}`
         );
-        // Handle success, update state, etc.
       } catch (error) {
         console.error("Error updating task status:", error);
       }
     };
 
-    console.log(selectedTasks);
-
     // Loop through selected tasks and update their status to move to Active board
     selectedTasks.forEach((taskId) => {
-      updateTaskStatus(taskId, "Active");
+      updateTaskStatus(taskId);
     });
 
     // Clear the selected tasks
@@ -61,33 +109,28 @@ export function BacklogBoard(props) {
       setSelectedTasks(selectedTasks.filter((id) => id !== taskId));
     } else {
       setSelectedTasks([...selectedTasks, taskId]);
-
-      console.log(taskId);
     }
   };
+
   return (
     <div className="board">
       <div className="board_top">
         <p className="board_top_title">
-          {" "}
-          <span>{props.bid}</span>
-          Backlog<span> {tasks.length}</span>
+          <span>{props.bid}</span> Backlog <span>{tasks.length}</span>
         </p>
-        {/* three dots ...  for more info */}
         <MoreHorizontal />
       </div>
       <div className="board_cards custom-scroll">
         {tasks.map((task) => (
-          <div>
-            <Card
-              bid={props.bid}
-              id={task.taskId}
-              title={task.title}
-              card={task}
-              handleTaskSelect={handleTaskSelect}
-              isSelected={selectedTasks?.includes(task.taskId) ?? false}
-            ></Card>
-          </div>
+          <Card
+            key={task.taskId}
+            bid={props.bid}
+            id={task.taskId}
+            title={task.title}
+            card={task}
+            handleTaskSelect={handleTaskSelect}
+            isSelected={selectedTasks?.includes(task.taskId) ?? false}
+          />
         ))}
       </div>
       <div>
