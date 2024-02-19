@@ -1,8 +1,19 @@
-.navbar-brand-main, .nav-link-main{
+/* NavbarStyles.js (or your stylesheet) */
+
+.navbar-brand-main,
+.nav-link-main {
     color: white;
 }
 
-.navbar-main{
-    /* width: 100vw; */
+.navbar-main {
     background-color: #0d6efd;
+}
+
+.nav-link-main {
+    transition: transform 0.3s ease-in-out;
+}
+
+.nav-link-main:hover {
+    transform: scale(1.2);
+    /* You can adjust the scale factor as needed */
 }

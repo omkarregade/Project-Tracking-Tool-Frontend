@@ -1,9 +1,8 @@
 /* Footer.css */
 
 .footer-container {
-    background-color: #0d6efd;
-    /* Set the primary color for the footer background */
-    color: white;
+background-image: linear-gradient(to left top, #686561, #5f5b59, #555151, #4a4849, #403f40, #414141, #434243, #444444, #515151, #5e5e5e, #6c6c6c, #7a7a7a);
+    font-family: 'Montserrat', sans-serif;    color: white;
     /* Set text color to white */
     text-align: center;
     padding: 1rem;

@@ -1,0 +1,102 @@
+.project-card {
+    margin-bottom: 20px;
+    /* Adjust the margin as needed for spacing between cards */
+    perspective: 1000px;
+}
+
+.card-inner {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 1s;
+    background-image: linear-gradient(to left top, #90bfff, #99c0f6, #a2c1ec, #abc2e2, #b3c3d9, #b7c5d9, #bbc7d9, #bfc9d9, #c1cce3, #c4cfed, #c9d1f6, #cfd3ff);
+}
+
+.project-card.is-flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    padding: 10px;
+    /* Adjust the padding as needed for content spacing */
+}
+
+.card-back {
+    transform: rotateY(180deg);
+}
+
+.edit-button {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #007bff;
+    color: black!important;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    background-color: white !important;
+}
+
+.card-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+    .project-card {
+        margin-bottom: 10px;
+    }
+
+    .edit-button {
+        font-size: 0.8rem;
+    }
+}
+
+/* Remove the absolute positioning */
+.edit-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-top: auto;
+    /* Align the edit button to the bottom */
+}
+
+/* Add Bootstrap utility classes for margin and padding */
+.project-card {
+    margin: 10px;
+    /* Add margin to create space between cards */
+}
+
+@media (min-width: 576px) {
+    .project-card {
+        margin: 10px;
+    }
+}
+
+@media (min-width: 768px) {
+    .project-card {
+        margin: 15px;
+    }
+}
+
+@media (min-width: 992px) {
+    .project-card {
+        margin: 20px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .project-card {
+        margin: 25px;
+    }
+}

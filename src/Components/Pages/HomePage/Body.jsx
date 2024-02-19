@@ -41,6 +41,16 @@ export function Body() {
                     </Card>
                 </Col>
             </Row>
+
+            
+            <Row className="my-4">
+                <Col lg={12}>
+                    <Card>
+                        <Card.Body>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
         </Container>
     );
 }

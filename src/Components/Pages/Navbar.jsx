@@ -1,57 +1,59 @@
+// CustomNavbar.js
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import { LinkContainer } from "react-router-bootstrap";
-import { isAuthenticated, logout } from "../Service/Util";
+import { Container, Navbar, Nav } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
+import { isAuthenticated, logout } from '../Service/Util';
 import { useNavigate } from 'react-router-dom';
-import './../CssFiles/Navbar.css'
-
+import { CustomNavbarContainer, Logo, NavLinkMain } from '../../NavbarStyles';
 
 function CustomNavbar() {
   const navigate = useNavigate();
 
-
   const handleLogout = () => {
-        logout();        
-        
-        navigate('/login');
-    };
+    logout();
+    navigate('/login');
+  };
+
   return (
-    <Navbar expand="lg" className="navbar sticky-top navbar-expand-sm navbar-main">
-      <Container fluid>
-        <Navbar.Brand href="#" className="navbar-brand-main logo">
-          <span>
-            <span className="align-top mb-1" style={{ fontSize: '1rem' }}>SprintHub</span>
-          </span>
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="navbarSupportedContent" />
-        <Navbar.Collapse id="navbarSupportedContent">
-          <Nav className="ms-auto navbar-nav mx-auto">
-            <LinkContainer to="/">
-              <Nav.Link className="nav-link-main">Home</Nav.Link>
-            </LinkContainer>
-            <LinkContainer to="/register">
-              <Nav.Link className="nav-link-main">Register</Nav.Link>
-            </LinkContainer>
+    <>
+      <CustomNavbarContainer expand="lg" className="navbar sticky-top navbar-expand-sm navbar-main">
+        <Container fluid>
+          <Logo>
+            <Navbar.Brand href="#" className="navbar-brand-main logo">
+              <span className="align-top mb-1" style={{ color: 'white', fontSize: '1.5rem', marginRight: '10px' }}>
+                SprintHub
+              </span>
+            </Navbar.Brand>
+          </Logo>
+          <Navbar.Toggle aria-controls="navbarSupportedContent" />
+          <Navbar.Collapse id="navbarSupportedContent">
+            <Nav className="ms-auto navbar-nav mx-auto">
+              <LinkContainer to="/">
+                <NavLinkMain className="nav-link-main">Home</NavLinkMain>
+              </LinkContainer>
+              <LinkContainer to="/register">
+                <NavLinkMain className="nav-link-main">Register</NavLinkMain>
+              </LinkContainer>
               <Nav>
-                            {isAuthenticated() ? (
-                                <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
-                            ) : (
-                                <LinkContainer to="/login">
-                                    <Nav.Link>Login</Nav.Link>
-                                </LinkContainer>
-                            )}
-                        </Nav>
-            <LinkContainer to="/about-us">
-              <Nav.Link className="nav-link-main">About Us</Nav.Link>
-            </LinkContainer>
-            <LinkContainer to="/contact-us">
-              <Nav.Link className="nav-link-main">Contact-Us</Nav.Link>
-            </LinkContainer>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+                {isAuthenticated() ? (
+                  <NavLinkMain className="nav-link-main" onClick={handleLogout}>Logout</NavLinkMain>
+                ) : (
+                  <LinkContainer to="/login">
+                    <NavLinkMain className="nav-link-main">Login</NavLinkMain>
+                  </LinkContainer>
+                )}
+              </Nav>
+              <LinkContainer to="/about-us">
+                <NavLinkMain className="nav-link-main">About Us</NavLinkMain>
+              </LinkContainer>
+              <LinkContainer to="/contact-us">
+                <NavLinkMain className="nav-link-main">Contact-Us</NavLinkMain>
+              </LinkContainer>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </CustomNavbarContainer>
+    </>
   );
 }
 

@@ -12,6 +12,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
 
 const EmployeeDashboard = () => {
@@ -68,7 +69,7 @@ const EmployeeDashboard = () => {
     <Container fluid className="content-container dashboard-container">
       <div className="flex-xl-nowrap">
         <Row className="mySidebar">
-          <Button onClick={toggleDrawer("left", true)}>Open Dashboard</Button>
+          <Button onClick={toggleDrawer('left', true)} style={{ color: 'Black', font:'Bold' }}><MenuOpenIcon style={{ marginRight: '8px' }}></MenuOpenIcon>Open Dashboard</Button>
           <Drawer anchor="left" open={drawerState.left} onClose={toggleDrawer("left", false)}>
             {list}
           </Drawer>
