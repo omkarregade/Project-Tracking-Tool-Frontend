@@ -54,7 +54,7 @@ const SignUp = () => {
 
         switch (role) {
           case "Admin":
-            signupEndpoint = `${BASE_URL}/admins/register`;
+            signupEndpoint = `${BASE_URL}/auth/register`;
             break;
           case "Manager":
             signupEndpoint = `${BASE_URL}/managers/register`;
@@ -72,8 +72,9 @@ const SignUp = () => {
           password,
           phoneNumber,
           city,
+          role,
         };
-
+        console.log(userData);
         const response = await axios.post(signupEndpoint, userData);
 
         console.log("User registered successfully:", response.data);
@@ -85,7 +86,7 @@ const SignUp = () => {
     } else {
       console.log("Form data is invalid. Please check the fields.");
     }
-  }; 
+  };
 
   return (
     <div className="comp">
