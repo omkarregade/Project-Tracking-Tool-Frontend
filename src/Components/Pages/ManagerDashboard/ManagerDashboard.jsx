@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from "react";
 import { Container, Row } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../CssFiles/ManagerDashboard.css';
@@ -16,12 +16,35 @@ import ListItemText from '@mui/material/ListItemText';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import CreateIcon from '@mui/icons-material/Create';
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
+import { getId } from "../../Service/Util";
+
+const Alert = React.forwardRef((props, ref) => <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />);
+
+const CustomSnackbar = ({ open, message, onClose }) => {
+  return (
+    <Snackbar open={open} autoHideDuration={6000} onClose={onClose}>
+      <Alert onClose={onClose} severity="info">
+        {message}
+      </Alert>
+    </Snackbar>
+  );
+};
 
 const ManagerDashboard = () => {
-  const [selectedOption, setSelectedOption] = useState('Manager Profile'); // Set default option to 'Manager Profile'
+  const [selectedOption, setSelectedOption] = useState('Manager Profile');
   const [drawerState, setDrawerState] = useState({
     left: false,
   });
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [stompClient, setStompClient] = useState(null);
+  const [webSocketConnected, setWebSocketConnected] = useState(false);
+  const [lastUpdate, setLastUpdate] = useState(Date.now());
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -30,16 +53,66 @@ const ManagerDashboard = () => {
     setDrawerState({ ...drawerState, [anchor]: open });
   };
 
+  const setupWebSocket = () => {
+    const socket = new SockJS('http://localhost:8090/ws'); // Adjust URL
+    const stomp = Stomp.over(socket);
+
+    stomp.reconnect_delay = 5000; // Reconnect after 5 seconds
+
+    stomp.connect({}, (frame) => {
+      console.log('Connected to WebSocket');
+      setWebSocketConnected(true);
+      setStompClient(stomp);
+
+const subscription = stomp.subscribe('/topic/projectAssignmentUpdate', (message) => {
+  try {
+    const receivedProject = JSON.parse(message.body);
+    console.log('Received project update:', receivedProject);
+    console.log('Manager ID:', receivedProject.manager.managerId);
+    console.log('Current Manager ID:', getId());
+
+    if (receivedProject.manager.managerId == getId()) {
+      console.log('Condition is true');
+      setSnackbarMessage(`New Project ${receivedProject.projectTitle} has been assigned to you!`);
+      setSnackbarOpen(true);
+    } else {
+      console.log('Condition is false');
+    }
+
+  } catch (parseError) {
+    console.error('Error parsing message body:', parseError);
+  }
+});
+    });
+
+    stomp.ws.onclose = () => {
+      console.log('WebSocket connection closed. Reconnecting...');
+      // Optionally handle additional reconnection logic here
+      setupWebSocket();
+    };
+  };
+
+  useEffect(() => {
+    setupWebSocket();
+
+    return () => {
+      // Cleanup WebSocket connection on component unmount
+      if (stompClient) {
+        stompClient.disconnect();
+      }
+    };
+  }, []);
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
+
   const handleNavigation = (option) => {
     setSelectedOption(option);
     setDrawerState({ ...drawerState, left: false });
   };
 
-  useEffect(() => {
-    // Handle additional side effects if needed
-  }, [selectedOption]);
-
-  const renderContent = () => {
+const renderContent = () => {
     switch (selectedOption) {
       case 'Manager Profile':
         return <ManagerProfile />;
@@ -54,7 +127,6 @@ const ManagerDashboard = () => {
     }
   };
 
-  // Mapping icons to each option
   const iconMap = {
     'Manager Profile': <AccountCircleIcon fontSize="small" style={{ marginRight: '8px' }} />,
     'Assign Projects': <AssignmentIcon fontSize="small" style={{ marginRight: '8px' }} />,
@@ -74,7 +146,7 @@ const ManagerDashboard = () => {
             onClick={() => handleNavigation(text)}
           >
             <ListItemButton>
-              {iconMap[text]} {/* Use the icon based on the mapping */}
+              {iconMap[text]}
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>
@@ -87,7 +159,7 @@ const ManagerDashboard = () => {
     <Container fluid className="content-container dashboard-container">
       <div className="flex-xl-nowrap">
         <Row className="mySidebar">
-          <Button onClick={toggleDrawer('left', true)}>Open Dashboard</Button>
+          <Button onClick={toggleDrawer('left', true)} style={{ color: 'Black', font:'Bold' }}><MenuOpenIcon style={{ marginRight: '8px' }}></MenuOpenIcon>Open Dashboard</Button>
           <Drawer
             anchor="left"
             open={drawerState.left}
@@ -100,6 +172,7 @@ const ManagerDashboard = () => {
           {renderContent()}
         </Row>
       </div>
+      <CustomSnackbar open={snackbarOpen} message={snackbarMessage} onClose={handleCloseSnackbar} />
     </Container>
   );
 };
