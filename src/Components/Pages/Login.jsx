@@ -13,56 +13,37 @@ import Grid from "@mui/material/Grid";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import axios from "axios"; // Import axios for API calls
 import { BASE_URL } from "../Service/APIConstant";
-
-const roles = ["Admin", "Manager", "Employee"];
+import { loginUser } from "../Service/LoginService";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [username, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
-      let apiEndpoint = ""; // Placeholder for your API endpoint
+      const userData = {
+        username,
+        password,
+      };
 
-      const emailParam = encodeURIComponent(email);
-const passwordParam = encodeURIComponent(password);
+      const response = await loginUser(userData);
 
-      switch (role) {
-        case "Admin":
-          apiEndpoint = `${BASE_URL}/admins/admin?email=${emailParam}&password=${passwordParam}`;
-          break;
-        case "Manager":
-          apiEndpoint = `${BASE_URL}/managers/manager?email=${emailParam}&password=${passwordParam}`;
-          break;
-        case "Employee":
-          apiEndpoint = `${BASE_URL}/employees/employee?email=${emailParam}&password=${passwordParam}`;
-
-          break;
-        default:
-          break;
-      }
-
-const response = await axios.get(apiEndpoint);
-
-      console.log("Login Successful:", response.data);
-
-      switch (role) {
+      console.log("Login Successful:", response.role);
+      switch (response.role) {
         case "Admin":
           navigate("/admin-dashboard");
-          localStorage.setItem("id", parseInt(response.data.adminId));
           break;
         case "Manager":
           navigate("/manager-dashboard");
-          localStorage.setItem("id", parseInt(response.data.managerId));
           break;
         case "Employee":
           navigate("/employee-dashboard");
-          localStorage.setItem("id", parseInt(response.data.employeeId));
-          localStorage.setItem("employee", parseInt(response.data));
           break;
         default:
+          console.log("this is error from login , unexpected !!!!");
+          navigate("/");
           break;
       }
     } catch (error) {
@@ -97,7 +78,7 @@ const response = await axios.get(apiEndpoint);
               variant="outlined"
               fullWidth
               margin="normal"
-              value={email}
+              value={username}
               onChange={(e) => setEmail(e.target.value)}
               InputProps={{
                 style: {
@@ -123,7 +104,7 @@ const response = await axios.get(apiEndpoint);
               }}
             />
 
-            <FormControl component="fieldset" fullWidth margin="normal">
+            {/* <FormControl component="fieldset" fullWidth margin="normal">
               <RadioGroup
                 row
                 aria-label="role"
@@ -140,7 +121,7 @@ const response = await axios.get(apiEndpoint);
                   />
                 ))}
               </RadioGroup>
-            </FormControl>
+            </FormControl> */}
 
             <Button
               variant="contained"
