@@ -19,10 +19,11 @@ export async function registerAdmin(admin) {
 
 export async function getAdminById(adminId) {
   try {
-    const token = localStorage.getItem("token");
+    
     const response = await axios.get(`${BASE_URL}/admins/getBy/${adminId}`, {
       headers,
     });
+    console.log(response.data);
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -43,7 +44,7 @@ export async function updateAdmin(adminId, updatedAdmin) {
   try {
     const response = await axios.put(
       `${BASE_URL}/admins/${adminId}`,
-      updatedAdmin
+      updatedAdmin ,  {headers}
     );
     return response.data;
   } catch (error) {

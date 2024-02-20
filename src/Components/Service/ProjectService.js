@@ -1,10 +1,16 @@
 import axios from "axios";
 
 import { BASE_URL } from "../Service/APIConstant";
+const token = localStorage.getItem("token");
+const headers = {
+  Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+};
 
 export async function addProject(project) {
   try {
-    const response = await axios.post(`${BASE_URL}/project`, project);
+    const response = await axios.post(`${BASE_URL}/project`, project, {
+      headers,
+    });
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -22,7 +28,7 @@ export async function getProjectById(projectId) {
 
 export async function getAllProjects(managerId) {
   try {
-    const response = await axios.get(`${BASE_URL}/projects`);
+    const response = await axios.get(`${BASE_URL}/project`, { headers });
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -30,10 +36,22 @@ export async function getAllProjects(managerId) {
   }
 }
 
-
 export async function deleteProject(projectId) {
   try {
     const response = await axios.delete(`${BASE_URL}/project/${projectId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+}
+
+export async function updateProjectData(projectId, projectData) {
+  try {
+    const response = await axios.patch(
+      `${BASE_URL}/project/${projectId}`,
+      projectData,
+      { headers }
+    );
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -63,7 +81,7 @@ export async function getProjectsByEmployeeId(employeeId) {
 export async function getProjectsByManagerId(managerId) {
   try {
     const response = await axios.get(`${BASE_URL}/getProject/${managerId}`);
-    console.log( response.data);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -81,5 +99,3 @@ export async function assignProject(projectId, managerId) {
     throw error.response.data;
   }
 }
-
-

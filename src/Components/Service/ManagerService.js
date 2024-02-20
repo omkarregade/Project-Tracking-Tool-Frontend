@@ -1,5 +1,9 @@
 import axios from "axios";
 import { BASE_URL } from "../Service/APIConstant";
+const token = localStorage.getItem("token");
+const headers = {
+  Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+};
 
 export async function registerManager(manager) {
   try {
@@ -12,7 +16,9 @@ export async function registerManager(manager) {
 
 export async function getManagerById(id) {
   try {
-    const response = await axios.get(`${BASE_URL}/managers/manager/${id}`);
+    const response = await axios.get(`${BASE_URL}/managers/manager/${id}`, {
+      headers,
+    });
     return response.data;
   } catch (error) {
     throw error.response.data;
