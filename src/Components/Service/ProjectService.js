@@ -91,9 +91,13 @@ export async function getProjectsByManagerId(managerId) {
 export async function assignProject(projectId, managerId) {
   try {
     console.log(projectId, managerId);
-    const response = await axios.post(
-      `${BASE_URL}/${projectId}/assign-manager/${managerId}`
+    console.log(projectId);
+    console.log(managerId);
+    const response = await axios.get(
+      `${BASE_URL}/project/${projectId}/assign-manager/${managerId}`,
+      { headers }
     );
+    console.log(response.data);
     return response.data;
   } catch (error) {
     throw error.response.data;

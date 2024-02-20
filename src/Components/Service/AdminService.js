@@ -19,7 +19,6 @@ export async function registerAdmin(admin) {
 
 export async function getAdminById(adminId) {
   try {
-    
     const response = await axios.get(`${BASE_URL}/admins/getBy/${adminId}`, {
       headers,
     });

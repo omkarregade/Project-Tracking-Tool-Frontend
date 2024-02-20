@@ -49,7 +49,8 @@ export async function updateManager(id, updatedManager) {
 
 export async function getAllManagers() {
   try {
-    const response = await axios.get(`${BASE_URL}/managers`);
+    const response = await axios.get(`${BASE_URL}/managers`, { headers });
+    console.log(response.data);
     return response.data;
   } catch (error) {
     throw error.response.data;
