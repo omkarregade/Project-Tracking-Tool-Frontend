@@ -50,21 +50,21 @@ const SignUp = () => {
       city
     ) {
       try {
-        let signupEndpoint = "";
+        let signupEndpoint = `${BASE_URL}/auth/register`;
 
-        switch (role) {
-          case "Admin":
-            signupEndpoint = `${BASE_URL}/auth/register`;
-            break;
-          case "Manager":
-            signupEndpoint = `${BASE_URL}/managers/register`;
-            break;
-          case "Employee":
-            signupEndpoint = `${BASE_URL}/employees`;
-            break;
-          default:
-            break;
-        }
+        // switch (role) {
+        //   case "Admin":
+        //     signupEndpoint = `${BASE_URL}/auth/register`;
+        //     break;
+        //   case "Manager":
+        //     signupEndpoint = `${BASE_URL}/managers/register`;
+        //     break;
+        //   case "Employee":
+        //     signupEndpoint = `${BASE_URL}/employees`;
+        //     break;
+        //   default:
+        //     break;
+        // }
 
         const userData = {
           fullName,

@@ -12,7 +12,9 @@ export async function loginUser(userData) {
     localStorage.setItem("token", response.data.token);
     localStorage.setItem("id", parseInt(response.data.id));
 
-    console.log("user role --->", response.data.role);
+    //   console.log(response.data);
+    //   console.log("user role --->", response.data.role);
+    //   console.log("user token --->", response.data.token);
     return response.data;
   } catch (error) {
     throw error.response.data;
