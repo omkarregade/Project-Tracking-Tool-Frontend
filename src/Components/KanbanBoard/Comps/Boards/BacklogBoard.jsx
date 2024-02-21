@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card } from "../Card/Card";
 import { MoreHorizontal, Move } from "react-feather";
-import axios from "axios";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import {
@@ -15,24 +14,28 @@ const headers = {
 };
 
 if (token) console.log("token present ");
+
 export function BacklogBoard(props) {
   const [selectedTasks, setSelectedTasks] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [stompClient, setStompClient] = useState(null);
+  const [stompSubscriptions, setStompSubscriptions] = useState([]);
   const [webSocketConnected, setWebSocketConnected] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(Date.now()); // Added for triggering a re-fetch
+  const [lastCreated, setLastCreated] = useState(Date.now());
 
   useEffect(() => {
     fetchTasks();
     setupWebSocket();
 
     return () => {
-      // Cleanup WebSocket connection on component unmount
+      // Cleanup WebSocket connection and subscriptions on component unmount
       if (stompClient) {
         stompClient.disconnect();
       }
+      stompSubscriptions.forEach((subscription) => subscription.unsubscribe());
     };
-  }, [webSocketConnected, lastUpdate]);
+  }, [webSocketConnected, lastUpdate, lastCreated]);
 
   const fetchTasks = async () => {
     try {
@@ -57,7 +60,8 @@ export function BacklogBoard(props) {
       setWebSocketConnected(true);
       setStompClient(stomp);
 
-      const subscription = stomp.subscribe(
+      // Subscription for task status updates
+      const taskStatusSubscription = stomp.subscribe(
         "/topic/taskStatusUpdates",
         (message) => {
           try {
@@ -84,6 +88,25 @@ export function BacklogBoard(props) {
           }
         }
       );
+
+      // Subscription for task creation updates
+      const taskCreationSubscription = stomp.subscribe(
+        "/topic/taskCreationUpdate",
+        (message) => {
+          try {
+            const createdTask = JSON.parse(message.body);
+            console.log("Received task creation update:", createdTask);
+
+            // Trigger re-fetch when new tasks are created
+            setLastCreated(Date.now());
+          } catch (parseError) {
+            console.error("Error parsing message body:", parseError);
+          }
+        }
+      );
+
+      // Save subscriptions for cleanup when the component is unmounted
+      setStompSubscriptions([taskStatusSubscription, taskCreationSubscription]);
     });
 
     stomp.ws.onclose = () => {
