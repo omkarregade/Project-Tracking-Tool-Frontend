@@ -39,7 +39,8 @@ export async function updateManager(id, updatedManager) {
     console.log(updatedManager);
     const response = await axios.patch(
       `${BASE_URL}/managers/${id}`,
-      updatedManager
+      updatedManager,
+      { headers }
     );
     return response.data;
   } catch (error) {
