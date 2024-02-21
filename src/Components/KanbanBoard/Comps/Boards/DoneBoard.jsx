@@ -4,6 +4,7 @@ import { MoreHorizontal } from "react-feather";
 import axios from "axios";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import { getDoneTask } from "../../../Service/KanBanBoardService";
 
 export function DoneBoard(props) {
   const [tasks, setTasks] = useState([]);
@@ -27,14 +28,13 @@ export function DoneBoard(props) {
 
   const fetchTasks = async () => {
     try {
-      const status = "DONE";
       const employeeId = localStorage.getItem("id");
 
-      const URI = `http://localhost:8090/api/tasks/status/${status}/${employeeId}`;
-      const response = await axios.get(URI);
+    
+      const response = await getDoneTask(employeeId);
 
-      if (response.data) {
-        setTasks(response.data);
+      if (response) {
+        setTasks(response);
       } else {
         setError("No Tasks In Done Board Yet!!");
       }
@@ -57,28 +57,33 @@ export function DoneBoard(props) {
       setWebSocketConnected(true);
       setStompClient(stomp);
 
-      const subscription = stomp.subscribe("/topic/taskStatusUpdates", (message) => {
-        try {
-          const receivedTask = JSON.parse(message.body);
-          console.log("Received task update:", receivedTask);
+      const subscription = stomp.subscribe(
+        "/topic/taskStatusUpdates",
+        (message) => {
+          try {
+            const receivedTask = JSON.parse(message.body);
+            console.log("Received task update:", receivedTask);
 
-          // Update state
-          setTasks((prevTasks) => {
-            const index = prevTasks.findIndex((task) => task.taskId === receivedTask.taskId);
-            if (index !== -1) {
-              const newTasks = [...prevTasks];
-              newTasks[index] = receivedTask;
-              return newTasks;
-            }
-            return [...prevTasks, receivedTask];
-          });
+            // Update state
+            setTasks((prevTasks) => {
+              const index = prevTasks.findIndex(
+                (task) => task.taskId === receivedTask.taskId
+              );
+              if (index !== -1) {
+                const newTasks = [...prevTasks];
+                newTasks[index] = receivedTask;
+                return newTasks;
+              }
+              return [...prevTasks, receivedTask];
+            });
 
-          // Trigger re-fetch when tasks are updated
-          setLastUpdate(Date.now());
-        } catch (parseError) {
-          console.error("Error parsing message body:", parseError);
+            // Trigger re-fetch when tasks are updated
+            setLastUpdate(Date.now());
+          } catch (parseError) {
+            console.error("Error parsing message body:", parseError);
+          }
         }
-      });
+      );
     });
 
     stomp.ws.onclose = () => {
@@ -110,7 +115,12 @@ export function DoneBoard(props) {
       <div className="board_cards custom-scroll">
         {tasks.map((task) => (
           <div key={task.taskId}>
-            <Card bid={props.bid} id={task.taskId} title={task.title} card={task} />
+            <Card
+              bid={props.bid}
+              id={task.taskId}
+              title={task.title}
+              card={task}
+            />
           </div>
         ))}
       </div>

@@ -28,6 +28,7 @@ export async function getProjectById(projectId) {
 
 export async function getAllProjects(managerId) {
   try {
+    if (token) console.log("token present in project service");
     const response = await axios.get(`${BASE_URL}/project`, { headers });
     console.log(response.data);
     return response.data;

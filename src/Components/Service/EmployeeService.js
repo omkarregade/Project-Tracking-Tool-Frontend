@@ -19,7 +19,8 @@ export async function registerEmployee(employeeData) {
 
 export async function getAllEmployees() {
   try {
-    const response = await axios.get(`${BASE_URL}/employees`, { headers });
+    if (token) console.log("token present in emp service");
+    const response = await axios.get(`${BASE_URL}/employees`);
     return response.data;
   } catch (error) {
     throw error;
@@ -28,6 +29,7 @@ export async function getAllEmployees() {
 
 export async function getEmployeeById(id) {
   try {
+    if (token) console.log("token present in emp service");
     const response = await axios.get(`${BASE_URL}/employees/getBy/${id}`, {
       headers,
     });
@@ -77,10 +79,16 @@ export async function updateEmployeeDesignation(employeeId, newDesignation) {
 
 export async function mapEmployeeToProject(employeeId, projectId) {
   try {
-    
+    if (token) {
+      console.log("token present for mapping");
+    } else {
+      return 1;
+    }
+    console.log(employeeId, projectId);
+
     const response = await axios.post(
       `${BASE_URL}/assignment-mappings/mapping/${employeeId}/to/${projectId}`,
-      {headers}
+      { headers }
     );
     console.log(response.data);
     return response.data;
@@ -88,3 +96,5 @@ export async function mapEmployeeToProject(employeeId, projectId) {
     throw error;
   }
 }
+
+

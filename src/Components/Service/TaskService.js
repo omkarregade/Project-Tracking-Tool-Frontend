@@ -62,6 +62,7 @@ export async function deleteTask(id) {
 
 export async function getTasksByProjectId(projectId) {
   try {
+    if (token) console.log("token present in task service");
     const response = await axios.get(
       `${BASE_URL}/api/tasks/project/${projectId}`,
       { headers }
@@ -72,7 +73,6 @@ export async function getTasksByProjectId(projectId) {
     throw error.response.data;
   }
 }
-
 // export async function getTasksByEmployeeId(employeeId) {
 //     try {
 //         const response = await axios.get(`${BASE_URL}/task/employees/${employeeId}/tasks`);
