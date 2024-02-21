@@ -9,6 +9,8 @@ export async function loginUser(userData) {
       userData
     );
 
+    console.log(response.data.token);
+
     localStorage.setItem("token", response.data.token);
     localStorage.setItem("id", parseInt(response.data.id));
 

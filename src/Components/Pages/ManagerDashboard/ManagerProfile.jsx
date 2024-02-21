@@ -39,6 +39,7 @@ const ManagerProfile = () => {
             console.error(error.message);
         }
     };
+    
 
     const handleCancelEdit = () => {
         setEditedProfile(managerData);

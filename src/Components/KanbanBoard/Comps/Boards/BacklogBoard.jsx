@@ -26,6 +26,8 @@ export function BacklogBoard(props) {
 
   const fetchTasks = async () => {
     try {
+
+
       const status = "BACKLOG";
       const employeeId = localStorage.getItem("id");
       const URI = `http://localhost:8090/api/tasks/status/${status}/${employeeId}`;

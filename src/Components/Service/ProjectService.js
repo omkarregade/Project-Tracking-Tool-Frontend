@@ -80,7 +80,12 @@ export async function getProjectsByEmployeeId(employeeId) {
 
 export async function getProjectsByManagerId(managerId) {
   try {
-    const response = await axios.get(`${BASE_URL}/getProject/${managerId}`);
+    const response = await axios.get(
+      `${BASE_URL}/project/getProject/${managerId}`,
+      {
+        headers,
+      }
+    );
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -90,12 +95,13 @@ export async function getProjectsByManagerId(managerId) {
 
 export async function assignProject(projectId, managerId) {
   try {
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+    };
     console.log(projectId, managerId);
-    console.log(projectId);
-    console.log(managerId);
     const response = await axios.get(
-      `${BASE_URL}/project/${projectId}/assign-manager/${managerId}`,
-      { headers }
+      `${BASE_URL}/project/${projectId}/assign-manager/${managerId}`
     );
     console.log(response.data);
     return response.data;
