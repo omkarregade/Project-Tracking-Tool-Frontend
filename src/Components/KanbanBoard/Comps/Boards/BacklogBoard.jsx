@@ -1,10 +1,20 @@
 import { useEffect, useState } from "react";
 import { Card } from "../Card/Card";
-import { MoreHorizontal } from "react-feather";
+import { MoreHorizontal, Move } from "react-feather";
 import axios from "axios";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import {
+  getBacklogTask,
+  moveBacklogToActive,
+} from "../../../Service/KanBanBoardService";
 
+const token = localStorage.getItem("token");
+const headers = {
+  Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+};
+
+if (token) console.log("token present ");
 export function BacklogBoard(props) {
   const [selectedTasks, setSelectedTasks] = useState([]);
   const [tasks, setTasks] = useState([]);
@@ -26,13 +36,11 @@ export function BacklogBoard(props) {
 
   const fetchTasks = async () => {
     try {
-
-
       const status = "BACKLOG";
       const employeeId = localStorage.getItem("id");
-      const URI = `http://localhost:8090/api/tasks/status/${status}/${employeeId}`;
-      const response = await axios.get(URI);
-      setTasks(response.data);
+      const response = await getBacklogTask(employeeId);
+      console.log("backlog task: ", response);
+      setTasks(response);
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
@@ -49,28 +57,33 @@ export function BacklogBoard(props) {
       setWebSocketConnected(true);
       setStompClient(stomp);
 
-      const subscription = stomp.subscribe("/topic/taskStatusUpdates", (message) => {
-        try {
-          const receivedTask = JSON.parse(message.body);
-          console.log("Received task update:", receivedTask);
+      const subscription = stomp.subscribe(
+        "/topic/taskStatusUpdates",
+        (message) => {
+          try {
+            const receivedTask = JSON.parse(message.body);
+            console.log("Received task update:", receivedTask);
 
-          // Update state
-          setTasks((prevTasks) => {
-            const index = prevTasks.findIndex((task) => task.taskId === receivedTask.taskId);
-            if (index !== -1) {
-              const newTasks = [...prevTasks];
-              newTasks[index] = receivedTask;
-              return newTasks;
-            }
-            return [...prevTasks, receivedTask];
-          });
+            // Update state
+            setTasks((prevTasks) => {
+              const index = prevTasks.findIndex(
+                (task) => task.taskId === receivedTask.taskId
+              );
+              if (index !== -1) {
+                const newTasks = [...prevTasks];
+                newTasks[index] = receivedTask;
+                return newTasks;
+              }
+              return [...prevTasks, receivedTask];
+            });
 
-          // Trigger re-fetch when tasks are updated
-          setLastUpdate(Date.now());
-        } catch (parseError) {
-          console.error("Error parsing message body:", parseError);
+            // Trigger re-fetch when tasks are updated
+            setLastUpdate(Date.now());
+          } catch (parseError) {
+            console.error("Error parsing message body:", parseError);
+          }
         }
-      });
+      );
     });
 
     stomp.ws.onclose = () => {
@@ -88,9 +101,7 @@ export function BacklogBoard(props) {
     const updateTaskStatus = async (taskId) => {
       try {
         const empId = localStorage.getItem("id");
-        await axios.patch(
-          `http://localhost:8090/api/tasks/${taskId}/ACTIVE/${empId}`
-        );
+        await moveBacklogToActive(taskId, empId);
       } catch (error) {
         console.error("Error updating task status:", error);
       }

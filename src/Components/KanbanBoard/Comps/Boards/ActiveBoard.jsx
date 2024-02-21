@@ -4,6 +4,10 @@ import { MoreHorizontal } from "react-feather";
 import axios from "axios";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import {
+  getActiveTask,
+  moveActiveToReview,
+} from "../../../Service/KanBanBoardService";
 
 export function ActiveBoard(props) {
   const [tasks, setTasks] = useState([]);
@@ -26,11 +30,12 @@ export function ActiveBoard(props) {
 
   const fetchTasks = async () => {
     try {
-      const status = "ACTIVE";
+      // const status = "ACTIVE";
       const employeeId = localStorage.getItem("id");
-      const URI = `http://localhost:8090/api/tasks/status/${status}/${employeeId}`;
-      const response = await axios.get(URI);
-      setTasks(response.data);
+      // const URI = `http://localhost:8090/api/tasks/status/${status}/${employeeId}`;
+      // const response = await axios.get(URI);
+      const response = await getActiveTask(employeeId);
+      setTasks(response);
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
@@ -47,28 +52,33 @@ export function ActiveBoard(props) {
       setWebSocketConnected(true);
       setStompClient(stomp);
 
-      const subscription = stomp.subscribe("/topic/taskStatusUpdates", (message) => {
-        try {
-          const receivedTask = JSON.parse(message.body);
-          console.log("Received task update:", receivedTask);
+      const subscription = stomp.subscribe(
+        "/topic/taskStatusUpdates",
+        (message) => {
+          try {
+            const receivedTask = JSON.parse(message.body);
+            console.log("Received task update:", receivedTask);
 
-          // Update state
-          setTasks((prevTasks) => {
-            const index = prevTasks.findIndex((task) => task.taskId === receivedTask.taskId);
-            if (index !== -1) {
-              const newTasks = [...prevTasks];
-              newTasks[index] = receivedTask;
-              return newTasks;
-            }
-            return [...prevTasks, receivedTask];
-          });
+            // Update state
+            setTasks((prevTasks) => {
+              const index = prevTasks.findIndex(
+                (task) => task.taskId === receivedTask.taskId
+              );
+              if (index !== -1) {
+                const newTasks = [...prevTasks];
+                newTasks[index] = receivedTask;
+                return newTasks;
+              }
+              return [...prevTasks, receivedTask];
+            });
 
-          // Trigger re-fetch when tasks are updated
-          setLastUpdate(Date.now());
-        } catch (parseError) {
-          console.error("Error parsing message body:", parseError);
+            // Trigger re-fetch when tasks are updated
+            setLastUpdate(Date.now());
+          } catch (parseError) {
+            console.error("Error parsing message body:", parseError);
+          }
         }
-      });
+      );
     });
 
     stomp.ws.onclose = () => {
@@ -86,10 +96,7 @@ export function ActiveBoard(props) {
     const updateTaskStatus = async (taskId) => {
       try {
         const empId = localStorage.getItem("id");
-        const status = "REVIEWING";
-        await axios.patch(
-          `http://localhost:8090/api/tasks/${taskId}/${status}/${empId}`
-        );
+        await moveActiveToReview(taskId, empId);
       } catch (error) {
         console.error("Error updating task status:", error);
       }

@@ -12,8 +12,42 @@ import AboutUs from "./Components/Pages/AboutUs/AboutUs";
 import SignUp from "./Components/Pages/SignUp";
 import Login from "./Components/Pages/Login";
 import { Kanban } from "./Components/KanbanBoard/Kanban";
+import { useEffect } from "react";
+import axios from "axios";
+
+
+
+
 
 function App() {
+
+useEffect(() => {
+  // Add request interceptor
+  const requestInterceptor = axios.interceptors.request.use(
+    (config) => {
+      // Add your authorization header logic here
+      // For example, you can retrieve the token from localStorage
+      const token = localStorage.getItem("token");
+
+      // Add the authorization header if the token is available
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+
+      return config;
+    },
+    (error) => {
+      // Handle request error
+      return Promise.reject(error);
+    }
+  );
+
+  // Cleanup the interceptor when the component unmounts
+  return () => {
+    axios.interceptors.request.eject(requestInterceptor);
+  };
+}, []);
+
   return (
     <div className="App">
       <BrowserRouter>

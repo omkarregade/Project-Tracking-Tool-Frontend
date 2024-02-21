@@ -16,6 +16,7 @@ export async function registerManager(manager) {
 
 export async function getManagerById(id) {
   try {
+    if (token) console.log("token present");
     const response = await axios.get(`${BASE_URL}/managers/manager/${id}`, {
       headers,
     });
