@@ -9,10 +9,10 @@ export async function loginUser(userData) {
       userData
     );
 
-    console.log(response.data.token);
-
     localStorage.setItem("token", response.data.token);
     localStorage.setItem("id", parseInt(response.data.id));
+    localStorage.setItem("role", response.data.role);
+
 
     //   console.log(response.data);
     //   console.log("user role --->", response.data.role);

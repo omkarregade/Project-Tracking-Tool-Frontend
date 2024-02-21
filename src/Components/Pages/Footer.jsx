@@ -15,7 +15,7 @@ export const Footer = () => {
         <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
           <FontAwesomeIcon icon={faLinkedin} className="footer-icon" />
         </a>
-        <a href="https://github.com/omkarregade/Project-Tracking-Tool-Frontend" target="_blank" rel="noopener noreferrer">
+        <a href="https://github.com/FlashShri/backend-sprinthub" target="_blank" rel="noopener noreferrer">
             <FontAwesomeIcon icon={faGithub} className="footer-icon" />
         </a>
         <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer">

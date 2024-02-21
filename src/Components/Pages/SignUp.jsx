@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { BASE_URL } from "../Service/APIConstant";
-
 import axios from "axios";
 import {
   TextField,
@@ -14,6 +13,7 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
+  Snackbar,
 } from "@mui/material";
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -26,65 +26,71 @@ const SignUp = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [city, setCity] = useState("");
   const [role, setRole] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const navigate = useNavigate();
 
-  const isValidEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }; // <-- Closing brace for isValidEmail
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+  const phoneNumberRegex = /^[6-9]\d{9}$/;
 
-  const isValidPhoneNumber = (phoneNumber) => {
-    // Phone number validation regex for Indian phone numbers
-    const phoneNumberRegex = /^[6-9]\d{9}$/;
-    return phoneNumberRegex.test(phoneNumber);
+  const isValidEmail = (email) => emailRegex.test(email);
+  const isValidPassword = (password) => passwordRegex.test(password);
+  const isValidPhoneNumber = (phoneNumber) => phoneNumberRegex.test(phoneNumber);
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   const handleSignup = async () => {
-    console.log(role);
+    let errors = [];
 
-    if (
-      fullName &&
-      isValidEmail(email) &&
-      password &&
-      isValidPhoneNumber(phoneNumber) &&
-      city
-    ) {
-      try {
-        let signupEndpoint = `${BASE_URL}/auth/register`;
+    if (!fullName) {
+      errors.push("Full Name is required.");
+    }
 
-        // switch (role) {
-        //   case "Admin":
-        //     signupEndpoint = `${BASE_URL}/auth/register`;
-        //     break;
-        //   case "Manager":
-        //     signupEndpoint = `${BASE_URL}/managers/register`;
-        //     break;
-        //   case "Employee":
-        //     signupEndpoint = `${BASE_URL}/employees`;
-        //     break;
-        //   default:
-        //     break;
-        // }
+    if (!isValidEmail(email)) {
+      errors.push("Invalid Email.");
+    }
 
-        const userData = {
-          fullName,
-          email,
-          password,
-          phoneNumber,
-          city,
-          role,
-        };
-        console.log(userData);
-        const response = await axios.post(signupEndpoint, userData);
+    if (!isValidPassword(password)) {
+      errors.push("Invalid Password. It should have at least 8 characters, one lowercase letter, one uppercase letter, and one number.");
+    }
 
-        console.log("User registered successfully:", response.data);
-        navigate("/login");
-      } catch (error) {
-        console.error("Error registering user:", error.message);
-        navigate("/register");
-      }
-    } else {
-      console.log("Form data is invalid. Please check the fields.");
+    if (!isValidPhoneNumber(phoneNumber)) {
+      errors.push("Invalid Phone Number. It should be a 10-digit number starting with 6-9.");
+    }
+
+    if (!city) {
+      errors.push("City is required.");
+    }
+
+    if (errors.length > 0) {
+      setSnackbarMessage(errors.join("\n"));
+      setSnackbarOpen(true);
+      return;
+    }
+
+    try {
+      let signupEndpoint = `${BASE_URL}/auth/register`;
+
+      const userData = {
+        fullName,
+        email,
+        password,
+        phoneNumber,
+        city,
+        role,
+      };
+
+      console.log(userData);
+      const response = await axios.post(signupEndpoint, userData);
+
+      console.log("User registered successfully:", response.data);
+      navigate("/login");
+    } catch (error) {
+      console.error("Error registering user:", error.message);
+      navigate("/register");
     }
   };
 
@@ -186,6 +192,13 @@ const SignUp = () => {
             <NavLink to="/login" style={{ textDecoration: "none" }}>
               <Button fullWidth>Login</Button>
             </NavLink>
+
+            <Snackbar
+              open={snackbarOpen}
+              autoHideDuration={6000}
+              onClose={handleSnackbarClose}
+              message={snackbarMessage}
+            />
           </div>
         </Grid>
       </Grid>

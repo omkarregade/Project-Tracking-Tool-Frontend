@@ -1,27 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Button,
-  FormControl,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
   Typography,
   Link,
+  Snackbar,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import axios from "axios"; // Import axios for API calls
-import { BASE_URL } from "../Service/APIConstant";
 import { loginUser } from "../Service/LoginService";
 
 const Login = () => {
   const [username, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("");
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const [submitAttempted, setSubmitAttempted] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const navigate = useNavigate();
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex for email validation
+  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/; // Regex for password validation
+
+  useEffect(() => {
+    // Update isEmailValid whenever username (email) changes
+    setIsEmailValid(emailRegex.test(username));
+  }, [username]);
+
+  useEffect(() => {
+    // Update isPasswordValid whenever password changes
+    setIsPasswordValid(passwordRegex.test(password));
+  }, [password]);
+
+  const isValidEmail = isEmailValid;
+  const isValidPassword = isPasswordValid;
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   const handleLogin = async () => {
+    setSubmitAttempted(true);
+
+    if (!isValidEmail || !isValidPassword) {
+      setSnackbarOpen(true);
+      return;
+    }
+
     try {
       const userData = {
         username,
@@ -42,7 +67,7 @@ const Login = () => {
           navigate("/employee-dashboard");
           break;
         default:
-          console.log("this is error from login , unexpected !!!!");
+          console.log("This is an error from login, unexpected !!!!");
           navigate("/");
           break;
       }
@@ -80,6 +105,12 @@ const Login = () => {
               margin="normal"
               value={username}
               onChange={(e) => setEmail(e.target.value)}
+              error={!isEmailValid && submitAttempted}
+              helperText={
+                !isEmailValid && submitAttempted
+                  ? "Invalid email format"
+                  : ""
+              }
               InputProps={{
                 style: {
                   backgroundColor: "#ffffff", // Input background color
@@ -96,6 +127,12 @@ const Login = () => {
               margin="normal"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              error={!isPasswordValid && submitAttempted}
+              helperText={
+                !isPasswordValid && submitAttempted
+                  ? "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one digit."
+                  : ""
+              }
               InputProps={{
                 style: {
                   backgroundColor: "#ffffff",
@@ -103,25 +140,6 @@ const Login = () => {
                 },
               }}
             />
-
-            {/* <FormControl component="fieldset" fullWidth margin="normal">
-              <RadioGroup
-                row
-                aria-label="role"
-                name="role"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-              >
-                {roles.map((role) => (
-                  <FormControlLabel
-                    key={role}
-                    value={role}
-                    control={<Radio />}
-                    label={role}
-                  />
-                ))}
-              </RadioGroup>
-            </FormControl> */}
 
             <Button
               variant="contained"
@@ -147,6 +165,13 @@ const Login = () => {
                 </Link>
               </p>
             </Typography>
+
+            <Snackbar
+              open={snackbarOpen}
+              autoHideDuration={6000}
+              onClose={handleSnackbarClose}
+              message="Invalid form data. Please check the fields."
+            />
           </div>
         </Grid>
       </Grid>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Container, Row } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../CssFiles/ManagerDashboard.css';
-import { Kanban } from '../../KanbanBoard/Kanban';
 import CreateTask from './CreateTask';
 import ManagerProfile from './ManagerProfile';
 import AssignProjectToEmployee from './AssignProjectToEmployee';
@@ -27,7 +26,7 @@ const Alert = React.forwardRef((props, ref) => <MuiAlert elevation={6} ref={ref}
 
 const CustomSnackbar = ({ open, message, onClose }) => {
   return (
-    <Snackbar open={open} autoHideDuration={6000} onClose={onClose}>
+    <Snackbar open={open} autoHideDuration={8000} onClose={onClose}>
       <Alert onClose={onClose} severity="info">
         {message}
       </Alert>
@@ -45,6 +44,7 @@ const ManagerDashboard = () => {
   const [stompClient, setStompClient] = useState(null);
   const [webSocketConnected, setWebSocketConnected] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(Date.now());
+  const [stompSubscriptions, setStompSubscriptions] = useState([]);
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -64,25 +64,47 @@ const ManagerDashboard = () => {
       setWebSocketConnected(true);
       setStompClient(stomp);
 
-const subscription = stomp.subscribe('/topic/projectAssignmentUpdate', (message) => {
-  try {
-    const receivedProject = JSON.parse(message.body);
-    console.log('Received project update:', receivedProject);
-    console.log('Manager ID:', receivedProject.manager.managerId);
-    console.log('Current Manager ID:', getId());
+      // Subscription for project assignment updates
+      const projectAssignmentSubscription = stomp.subscribe('/topic/projectAssignmentUpdate', (message) => {
+        try {
+          const receivedProject = JSON.parse(message.body);
+          console.log('Received project update:', receivedProject);
+          console.log('Manager ID:', receivedProject.manager.managerId);
+          console.log('Current Manager ID:', getId());
 
-    if (receivedProject.manager.managerId == getId()) {
-      console.log('Condition is true');
-      setSnackbarMessage(`New Project ${receivedProject.projectTitle} has been assigned to you!`);
-      setSnackbarOpen(true);
-    } else {
-      console.log('Condition is false');
-    }
+          if (receivedProject.manager.managerId === getId()) {
+            console.log('Condition is true');
+            setSnackbarMessage(`New Project ${receivedProject.projectTitle} has been assigned to you!`);
+            setSnackbarOpen(true);
+          } else {
+            console.log('Condition is false');
+          }
 
-  } catch (parseError) {
-    console.error('Error parsing message body:', parseError);
-  }
-});
+        } catch (parseError) {
+          console.error('Error parsing message body:', parseError);
+        }
+      });
+
+      // Subscription for task creation updates
+      const taskCreationSubscription = stomp.subscribe('/topic/taskCreationUpdate', (message) => {
+        try {
+          const createdTask = JSON.parse(message.body);
+          console.log('Received task creation update:', createdTask);
+
+          // Display snackbar message for task creation
+          setSnackbarMessage(`New task ${createdTask.title} has been created!`);
+          setSnackbarOpen(true);
+
+          // Optionally trigger any additional actions based on the created task
+          // ...
+
+        } catch (parseError) {
+          console.error('Error parsing message body:', parseError);
+        }
+      });
+
+      // Save subscriptions for cleanup when the component is unmounted
+      setStompSubscriptions([projectAssignmentSubscription, taskCreationSubscription]);
     });
 
     stomp.ws.onclose = () => {
@@ -96,10 +118,11 @@ const subscription = stomp.subscribe('/topic/projectAssignmentUpdate', (message)
     setupWebSocket();
 
     return () => {
-      // Cleanup WebSocket connection on component unmount
+      // Cleanup WebSocket connection and subscriptions on component unmount
       if (stompClient) {
         stompClient.disconnect();
       }
+      stompSubscriptions.forEach((subscription) => subscription.unsubscribe());
     };
   }, []);
 
@@ -112,14 +135,12 @@ const subscription = stomp.subscribe('/topic/projectAssignmentUpdate', (message)
     setDrawerState({ ...drawerState, left: false });
   };
 
-const renderContent = () => {
+  const renderContent = () => {
     switch (selectedOption) {
       case 'Manager Profile':
         return <ManagerProfile />;
       case 'Assign Projects':
         return <AssignProjectToEmployee />;
-      // case 'Kanban Board':
-      //     return <Kanban />;
       case 'Create Task':
         return <CreateTask />;
       default:
